@@ -1,0 +1,88 @@
+.root {
+  padding-bottom: 60px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  gap: 12px;
+  max-width: 890px;
+  margin-inline: auto;
+
+  li {
+    padding: 32px;
+    background-color: #f9f9f9;
+    border-radius: 32px;
+    position: relative;
+
+    h2 {
+      font-weight: 700;
+      color: #545b69;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b81;
+      margin-block: 8px;
+
+      &.gradient {
+        display: inline-block;
+        background: linear-gradient(to right, #288ed2, #7d5cad, #d12a89);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 2;
+      color: #637684;
+    }
+
+    &:nth-child(4) h3 {
+      color: #ffd74d;
+    }
+
+    &:nth-child(8) h3 {
+      color: #272d31;
+    }
+
+    &::after {
+      content: "";
+      width: 17px;
+      height: 18px;
+      background-image: url("../../../assets/icons/up.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+  }
+}
+
+.imgWrapper {
+  display: grid;
+  max-width: 655px;
+  margin: 40px auto;
+}
+
+.link1 {
+  grid-area: 1/1;
+  width: 50%;
+  justify-self: start;
+}
+
+.link2 {
+  grid-area: 1/1;
+  width: 50%;
+  justify-self: end;
+}
+
+.hiveSample {
+  grid-area: 1/1;
+}

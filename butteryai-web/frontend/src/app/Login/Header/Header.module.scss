@@ -1,0 +1,23 @@
+.root {
+  padding-bottom: 64px;
+  text-align: center;
+}
+
+.link {
+  display: inline-block;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  text-align: center;
+  color: #272d31;
+
+  span {
+    background: linear-gradient(to right, #d12a89, #755cba);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

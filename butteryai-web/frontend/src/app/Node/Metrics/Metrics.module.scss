@@ -1,0 +1,55 @@
+.root {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-bottom: 48px;
+
+  > strong {
+    display: block;
+    margin-top: 48px;
+    margin-bottom: 24px;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+
+  li {
+    padding: 32px;
+    background-color: #f9f9f9;
+    border-radius: 32px;
+
+    h2 {
+      font-weight: 700;
+      color: #545b69;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b81;
+      margin-block: 8px;
+    }
+
+    &:nth-child(2) {
+      h3 {
+        color: #d12a89;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 2;
+      color: #637684;
+    }
+  }
+}
+
+.heatmapDescription {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #576773;
+  margin-top: 4px;
+}

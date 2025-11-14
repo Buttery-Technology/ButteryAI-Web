@@ -1,0 +1,32 @@
+@import "../../../../Mixins.scss";
+
+.input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 99px;
+  background-color: #f7f7f7;
+  color: #47545d;
+  font-size: 16px;
+  transition: 0.2s;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #dedede;
+  }
+}
+
+.error {
+  padding-left: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #d12a89;
+
+  @include mq(999) {
+    font-size: 11px;
+  }
+}

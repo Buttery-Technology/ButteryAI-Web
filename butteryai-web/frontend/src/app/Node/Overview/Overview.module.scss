@@ -1,0 +1,83 @@
+.root {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-block: 48px;
+
+  > strong {
+    display: block;
+    margin-bottom: 16px;
+  }
+}
+
+.activity {
+  margin-bottom: 40px;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 620px;
+  color: #272d31;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+
+  li {
+    padding: 32px;
+    background-color: #f9f9f9;
+    border-radius: 32px;
+    position: relative;
+
+    strong {
+      color: #545b69;
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b81;
+      margin-block: 8px;
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 2;
+      color: #637684;
+    }
+
+    &:first-child h2 {
+      color: #d12a89;
+    }
+
+    &::after {
+      content: "";
+      width: 17px;
+      height: 18px;
+      background-image: url("../../../assets/icons/up.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+  }
+
+  &.interactions {
+    margin-bottom: 60px;
+
+    h2 {
+      color: #637684 !important;
+    }
+  }
+}
+
+.energy {
+  margin-bottom: 150px;
+}

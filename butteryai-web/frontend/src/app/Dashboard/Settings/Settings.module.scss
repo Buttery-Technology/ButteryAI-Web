@@ -1,0 +1,62 @@
+.root {
+  max-width: 900px;
+  margin-inline: auto;
+
+  > p {
+    margin-top: 12px;
+  }
+}
+
+.infoCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 64px;
+
+  li {
+    padding: 32px;
+    background-color: #f9f9f9;
+    border-radius: 32px;
+    position: relative;
+
+    h2 {
+      font-weight: 700;
+      color: #545b69;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b81;
+      margin-block: 8px;
+    }
+
+    &:first-child,
+    &:last-child {
+      h3 {
+        color: #272d31;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 2;
+      color: #637684;
+    }
+
+    &::after {
+      content: "";
+      width: 17px;
+      height: 18px;
+      background-image: url("../../../assets/icons/up.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+  }
+}

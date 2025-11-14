@@ -1,0 +1,66 @@
+.tip {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #545b69;
+}
+
+.form {
+  display: grid;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  border-radius: 99px;
+  background-color: #f7f7f7;
+  font-size: 16px;
+  transition: 0.2s;
+  grid-area: 1/1;
+  line-height: 1.5;
+  color: #272d31;
+  padding: 16px 60px 16px 32px;
+  margin-block: 16px;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #637684;
+  }
+}
+
+.submitButton {
+  grid-area: 1/1;
+  justify-self: end;
+  padding: 8px 14px;
+  background-color: #cccccc;
+  border-radius: 99px;
+  margin-right: 12px;
+  transition: 0.2s ease-out;
+
+  &:hover {
+    background-color: #288ed2;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+
+  button {
+    color: #272d31;
+    padding: 16px 32px;
+    background-color: #ededed;
+    border-radius: 99px;
+    transition: 0.2s ease-out;
+
+    &:hover {
+      background-color: #288ed2;
+      color: #fff;
+    }
+  }
+}

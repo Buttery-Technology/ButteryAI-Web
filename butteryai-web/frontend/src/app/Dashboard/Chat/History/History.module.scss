@@ -1,0 +1,17 @@
+.root {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 70vh;
+  background-color: #fff8cc;
+  border-radius: 20px;
+  outline: none;
+}
+
+.message {
+  font-family: monospace;
+  font-size: 14px;
+  color: #6b4c00;
+  white-space: pre-wrap;
+  margin-top: 4px;
+  padding-left: 10px;
+}

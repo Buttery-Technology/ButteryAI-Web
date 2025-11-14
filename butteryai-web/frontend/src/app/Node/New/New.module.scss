@@ -1,0 +1,142 @@
+@import "../../../Mixins.scss";
+
+.root {
+  background-color: var(--white);
+  padding-inline: 16px;
+  position: absolute;
+  inset: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.logoWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.header {
+  margin-block: 48px;
+  display: grid;
+  align-items: center;
+
+  .closeButton,
+  .title {
+    grid-area: 1/1;
+  }
+}
+
+.closeButton {
+  justify-self: start;
+  z-index: 1;
+  @include scaleAnimation;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  text-align: center;
+}
+
+.categoryTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.input {
+  font-size: 18px;
+  background-color: #ededed;
+  padding: 16px 24px;
+  border-radius: 99px;
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 32px;
+
+  &::placeholder {
+    color: #637684;
+  }
+}
+
+.inputButtonWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 20px;
+}
+
+.inputButton {
+  background-color: #384148;
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 99px;
+  @include scaleAnimation;
+}
+
+.description {
+  line-height: 1.3;
+}
+
+.link {
+  color: #288ed2;
+  text-decoration: underline;
+}
+
+.upgradeBox {
+  margin-top: 16px;
+  margin-bottom: 32px;
+  border: 5px dotted #ffb500;
+  border-radius: 32px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  p {
+    text-align: center;
+    font-size: 26px;
+  }
+}
+
+.upgradeButton {
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #ffd74d;
+  border-radius: 99px;
+  padding: 16px 32px;
+  @include scaleAnimation;
+}
+
+.createWrapper {
+  padding-block: 48px;
+  max-width: 500px;
+  margin-inline: auto;
+
+  p {
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+}
+
+.createButton {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  background-color: #ffd74d;
+  padding: 16px;
+  border-radius: 99px;
+  @include scaleAnimation;
+}

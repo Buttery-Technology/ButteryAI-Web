@@ -1,0 +1,83 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 64px;
+  color: #272d31;
+  margin-top: 32px;
+}
+
+.wrapper {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.status,
+.plan {
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  gap: 8px;
+
+  &::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+}
+
+.status {
+  color: #576773;
+
+  &::before {
+    background-image: url("../../../assets/icons/circle.svg");
+  }
+}
+
+.plan {
+  color: #288ed2;
+
+  &::before {
+    background-image: url("../../../assets/icons/hexagon.svg");
+  }
+}
+
+.tabList {
+  display: flex;
+  gap: 16px;
+  padding: 12px 20px;
+  border-radius: 99px;
+  background-color: #f9f9f9;
+
+  li:not(:first-child) {
+    padding-left: 17px;
+    border-left: 1px solid #cccccc;
+  }
+
+  a {
+    path {
+      transition: 0.2s ease-out;
+    }
+
+    &:hover path,
+    &.active path {
+      fill: #288ed2;
+    }
+  }
+}
+
+.tabName {
+  color: #637684;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
