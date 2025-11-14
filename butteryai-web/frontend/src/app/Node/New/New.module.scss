@@ -1,4 +1,4 @@
-@import "../../../Mixins.scss";
+@use "../../../mixins" as *;
 
 .root {
   background-color: var(--white);

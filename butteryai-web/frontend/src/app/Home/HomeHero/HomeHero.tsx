@@ -1,10 +1,10 @@
 import { LinkButton } from "../../Global/LinkButton";
-import honey from "../../../assets/logos/honey.png";
+import butteryai from "../../../assets/logos/butteryai.png";
 import styles from "./HomeHero.module.scss";
 
 const HomeHero = () => (
   <main className={styles.root}>
-    <img src={honey} alt="ButteryAI" className={styles.butteryAI} />
+    <img src={butteryai} alt="ButteryAI" className={styles.butteryAI} />
     <h1 className={styles.title}>
       Disrupt the <span className={styles.greenish}>future</span> with the world’s first{" "}
       <span className={styles.blueish}>distributed AI</span> platform

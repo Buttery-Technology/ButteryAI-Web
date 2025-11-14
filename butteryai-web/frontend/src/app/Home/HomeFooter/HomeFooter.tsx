@@ -1,4 +1,4 @@
-import honey from "../../../assets/logos/honey.png";
+import butteryai from "../../../assets/logos/butteryai.png";
 import melting from "../../../assets/images/melting-footer.svg";
 import { LinkButton } from "../../Global/LinkButton";
 import styles from "./HomeFooter.module.scss";
@@ -6,7 +6,7 @@ import styles from "./HomeFooter.module.scss";
 const HomeFooter = () => (
   <div className={styles.root}>
     <div className={styles.wrapper}>
-      <img src={honey} alt="ButteryAI" className={styles.butteryAI} />
+      <img src={butteryai} alt="ButteryAI" className={styles.butteryAI} />
       <h1 className={styles.title}>
         <span>Join</span> ButteryAI today!
       </h1>

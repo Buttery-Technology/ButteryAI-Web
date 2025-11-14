@@ -1,4 +1,4 @@
-@import "../../../Mixins.scss";
+@use "../../../mixins" as *;
 
 .root {
   padding-block: 96px;

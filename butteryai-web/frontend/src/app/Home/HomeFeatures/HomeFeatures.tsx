@@ -12,7 +12,7 @@ const HomeFeatures = () => (
       <p>
         ButteryAI is always making sure those connected to the Hive are communicating against known sources-of-truth and
         evaluating their trustworthiness. This gives greater control and security for the ButteryAI platform. Enterprise
-        customers get even deeper control through customizing the sources-of-truth Honey uses for their Hive.
+        customers get even deeper control through customizing the sources-of-truth ButteryAI uses for their Hive.
       </p>
       <LinkButton to="/login" hasBackground>
         Start defining truth
