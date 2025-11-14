@@ -4,17 +4,14 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
-
 declare module "*.png";
 declare module "*.jpg";
 declare module "*.jpeg";
 declare module "*.gif";
 declare module "*.mp4";
 declare module "*.webm";
-
 declare module "*.module.scss" {
   const classes: { [key: string]: string };
   export default classes;
 }
-
 declare module "*.scss";
