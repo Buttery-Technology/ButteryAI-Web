@@ -1,6 +1,6 @@
 import { createContext, type ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TOKEN_POST, TOKEN_VALIDATE_POST, USER_GET, USER_POST } from "./api";
+import { POST_TOKEN, VALIDATE_TOKEN, GET_USER, POST_USER } from "./api";
 
 type TUserContext = {
   data: null;
@@ -36,7 +36,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         setError(null);
         setIsLoading(true);
 
-        const { url, options } = TOKEN_VALIDATE_POST(token);
+        const { url, options } = VALIDATE_TOKEN(token);
         const response = await fetch(url, options);
         if (!response.ok) throw new Error("Invalid token");
 
@@ -50,7 +50,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function getUser(token: string) {
-    const { url, options } = USER_GET(token);
+    const { url, options } = GET_USER(token);
     const response = await fetch(url, options);
     const json = await response.json();
 
@@ -63,7 +63,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       setIsLoading(true);
 
-      const { url, options } = USER_POST({ username, email, password });
+      const { url, options } = POST_USER({ username, email, password });
       const response = await fetch(url, options);
       const json = await response.json();
       if (!response.ok) throw new Error(json.message);
@@ -80,7 +80,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       setIsLoading(true);
 
-      const { url, options } = TOKEN_POST({ username, password });
+      const { url, options } = POST_TOKEN({ username, password });
       const response = await fetch(url, options);
       if (!response.ok) throw new Error("Sorry, we found an error. Please try again.");
 
