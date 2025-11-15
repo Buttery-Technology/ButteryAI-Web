@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import dashboardLogo from "../../../assets/logos/dashboard-logo.png";
-import { ReactComponent as ArrowLeft } from "../../../assets/icons/arrow-left.svg";
-import { ReactComponent as Hive } from "../../../assets/icons/hive.svg";
-import { ReactComponent as Settings } from "../../../assets/icons/settings.svg";
-import { ReactComponent as Metrics } from "../../../assets/icons/metrics.svg";
+import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import ArrowLeft from "@assets/icons/arrow-left.svg?react";
+import Hive from "@assets/icons/hive.svg?react";
+import Settings from "@assets/icons/settings.svg?react";
+import Metrics from "@assets/icons/metrics.svg?react";
 import styles from "./Menu.module.scss";
 
 type Tabs = "Overview" | "Settings" | "Metrics";

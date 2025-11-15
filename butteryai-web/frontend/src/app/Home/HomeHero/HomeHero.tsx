@@ -1,5 +1,5 @@
-import { LinkButton } from "../../Global/LinkButton";
-import butteryai from "../../../assets/logos/butteryai.png";
+import { LinkButton } from "@global";
+import butteryai from "@assets/logos/butteryai.png";
 import styles from "./HomeHero.module.scss";
 
 const HomeHero = () => (

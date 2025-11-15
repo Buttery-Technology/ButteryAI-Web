@@ -1,6 +1,6 @@
-import { ReactComponent as Copy } from "../../../assets/icons/copy.svg";
-import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
-import { ReactComponent as Refresh } from "../../../assets/icons/refresh.svg";
+import Copy from "@assets/icons/copy.svg?react";
+import Edit from "@assets/icons/edit.svg?react";
+import Refresh from "@assets/icons/refresh.svg?react";
 import styles from "./Settings.module.scss";
 
 const Settings = () => (

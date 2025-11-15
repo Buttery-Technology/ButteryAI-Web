@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import dashboardLogo from "../../../assets/logos/dashboard-logo.png";
-import { ReactComponent as Close } from "../../../assets/icons/close.svg";
+import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import Close from "@assets/icons/close.svg?react";
 import styles from "./New.module.scss";
 
 const New = () => {

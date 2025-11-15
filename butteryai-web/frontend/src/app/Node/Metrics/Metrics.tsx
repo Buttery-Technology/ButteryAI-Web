@@ -1,6 +1,6 @@
-import { ReactComponent as Energy } from "../../../assets/images/energy.svg";
-import { ReactComponent as Trust } from "../../../assets/images/trust.svg";
-import { ReactComponent as Heatmap } from "../../../assets/images/heatmap.svg";
+import Energy from "@assets/images/energy.svg?react";
+import Trust from "@assets/images/trust.svg?react";
+import Heatmap from "@assets/images/heatmap.svg?react";
 import styles from "./Metrics.module.scss";
 
 const Metrics = () => (

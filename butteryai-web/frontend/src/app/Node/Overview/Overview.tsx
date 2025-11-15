@@ -1,5 +1,5 @@
-import { ReactComponent as Activity } from "../../../assets/images/activity.svg";
-import { ReactComponent as Energy } from "../../../assets/images/energy-node.svg";
+import Activity from "@assets/images/activity.svg?react";
+import Energy from "@assets/images/energy-node.svg?react";
 import { Chat } from "../../Dashboard/Chat";
 import styles from "./Overview.module.scss";
 

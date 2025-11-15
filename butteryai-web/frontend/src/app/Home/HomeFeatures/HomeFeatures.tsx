@@ -1,5 +1,5 @@
-import { LinkButton } from "../../Global/LinkButton";
-import visualAuditTrail from "../../../assets/images/visual-audit-trail.svg";
+import { LinkButton } from "@global";
+import visualAuditTrail from "@assets/images/visual-audit-trail.svg";
 import styles from "./HomeFeatures.module.scss";
 
 const HomeFeatures = () => (

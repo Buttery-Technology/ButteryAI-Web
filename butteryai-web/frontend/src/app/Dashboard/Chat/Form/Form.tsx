@@ -1,12 +1,12 @@
-import { type ChangeEvent, type FormEvent, type RefObject } from "react";
-import { ReactComponent as Send } from "../../../../assets/icons/send.svg";
+import { type MutableRefObject, type ChangeEvent, type FormEvent } from "react";
+import Send from "@assets/icons/send.svg?react";
 import styles from "./Form.module.scss";
 
 type FormProps = {
   inputValue: string;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  inputRef: RefObject<HTMLInputElement | null>;
+  inputRef: MutableRefObject<HTMLInputElement | null>;
 };
 
 const Form = ({ inputValue, handleSubmit, handleChange, inputRef }: FormProps) => (

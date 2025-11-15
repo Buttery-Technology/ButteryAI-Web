@@ -1,4 +1,4 @@
-import { type ReactElement, useLayoutEffect } from "react";
+import { ReactNode, useLayoutEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import { UserContextProvider } from "./UserContext";
@@ -10,11 +10,11 @@ import { Node } from "./app/Node";
 
 import "./App.scss";
 
-const Wrapper = ({ children }: { children: ReactElement | null }) => {
+const Wrapper = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
 
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [pathname]);
 
   return children;

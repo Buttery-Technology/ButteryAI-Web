@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { LinkButton } from "../../Global/LinkButton";
-import transform from "../../../assets/images/transform.png";
+import { LinkButton } from "@global";
+import transform from "@assets/images/transform.png";
 import styles from "./HomeTransform.module.scss";
 
 const HomeTransform = () => (

@@ -1,5 +1,5 @@
-import { LinkButton } from "../../Global/LinkButton";
-import screenshots from "../../../assets/images/screenshots.png";
+import { LinkButton } from "@global";
+import screenshots from "@assets/images/screenshots.png";
 import styles from "./HomeScreenshots.module.scss";
 
 const HomeScreenshots = () => (

@@ -1,9 +1,8 @@
 import { type FormEvent } from "react";
 import { Navigate } from "react-router-dom";
-import useForm from "../../../hooks/useForm";
+import { useForm, useUserContext } from "@hooks";
 import { Input } from "./Input";
 import { Button } from "./Button";
-import { useUserContext } from "../../../hooks/useUserContext";
 import { Loading } from "../../Helper/Loading";
 import styles from "./Form.module.scss";
 

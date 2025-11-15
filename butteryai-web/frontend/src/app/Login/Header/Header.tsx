@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import butteryai from "../../../assets/logos/butteryai.png";
+import butteryai from "@assets/logos/butteryai.png";
 import styles from "./Header.module.scss";
 
 const Header = () => (

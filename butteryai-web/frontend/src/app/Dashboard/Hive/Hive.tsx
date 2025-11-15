@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ReactComponent as HiveSample } from "../../../assets/images/hive-sample.svg";
+import HiveSample from "@assets/images/hive-sample.svg?react";
 import { Chat } from "../Chat";
 import styles from "./Hive.module.scss";
 

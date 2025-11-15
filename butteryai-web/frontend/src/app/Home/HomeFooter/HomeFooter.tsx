@@ -1,6 +1,6 @@
-import butteryai from "../../../assets/logos/butteryai.png";
-import melting from "../../../assets/images/melting-footer.svg";
-import { LinkButton } from "../../Global/LinkButton";
+import { LinkButton } from "@global";
+import butteryai from "@assets/logos/butteryai.png";
+import melting from "@assets/images/melting-footer.svg";
 import styles from "./HomeFooter.module.scss";
 
 const HomeFooter = () => (

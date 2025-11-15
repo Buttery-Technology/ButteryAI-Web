@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import dashboardLogo from "../../../assets/logos/dashboard-logo.png";
-import { ReactComponent as Hive } from "../../../assets/icons/hive.svg";
-import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
-import { ReactComponent as Settings } from "../../../assets/icons/settings.svg";
+import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import Hive from "@assets/icons/hive.svg?react";
+import Chat from "@assets/icons/chat.svg?react";
+import Settings from "@assets/icons/settings.svg?react";
 import styles from "./Menu.module.scss";
 
 type Tabs = "Hive" | "Chat" | "Settings";

@@ -41,7 +41,6 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         if (!response.ok) throw new Error("Invalid token");
 
         await getUser(token);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         signOut();
       } finally {
