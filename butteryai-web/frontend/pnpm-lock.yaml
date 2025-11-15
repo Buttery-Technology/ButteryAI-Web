@@ -46,7 +46,7 @@ importers:
         specifier: ^0.4.4
         version: 0.4.24(eslint@8.57.1)
       sass:
-        specifier: ^1.69.5
+        specifier: ^1.94.0
         version: 1.94.0
       typescript:
         specifier: ^5.2.2
