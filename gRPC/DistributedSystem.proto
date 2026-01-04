@@ -1,0 +1,149 @@
+//
+//  DistributedSystem.proto
+//  DaCom
+//
+//  Created by Jonathan Holland on 4/21/25.
+//
+
+syntax = "proto3";
+
+package distributedSystem;
+
+service RouterService {
+	rpc RegisterNode(ClusterNodeInfo) returns (RegistrationResponse) {}
+	rpc InvokeMethod (MethodInvocation) returns (GeneralResponse) {}
+	rpc StreamUpdates(stream StreamRequest) returns (stream StreamUpdate) {}
+	rpc GetStatus(Empty) returns (StatusUpdate) {}
+}
+
+service ValueSystemService {
+	rpc Metrics(stream ValueInput) returns (stream GeneralResponse) {}
+	rpc StreamUpdates(stream StreamRequest) returns (stream StreamUpdate) {}
+	rpc GetStatus(Empty) returns (StatusUpdate) {}
+}
+
+service CoreSystem {
+	rpc Restart(Empty) returns (stream JobCompletion) {}
+	rpc Shutdown(Empty) returns (stream JobCompletion) {}
+	rpc Status(stream CoreSystemStatus) returns (Empty) {}
+	rpc Start(Empty) returns (stream JobCompletion) {}
+	rpc Handle(HandleRequest) returns (stream JobCompletion) {}
+	rpc StreamUpdates(stream StreamRequest) returns (stream StreamUpdate) {}
+	rpc GetStatus(Empty) returns (StatusUpdate) {}
+}
+
+service ClusterController {
+	rpc RegisterCluster(ClusterNodeInfo) returns (RegistrationResponse) {}
+	rpc StreamUpdates(stream StreamRequest) returns (stream StreamUpdate) {}
+	rpc SyncStatus(StatusUpdate) returns (StatusUpdate) {}
+}
+
+message Empty {}
+
+message MethodInvocation {
+	string nodeID = 1;
+	string methodIdentifier = 2;
+	bytes payload = 3;
+	bytes securityCertificate = 4;
+}
+
+message GeneralResponse {
+	bytes result = 1;
+	bool isError = 2;
+	string errorDescription = 3;
+}
+
+message ClusterNodeInfo {
+	string name = 1;
+	repeated string supportedFeatures = 2;
+	repeated string categories = 3;
+	AccessLevel accessLevel = 4;
+	bytes securityCertificate = 5;
+	DeviceInfo deviceInfo = 6;
+	NetworkInfo networkInfo = 7;
+}
+
+message DeviceInfo {
+	optional string os = 1;
+	optional string serialNumber = 2;
+	optional string deviceIdentifier = 3;
+}
+
+message NetworkInfo {
+	optional string ipAddress = 1;
+	optional int32 port = 2;
+	optional string macAddress = 3;
+}
+
+enum AccessLevel {
+	OPEN = 0;
+	PUBLIC = 1;
+	RESTRICTED = 2;
+	PRIVATE = 3;
+}
+
+enum SystemStatus {
+	OK = 0;
+	NEEDS_ATTENTION = 1;
+	BUSY = 2;
+}
+
+message RegistrationResponse {
+	bool success = 1;
+	string id = 2;
+	string message = 3;
+}
+
+message StreamRequest {
+	string id = 1;
+	SystemStatus status = 2;
+	bytes payload = 3;
+	bytes securityCertificate = 4;
+}
+
+message StreamUpdate {
+	string updateType = 1;
+	bytes payload = 2;
+	int64 timestamp = 3;
+}
+
+message ValueInput {
+	string initiatorID = 1;
+	string initiatorType = 2;
+	bytes input = 3;
+	bytes securityCertificate = 4;
+	bytes accessCertificate = 5;
+	int64 timestamp = 6;
+}
+
+message CoreSystemStatus {
+	SystemStatus status = 1;
+	bytes currentAuditTrail = 2;
+	string entityID = 3;
+	string entityType = 4;
+	bytes payload = 5;
+}
+
+message AuditTrail {
+	bytes payload = 1;
+}
+
+message JobCompletion {
+	bool isComplete = 1;
+	bytes payload = 2;
+	bool isError = 3;
+	bool errorDescription = 4;
+	int64 timestamp = 5;
+}
+
+message HandleRequest {
+	bytes input = 1;
+	bytes source = 2;
+	int64 timestamp = 3;
+}
+
+message StatusUpdate {
+	int64 timestamp = 1;
+	string status = 2;
+	bytes payload = 3;
+}
