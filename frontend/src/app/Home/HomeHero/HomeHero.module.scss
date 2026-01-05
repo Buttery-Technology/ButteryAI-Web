@@ -86,6 +86,9 @@ $transition-duration: 0.5s;
 }
 
 // Transition states
+// Minimum clearance from center for hexagons (ensures text area)
+$min-hex-clearance: 320px;
+
 .gridContainer.transitioning,
 .gridContainer.complete {
   .logoHex {
@@ -106,13 +109,13 @@ $transition-duration: 0.5s;
   }
 
   .rightHex {
-    // Slide right hexagons to the right edge
-    transform: translateX(calc(50vw - $hex-width * 2.5));
+    // Slide right hexagons out - maintain minimum clearance from center
+    transform: translateX(#{unquote("max(#{$min-hex-clearance}, calc(50vw - #{$hex-width * 2.5}))")});
   }
 
   .leftHex {
-    // Slide left hexagons to the left edge
-    transform: translateX(calc(-50vw + $hex-width * 2.5));
+    // Slide left hexagons out - maintain minimum clearance from center
+    transform: translateX(#{unquote("min(#{-$min-hex-clearance}, calc(-50vw + #{$hex-width * 2.5}))")});
   }
 }
 
@@ -127,8 +130,9 @@ $transition-duration: 0.5s;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease-out;
-  transition-delay: 0.3s;
-  max-width: 600px;
+  transition-delay: 0.5s;
+  // Text width based on minimum hexagon clearance
+  max-width: calc($min-hex-clearance * 2 - 40px);
   padding: 0 40px;
 }
 
@@ -144,6 +148,12 @@ $transition-duration: 0.5s;
   line-height: 1.1;
   color: #272d31;
   margin: 24px 0 40px 0;
+  white-space: nowrap;
+  // Keep title centered with logo regardless of container width
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
 }
 
 .subtitle {
@@ -184,6 +194,7 @@ $transition-duration: 0.5s;
   $hex-width-tablet: 160px;
   $hex-height-tablet: 185px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
+  $min-hex-clearance-tablet: 280px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-tablet);
@@ -206,20 +217,25 @@ $transition-duration: 0.5s;
     }
 
     .rightHex {
-      transform: translateX(calc(50vw - $hex-width-tablet * 2.5));
+      transform: translateX(#{unquote("max(#{$min-hex-clearance-tablet}, calc(50vw - #{$hex-width-tablet * 1.5}))")});
     }
 
     .leftHex {
-      transform: translateX(calc(-50vw + $hex-width-tablet * 2.5));
+      transform: translateX(#{unquote("min(#{-$min-hex-clearance-tablet}, calc(-50vw + #{$hex-width-tablet * 1.5}))")});
     }
   }
 
+  .textSection {
+    transform: translate(-50%, calc($hex-height-tablet * -0.15));
+    max-width: calc($min-hex-clearance-tablet * 2 - 40px);
+  }
+
   .title {
-    font-size: 48px;
+    font-size: 56px;
   }
 
   .subtitle {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .description {
@@ -233,6 +249,7 @@ $transition-duration: 0.5s;
   $hex-height-mobile: 133px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
+  $min-hex-clearance-mobile: 180px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-mobile);
@@ -256,25 +273,28 @@ $transition-duration: 0.5s;
     }
 
     .rightHex {
-      transform: translateX(calc(50vw - $hex-width-mobile * 2)) translateY(180px);
+      transform: translateX(#{unquote("max(#{$min-hex-clearance-mobile}, calc(50vw - #{$hex-width-mobile}))")});
     }
 
     .leftHex {
-      transform: translateX(calc(-50vw + $hex-width-mobile * 2)) translateY(-180px);
+      transform: translateX(#{unquote("min(#{-$min-hex-clearance-mobile}, calc(-50vw + #{$hex-width-mobile}))")});
     }
   }
 
   .textSection {
     padding: 0 20px;
+    transform: translate(-50%, calc($hex-height-mobile * -0.1));
+    max-width: calc($min-hex-clearance-mobile * 2 - 40px);
   }
 
   .title {
     font-size: 36px;
+    margin: 16px 0 24px 0;
   }
 
   .subtitle {
     font-size: 20px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .description {
