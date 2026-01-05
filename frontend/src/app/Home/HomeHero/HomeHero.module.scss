@@ -6,7 +6,7 @@ $gap: 16px;
 $cols: 14;
 $rows: 3;
 $row-offset: calc($hex-width / 2 + $gap / 2);
-$transition-duration: 0.8s;
+$transition-duration: 0.5s;
 
 .root {
   display: flex;

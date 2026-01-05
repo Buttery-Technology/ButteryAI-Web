@@ -61,7 +61,7 @@ const HomeHero = () => {
     // Mark complete after transition finishes
     const completeDelay = setTimeout(() => {
       setPhase("complete");
-    }, 2500);
+    }, 2100);
 
     return () => {
       clearTimeout(transitionDelay);
