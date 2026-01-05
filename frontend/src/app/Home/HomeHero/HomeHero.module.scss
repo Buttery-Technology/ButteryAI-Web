@@ -83,8 +83,9 @@ $transition-duration: 0.8s;
 .gridContainer.transitioning,
 .gridContainer.complete {
   .logoHex {
-    // Slide logo to the left edge
-    transform: translateX(calc(-50vw + $hex-width / 2 + 60px));
+    // Slide logo up above the text, aligned with top row hexagons
+    // Move up by 1 row height (from middle row to top row)
+    transform: translateY(calc(($hex-height * 0.75 + $gap) * -1));
   }
 
   .rightHex {
@@ -104,7 +105,7 @@ $transition-duration: 0.8s;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc($hex-height * -0.25));
   text-align: center;
   z-index: 5;
   opacity: 0;
@@ -126,7 +127,7 @@ $transition-duration: 0.8s;
   font-size: 64px;
   line-height: 1.1;
   color: #272d31;
-  margin: 0 0 8px 0;
+  margin: 0 0 40px 0;
 }
 
 .subtitle {
@@ -134,7 +135,7 @@ $transition-duration: 0.8s;
   font-size: 32px;
   line-height: 1.2;
   color: #272d31;
-  margin: 0 0 24px 0;
+  margin: 0 0 12px 0;
 }
 
 .description {
@@ -185,7 +186,7 @@ $transition-duration: 0.8s;
   .gridContainer.transitioning,
   .gridContainer.complete {
     .logoHex {
-      transform: translateX(calc(-50vw + $hex-width-tablet / 2 + 40px));
+      transform: translateY(calc(($hex-height-tablet * 0.75 + $gap) * -1));
     }
 
     .rightHex {
@@ -231,7 +232,7 @@ $transition-duration: 0.8s;
   .gridContainer.transitioning,
   .gridContainer.complete {
     .logoHex {
-      transform: translateX(calc(-50vw + $hex-width-mobile / 2 + 20px)) translateY(-180px);
+      transform: translateY(calc(($hex-height-mobile * 0.75 + $gap-mobile) * -1));
     }
 
     .rightHex {
