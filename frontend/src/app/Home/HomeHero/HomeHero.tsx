@@ -6,9 +6,15 @@ const LOGO_COLOR = "#F9C000";
 const ROWS = 3;
 const COLS = 14;
 
-// Colors by row for left and right sides
-const LEFT_SIDE_COLORS = ["#31AFF5", "#0F9B81", "#D22839"];
-const RIGHT_SIDE_COLORS = ["#288ED2", "#755CBA", "#D12A89"];
+// Diagonal color sequence (repeats as needed, starting with light blue to align with logo)
+const DIAGONAL_COLORS = [
+  "#31AFF5",
+  "#288ED2",
+  "#755CBA",
+  "#D12A89",
+  "#D22839",
+  "#22908C",
+];
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
@@ -41,14 +47,17 @@ const HomeHero = () => {
           position = "left";
         }
 
-        // Determine color based on position and row
+        // Determine color based on diagonal position (accounting for honeycomb offset on odd rows)
         let color: string;
         if (isLogo) {
           color = LOGO_COLOR;
-        } else if (position === "left") {
-          color = LEFT_SIDE_COLORS[row];
         } else {
-          color = RIGHT_SIDE_COLORS[row];
+          // Odd rows are shifted right, so adjust diagonal calculation
+          const rowOffset = Math.floor(row / 2);
+          const diagonal = col - rowOffset;
+          // Handle negative values with proper modulo
+          const diagonalIndex = ((diagonal % DIAGONAL_COLORS.length) + DIAGONAL_COLORS.length) % DIAGONAL_COLORS.length;
+          color = DIAGONAL_COLORS[diagonalIndex];
         }
 
         grid.push({
