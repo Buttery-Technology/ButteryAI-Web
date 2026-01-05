@@ -1,7 +1,7 @@
 @use "@mixins" as *;
 
-$hex-width: 160px;
-$hex-height: 185px;
+$hex-width: 185px;
+$hex-height: 214px;
 $gap: 16px;
 $cols: 14;
 $rows: 3;
@@ -90,8 +90,8 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
 }
 
 @include mq(1200) {
-  $hex-width-tablet: 120px;
-  $hex-height-tablet: 138px;
+  $hex-width-tablet: 140px;
+  $hex-height-tablet: 162px;
   $gap-tablet: 12px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap-tablet / 2);
 
@@ -112,9 +112,9 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
 }
 
 @include mq(768) {
-  $hex-width-mobile: 80px;
-  $hex-height-mobile: 92px;
-  $gap-mobile: 8px;
+  $hex-width-mobile: 100px;
+  $hex-height-mobile: 115px;
+  $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
 
   .grid {
