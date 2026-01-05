@@ -1,7 +1,7 @@
 @use "@mixins" as *;
 
-$hex-width: 185px;
-$hex-height: 214px;
+$hex-width: 210px;
+$hex-height: 242px;
 $gap: 16px;
 $cols: 14;
 $rows: 3;
@@ -90,12 +90,12 @@ $transition-duration: 0.8s;
 
   .rightHex {
     // Slide right hexagons to the right edge
-    transform: translateX(calc(50vw - $hex-width * 3));
+    transform: translateX(calc(50vw - $hex-width * 2.5));
   }
 
   .leftHex {
     // Slide left hexagons to the left edge
-    transform: translateX(calc(-50vw + $hex-width * 3));
+    transform: translateX(calc(-50vw + $hex-width * 2.5));
   }
 }
 
@@ -164,8 +164,8 @@ $transition-duration: 0.8s;
 
 // Tablet
 @include mq(1200) {
-  $hex-width-tablet: 140px;
-  $hex-height-tablet: 162px;
+  $hex-width-tablet: 160px;
+  $hex-height-tablet: 185px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
 
   .gridContainer {
@@ -189,11 +189,11 @@ $transition-duration: 0.8s;
     }
 
     .rightHex {
-      transform: translateX(calc(50vw - $hex-width-tablet * 3));
+      transform: translateX(calc(50vw - $hex-width-tablet * 2.5));
     }
 
     .leftHex {
-      transform: translateX(calc(-50vw + $hex-width-tablet * 3));
+      transform: translateX(calc(-50vw + $hex-width-tablet * 2.5));
     }
   }
 
@@ -212,8 +212,8 @@ $transition-duration: 0.8s;
 
 // Mobile
 @include mq(768) {
-  $hex-width-mobile: 100px;
-  $hex-height-mobile: 115px;
+  $hex-width-mobile: 115px;
+  $hex-height-mobile: 133px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
 
