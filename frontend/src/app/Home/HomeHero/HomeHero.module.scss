@@ -66,26 +66,13 @@ $transition-duration: 0.5s;
   }
 }
 
+// Yellow hexagon - stays visible during loading, fades out during transition
 .logoHexSvg {
-  animation: fadeOutHex 0.8s ease-out forwards;
-  animation-delay: inherit;
+  opacity: 1;
+  transition: opacity 0.15s ease-out;
 }
 
-@keyframes fadeOutHex {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
-}
-
+// Logo - hidden during loading, fades in during transition
 .logo {
   position: absolute;
   top: 50%;
@@ -95,24 +82,7 @@ $transition-duration: 0.5s;
   height: auto;
   z-index: 2;
   opacity: 0;
-  animation: fadeInLogo 0.8s ease-out forwards;
-  animation-delay: inherit;
-  transition: width 0.5s ease-out;
-}
-
-@keyframes fadeInLogo {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-  50% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
+  transition: opacity 0.15s ease-out, width 0.5s ease-out;
 }
 
 // Transition states
@@ -123,8 +93,14 @@ $transition-duration: 0.5s;
     // Move up by 1 row height (from middle row to top row)
     transform: translateY(calc(($hex-height * 0.75 + $gap) * -1));
 
+    // Fade out the yellow hexagon
+    .logoHexSvg {
+      opacity: 0;
+    }
+
+    // Fade in and scale up the logo
     .logo {
-      // Scale up slightly when animation completes
+      opacity: 1;
       width: 95%;
     }
   }
