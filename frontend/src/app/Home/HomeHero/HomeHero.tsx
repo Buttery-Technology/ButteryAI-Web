@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import butteryaiLogo from "@assets/logos/ButteryAI Logo.svg";
 import styles from "./HomeHero.module.scss";
 
-const LOGO_COLOR = "#FFD74D";
+const LOGO_COLOR = "#F9C000";
 const ROWS = 3;
 const COLS = 14;
 
