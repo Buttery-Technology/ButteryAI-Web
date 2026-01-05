@@ -6,6 +6,7 @@ $gap: 16px;
 $cols: 14;
 $rows: 3;
 $row-offset: calc($hex-width / 2 + $gap / 2);
+$transition-duration: 0.8s;
 
 .root {
   display: flex;
@@ -16,14 +17,19 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   padding: 40px 0;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  position: relative;
 }
 
-.grid {
+// Grid container - starts centered, then splits
+.gridContainer {
   display: grid;
   grid-template-columns: repeat($cols, $hex-width);
   grid-template-rows: repeat($rows, calc($hex-height * 0.75));
   gap: $gap;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .hexagon {
@@ -35,6 +41,7 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   opacity: 0;
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: var(--delay);
+  transition: transform $transition-duration ease-out, opacity $transition-duration ease-out;
 }
 
 .oddRow {
@@ -50,8 +57,9 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   animation-delay: inherit;
 }
 
-.center {
-  z-index: 1;
+// Logo hexagon
+.logoHex {
+  z-index: 10;
 
   .hexSvg {
     filter: drop-shadow(0 6px 16px rgba(255, 215, 77, 0.4));
@@ -69,6 +77,71 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   opacity: 0;
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: inherit;
+}
+
+// Transition states
+.gridContainer.transitioning,
+.gridContainer.complete {
+  .logoHex {
+    // Slide logo to the left edge
+    transform: translateX(calc(-50vw + $hex-width / 2 + 60px));
+  }
+
+  .rightHex {
+    // Slide right hexagons to the right edge
+    transform: translateX(calc(50vw - $hex-width * 3));
+  }
+
+  .leftHex {
+    // Fade out left hexagons
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+}
+
+// Text section
+.textSection {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease-out;
+  transition-delay: 0.3s;
+  max-width: 600px;
+  padding: 0 40px;
+}
+
+.textSection.transitioning,
+.textSection.complete {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 64px;
+  line-height: 1.1;
+  color: #272d31;
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 32px;
+  line-height: 1.2;
+  color: #272d31;
+  margin: 0 0 24px 0;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #576773;
+  margin: 0;
 }
 
 @keyframes fadeIn {
@@ -89,16 +162,15 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   }
 }
 
+// Tablet
 @include mq(1200) {
   $hex-width-tablet: 140px;
   $hex-height-tablet: 162px;
-  $gap-tablet: 12px;
-  $row-offset-tablet: calc($hex-width-tablet / 2 + $gap-tablet / 2);
+  $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
 
-  .grid {
+  .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-tablet);
     grid-template-rows: repeat($rows, calc($hex-height-tablet * 0.75));
-    gap: $gap-tablet;
   }
 
   .hexagon {
@@ -109,15 +181,39 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
   .oddRow {
     margin-left: $row-offset-tablet;
   }
+
+  .gridContainer.transitioning,
+  .gridContainer.complete {
+    .logoHex {
+      transform: translateX(calc(-50vw + $hex-width-tablet / 2 + 40px));
+    }
+
+    .rightHex {
+      transform: translateX(calc(50vw - $hex-width-tablet * 3));
+    }
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .subtitle {
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
 }
 
+// Mobile
 @include mq(768) {
   $hex-width-mobile: 100px;
   $hex-height-mobile: 115px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
 
-  .grid {
+  .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-mobile);
     grid-template-rows: repeat($rows, calc($hex-height-mobile * 0.75));
     gap: $gap-mobile;
@@ -130,5 +226,33 @@ $row-offset: calc($hex-width / 2 + $gap / 2);
 
   .oddRow {
     margin-left: $row-offset-mobile;
+  }
+
+  .gridContainer.transitioning,
+  .gridContainer.complete {
+    .logoHex {
+      transform: translateX(calc(-50vw + $hex-width-mobile / 2 + 20px)) translateY(-180px);
+    }
+
+    .rightHex {
+      transform: translateX(calc(50vw - $hex-width-mobile * 2)) translateY(180px);
+    }
+  }
+
+  .textSection {
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .description {
+    font-size: 14px;
   }
 }
