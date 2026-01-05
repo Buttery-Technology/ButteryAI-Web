@@ -88,27 +88,50 @@ const HomeHero = () => {
               "--delay": `${delay}s`,
             } as React.CSSProperties}
           >
-            <svg viewBox="0 0 468 540" className={styles.hexSvg}>
-              <path
-                d="M273 22
-                   L427 112
-                   Q468 135 468 180
-                   L468 360
-                   Q468 405 427 428
-                   L273 518
-                   Q234 540 195 518
-                   L41 428
-                   Q0 405 0 360
-                   L0 180
-                   Q0 135 41 112
-                   L195 22
-                   Q234 0 273 22
-                   Z"
-                fill={color}
-              />
-            </svg>
+            {!isLogo && (
+              <svg viewBox="0 0 468 540" className={styles.hexSvg}>
+                <path
+                  d="M273 22
+                     L427 112
+                     Q468 135 468 180
+                     L468 360
+                     Q468 405 427 428
+                     L273 518
+                     Q234 540 195 518
+                     L41 428
+                     Q0 405 0 360
+                     L0 180
+                     Q0 135 41 112
+                     L195 22
+                     Q234 0 273 22
+                     Z"
+                  fill={color}
+                />
+              </svg>
+            )}
             {isLogo && (
-              <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
+              <>
+                <svg viewBox="0 0 468 540" className={`${styles.hexSvg} ${styles.logoHexSvg}`}>
+                  <path
+                    d="M273 22
+                       L427 112
+                       Q468 135 468 180
+                       L468 360
+                       Q468 405 427 428
+                       L273 518
+                       Q234 540 195 518
+                       L41 428
+                       Q0 405 0 360
+                       L0 180
+                       Q0 135 41 112
+                       L195 22
+                       Q234 0 273 22
+                       Z"
+                    fill={color}
+                  />
+                </svg>
+                <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
+              </>
             )}
           </div>
         ))}

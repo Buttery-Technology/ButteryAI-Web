@@ -66,6 +66,26 @@ $transition-duration: 0.5s;
   }
 }
 
+.logoHexSvg {
+  animation: fadeOutHex 0.8s ease-out forwards;
+  animation-delay: inherit;
+}
+
+@keyframes fadeOutHex {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
 .logo {
   position: absolute;
   top: 50%;
@@ -75,8 +95,23 @@ $transition-duration: 0.5s;
   height: auto;
   z-index: 2;
   opacity: 0;
-  animation: fadeIn 0.6s ease-out forwards;
+  animation: fadeInLogo 0.8s ease-out forwards;
   animation-delay: inherit;
+}
+
+@keyframes fadeInLogo {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 // Transition states
