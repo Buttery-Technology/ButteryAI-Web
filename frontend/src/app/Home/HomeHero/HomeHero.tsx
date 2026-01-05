@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import butteryaiLogo from "@assets/logos/butteryai.png";
+import butteryaiLogo from "@assets/logos/ButteryAI Logo.svg";
 import styles from "./HomeHero.module.scss";
 
 const COLORS = ["#288ED2", "#22908C", "#755CBA", "#D12A89"];
