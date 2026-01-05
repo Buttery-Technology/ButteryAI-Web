@@ -249,7 +249,7 @@ $min-hex-clearance: 320px;
   $hex-height-mobile: 133px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
-  $min-hex-clearance-mobile: 180px;
+  $min-hex-clearance-mobile: 140px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-mobile);
