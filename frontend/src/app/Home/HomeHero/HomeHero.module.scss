@@ -1,50 +1,134 @@
 @use "@mixins" as *;
 
+$hex-width: 160px;
+$hex-height: 185px;
+$gap: 16px;
+$cols: 14;
+$rows: 3;
+$row-offset: calc($hex-width / 2 + $gap / 2);
+
 .root {
-  max-width: 640px;
-  margin-inline: auto;
-  padding-top: 32px;
-  padding-bottom: 120px;
-}
-
-.butteryAI {
-  margin-inline: auto;
-}
-
-.title {
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 75px;
-  line-height: 1.1333;
-  color: #272d31;
-  text-align: center;
-  margin-top: 32px;
-
-  .greenish {
-    background: linear-gradient(to right, #0f9b81, #288ed2);
-  }
-
-  .blueish {
-    background: linear-gradient(to right, #288ed2, #d12a89);
-  }
-
-  .greenish,
-  .blueish {
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
-.intro {
-  font-size: 24px;
-  line-height: 1.4;
-  color: #576773;
-  margin-top: 32px;
-  margin-bottom: 48px;
-}
-
-.buttons {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 32px;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 40px 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat($cols, $hex-width);
+  grid-template-rows: repeat($rows, calc($hex-height * 0.75));
+  gap: $gap;
+  position: relative;
+}
+
+.hexagon {
+  width: $hex-width;
+  height: $hex-height;
+  position: relative;
+  grid-row: calc(var(--row) + 1);
+  grid-column: calc(var(--col) + 1);
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: var(--delay);
+}
+
+.oddRow {
+  margin-left: $row-offset;
+}
+
+.hexSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  transform-origin: center;
+  animation: scaleIn 0.6s ease-out forwards;
+  animation-delay: inherit;
+}
+
+.center {
+  z-index: 1;
+
+  .hexSvg {
+    filter: drop-shadow(0 6px 16px rgba(255, 215, 77, 0.4));
+  }
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: auto;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: inherit;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@include mq(1200) {
+  $hex-width-tablet: 120px;
+  $hex-height-tablet: 138px;
+  $gap-tablet: 12px;
+  $row-offset-tablet: calc($hex-width-tablet / 2 + $gap-tablet / 2);
+
+  .grid {
+    grid-template-columns: repeat($cols, $hex-width-tablet);
+    grid-template-rows: repeat($rows, calc($hex-height-tablet * 0.75));
+    gap: $gap-tablet;
+  }
+
+  .hexagon {
+    width: $hex-width-tablet;
+    height: $hex-height-tablet;
+  }
+
+  .oddRow {
+    margin-left: $row-offset-tablet;
+  }
+}
+
+@include mq(768) {
+  $hex-width-mobile: 80px;
+  $hex-height-mobile: 92px;
+  $gap-mobile: 8px;
+  $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
+
+  .grid {
+    grid-template-columns: repeat($cols, $hex-width-mobile);
+    grid-template-rows: repeat($rows, calc($hex-height-mobile * 0.75));
+    gap: $gap-mobile;
+  }
+
+  .hexagon {
+    width: $hex-width-mobile;
+    height: $hex-height-mobile;
+  }
+
+  .oddRow {
+    margin-left: $row-offset-mobile;
+  }
 }
