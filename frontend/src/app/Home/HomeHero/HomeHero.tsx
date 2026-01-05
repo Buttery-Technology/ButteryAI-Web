@@ -2,31 +2,13 @@ import { useMemo, useState, useEffect } from "react";
 import butteryaiLogo from "@assets/logos/ButteryAI Logo.svg";
 import styles from "./HomeHero.module.scss";
 
-const COLORS = ["#288ED2", "#22908C", "#755CBA", "#D12A89"];
 const LOGO_COLOR = "#FFD74D";
 const ROWS = 3;
 const COLS = 14;
 
-// Colors for hexagons adjacent to logo (by row, top to bottom)
-const LEFT_COLUMN_COLORS = ["#31AFF5", "#0F9B81", "#D22839"];
-const RIGHT_COLUMN_COLORS = ["#288ED2", "#755CBA", "#D12A89"];
-
-const getRandomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
-
-const getNeighborColor = (
-  row: number,
-  col: number,
-  logoCol: number
-): string | null => {
-  // In honeycomb with odd rows offset right, left neighbors vary by row
-  const isEvenRow = row % 2 === 0;
-  const leftNeighborCol = isEvenRow ? logoCol : logoCol - 1;
-  const rightNeighborCol = isEvenRow ? logoCol + 1 : logoCol + 1;
-
-  if (col === leftNeighborCol) return LEFT_COLUMN_COLORS[row];
-  if (col === rightNeighborCol) return RIGHT_COLUMN_COLORS[row];
-  return null;
-};
+// Colors by row for left and right sides
+const LEFT_SIDE_COLORS = ["#31AFF5", "#0F9B81", "#D22839"];
+const RIGHT_SIDE_COLORS = ["#288ED2", "#755CBA", "#D12A89"];
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
@@ -59,13 +41,14 @@ const HomeHero = () => {
           position = "left";
         }
 
-        // Determine color based on position relative to logo
+        // Determine color based on position and row
         let color: string;
         if (isLogo) {
           color = LOGO_COLOR;
+        } else if (position === "left") {
+          color = LEFT_SIDE_COLORS[row];
         } else {
-          const neighborColor = getNeighborColor(row, col, logoCol);
-          color = neighborColor ?? getRandomColor();
+          color = RIGHT_SIDE_COLORS[row];
         }
 
         grid.push({
