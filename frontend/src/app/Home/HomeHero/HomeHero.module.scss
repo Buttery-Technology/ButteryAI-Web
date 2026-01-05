@@ -94,9 +94,8 @@ $transition-duration: 0.8s;
   }
 
   .leftHex {
-    // Fade out left hexagons
-    opacity: 0 !important;
-    pointer-events: none;
+    // Slide left hexagons to the left edge
+    transform: translateX(calc(-50vw + $hex-width * 3));
   }
 }
 
@@ -192,6 +191,10 @@ $transition-duration: 0.8s;
     .rightHex {
       transform: translateX(calc(50vw - $hex-width-tablet * 3));
     }
+
+    .leftHex {
+      transform: translateX(calc(-50vw + $hex-width-tablet * 3));
+    }
   }
 
   .title {
@@ -237,6 +240,10 @@ $transition-duration: 0.8s;
 
     .rightHex {
       transform: translateX(calc(50vw - $hex-width-mobile * 2)) translateY(180px);
+    }
+
+    .leftHex {
+      transform: translateX(calc(-50vw + $hex-width-mobile * 2)) translateY(-180px);
     }
   }
 
