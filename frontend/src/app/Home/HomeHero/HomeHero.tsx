@@ -7,13 +7,33 @@ const LOGO_COLOR = "#FFD74D";
 const ROWS = 3;
 const COLS = 14;
 
+// Colors for hexagons adjacent to logo (by row, top to bottom)
+const LEFT_COLUMN_COLORS = ["#31AFF5", "#0F9B81", "#D22839"];
+const RIGHT_COLUMN_COLORS = ["#288ED2", "#755CBA", "#D12A89"];
+
 const getRandomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
+
+const getNeighborColor = (
+  row: number,
+  col: number,
+  logoCol: number
+): string | null => {
+  // In honeycomb with odd rows offset right, left neighbors vary by row
+  const isEvenRow = row % 2 === 0;
+  const leftNeighborCol = isEvenRow ? logoCol : logoCol - 1;
+  const rightNeighborCol = isEvenRow ? logoCol + 1 : logoCol + 1;
+
+  if (col === leftNeighborCol) return LEFT_COLUMN_COLORS[row];
+  if (col === rightNeighborCol) return RIGHT_COLUMN_COLORS[row];
+  return null;
+};
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
 
   const centerCol = Math.floor(COLS / 2);
   const centerRow = Math.floor(ROWS / 2);
+  const logoCol = centerCol - 1;
 
   const hexagons = useMemo(() => {
     const grid: {
@@ -27,7 +47,7 @@ const HomeHero = () => {
 
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
-        const isLogo = row === centerRow && col === centerCol - 1;
+        const isLogo = row === centerRow && col === logoCol;
         const distance = Math.abs(row - centerRow) + Math.abs(col - centerCol);
 
         let position: "left" | "logo" | "right";
@@ -39,10 +59,19 @@ const HomeHero = () => {
           position = "left";
         }
 
+        // Determine color based on position relative to logo
+        let color: string;
+        if (isLogo) {
+          color = LOGO_COLOR;
+        } else {
+          const neighborColor = getNeighborColor(row, col, logoCol);
+          color = neighborColor ?? getRandomColor();
+        }
+
         grid.push({
           row,
           col,
-          color: isLogo ? LOGO_COLOR : getRandomColor(),
+          color,
           isLogo,
           position,
           delay: distance * 0.05,
@@ -50,7 +79,7 @@ const HomeHero = () => {
       }
     }
     return grid;
-  }, [centerCol, centerRow]);
+  }, [centerCol, centerRow, logoCol]);
 
   useEffect(() => {
     // Start transition after initial grid animation completes
