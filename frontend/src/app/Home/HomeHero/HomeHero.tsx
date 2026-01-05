@@ -151,7 +151,7 @@ const HomeHero = () => {
 
       {/* Text content - appears after transition */}
       <div className={`${styles.textSection} ${styles[phase]}`}>
-        <h1 className={styles.title}>ButteryAI</h1>
+        <h1 className={styles.title}>Buttery AI</h1>
         <h2 className={styles.subtitle}>Buttery Smooth AI Development</h2>
         <p className={styles.description}>
           Build unbelievable AI and the tech stack like never before with everything you need, like enterprise-grade
