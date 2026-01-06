@@ -12,9 +12,9 @@ import { HomeFooter } from "./HomeFooter";
 const Home = () => (
   <>
     <HomeHero />
+    <HomeNextGen />
     <HomeEfficiency />
     <HomeSmart />
-    <HomeNextGen />
     <HomeExtensions />
     <HomeWorkflows />
     <HomeSecurity />

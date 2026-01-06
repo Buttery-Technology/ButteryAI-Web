@@ -14,7 +14,7 @@ $transition-duration: 0.5s;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: visible;
   padding: 40px 0;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -65,6 +65,12 @@ $transition-duration: 0.5s;
   .hexSvg {
     filter: drop-shadow(0 6px 16px rgba(255, 215, 77, 0.4));
   }
+}
+
+// Keep logo in grid during loading/transitioning
+.gridContainer.loading .logoHex,
+.gridContainer.transitioning .logoHex {
+  position: relative;
 }
 
 // Yellow hexagon - stays visible during loading, fades out during transition
@@ -119,6 +125,17 @@ $min-hex-clearance: 320px;
     transform: translateX(#{string.unquote("min(#{-$min-hex-clearance}, calc(-50vw + #{$hex-width * 2.5}))")});
   }
 }
+
+// Fixed positioning for hexagons after transition completes
+.gridContainer.complete {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+}
+
+// Logo scroll animation is handled via inline styles from JS
+// This ensures smooth interpolation based on actual element position
 
 // Text section
 .textSection {
@@ -226,6 +243,13 @@ $min-hex-clearance: 320px;
     }
   }
 
+  .gridContainer.complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+  }
+
   .textSection {
     transform: translate(-50%, calc($hex-height-tablet * -0.15));
     max-width: calc($min-hex-clearance-tablet * 2 - 40px);
@@ -280,6 +304,13 @@ $min-hex-clearance: 320px;
     .leftHex {
       transform: translateX(#{string.unquote("min(#{-$min-hex-clearance-mobile}, calc(-50vw + #{$hex-width-mobile}))")});
     }
+  }
+
+  .gridContainer.complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
   }
 
   .textSection {
