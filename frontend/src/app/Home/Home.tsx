@@ -12,7 +12,7 @@ import { HomeFooter } from "./HomeFooter";
 import styles from "./Home.module.scss";
 
 // Section wrapper with fade-out/fade-in effect
-const Section = ({ children, noFade = false }: { children: ReactNode; noFade?: boolean }) => {
+const Section = ({ children }: { children: ReactNode }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,45 +25,28 @@ const Section = ({ children, noFade = false }: { children: ReactNode; noFade?: b
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
 
-      if (noFade) {
-        // For hero section - fade out as it scrolls up, but don't hide initially
+      // Sections hidden until previous section scrolls away
+      const distanceFromBottom = viewportHeight - rect.top;
+      const showThreshold = viewportHeight * 0.3;
+
+      if (distanceFromBottom < showThreshold) {
+        section.style.opacity = "0";
+      } else if (rect.top > 0) {
+        const fadeInProgress = Math.min((distanceFromBottom - showThreshold) / (viewportHeight * 0.2), 1);
+        section.style.opacity = `${fadeInProgress}`;
+      } else {
         const scrolledPast = -rect.top;
         const sectionHeight = rect.height;
-
-        if (scrolledPast > 0) {
-          const fadeProgress = Math.min(scrolledPast / (sectionHeight * 0.5), 1);
-          section.style.opacity = `${1 - fadeProgress}`;
-        } else {
-          section.style.opacity = "1";
-        }
-      } else {
-        // For other sections - hidden until previous section scrolls away
-        // Show when section top reaches 20% from bottom of viewport
-        const distanceFromBottom = viewportHeight - rect.top;
-        const showThreshold = viewportHeight * 0.3;
-
-        if (distanceFromBottom < showThreshold) {
-          // Section not yet in view - hidden
-          section.style.opacity = "0";
-        } else if (rect.top > 0) {
-          // Section coming into view - fade in
-          const fadeInProgress = Math.min((distanceFromBottom - showThreshold) / (viewportHeight * 0.2), 1);
-          section.style.opacity = `${fadeInProgress}`;
-        } else {
-          // Section scrolling past - fade out
-          const scrolledPast = -rect.top;
-          const sectionHeight = rect.height;
-          const fadeProgress = Math.min(scrolledPast / (sectionHeight * 0.5), 1);
-          section.style.opacity = `${1 - fadeProgress}`;
-        }
+        const fadeProgress = Math.min(scrolledPast / (sectionHeight * 0.5), 1);
+        section.style.opacity = `${1 - fadeProgress}`;
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [noFade]);
+  }, []);
 
   return (
     <div ref={sectionRef} className={styles.section}>
@@ -72,48 +55,37 @@ const Section = ({ children, noFade = false }: { children: ReactNode; noFade?: b
   );
 };
 
-const Home = () => {
-  // Enable scroll snapping on html element
-  useEffect(() => {
-    document.documentElement.style.scrollSnapType = "y proximity";
-    return () => {
-      document.documentElement.style.scrollSnapType = "";
-    };
-  }, []);
-
-  return (
-    <>
-      {/* HomeHero outside Section so hexagons/logo don't fade */}
-      <HomeHero />
-      <Section>
-        <HomeNextGen />
-      </Section>
-      <Section>
-        <HomeEfficiency />
-      </Section>
-      <Section>
-        <HomeSmart />
-      </Section>
-      <Section>
-        <HomeExtensions />
-      </Section>
-      <Section>
-        <HomeWorkflows />
-      </Section>
-      <Section>
-        <HomeSecurity />
-      </Section>
-      <Section>
-        <HomeGovernance />
-      </Section>
-      <Section>
-        <HomeDesign />
-      </Section>
-      <Section>
-        <HomeFooter />
-      </Section>
-    </>
-  );
-};
+const Home = () => (
+  <>
+    <HomeHero />
+    <Section>
+      <HomeNextGen />
+    </Section>
+    <Section>
+      <HomeEfficiency />
+    </Section>
+    <Section>
+      <HomeSmart />
+    </Section>
+    <Section>
+      <HomeExtensions />
+    </Section>
+    <Section>
+      <HomeWorkflows />
+    </Section>
+    <Section>
+      <HomeSecurity />
+    </Section>
+    <Section>
+      <HomeGovernance />
+    </Section>
+    <Section>
+      <HomeDesign />
+    </Section>
+    <Section>
+      <HomeFooter />
+    </Section>
+  </>
+);
 
 export default Home;
