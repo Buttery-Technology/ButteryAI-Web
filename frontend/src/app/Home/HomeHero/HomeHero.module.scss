@@ -1,3 +1,4 @@
+@use "sass:string";
 @use "@mixins" as *;
 
 $hex-width: 210px;
@@ -110,12 +111,12 @@ $min-hex-clearance: 320px;
 
   .rightHex {
     // Slide right hexagons out - maintain minimum clearance from center
-    transform: translateX(#{unquote("max(#{$min-hex-clearance}, calc(50vw - #{$hex-width * 2.5}))")});
+    transform: translateX(#{string.unquote("max(#{$min-hex-clearance}, calc(50vw - #{$hex-width * 2.5}))")});
   }
 
   .leftHex {
     // Slide left hexagons out - maintain minimum clearance from center
-    transform: translateX(#{unquote("min(#{-$min-hex-clearance}, calc(-50vw + #{$hex-width * 2.5}))")});
+    transform: translateX(#{string.unquote("min(#{-$min-hex-clearance}, calc(-50vw + #{$hex-width * 2.5}))")});
   }
 }
 
@@ -217,11 +218,11 @@ $min-hex-clearance: 320px;
     }
 
     .rightHex {
-      transform: translateX(#{unquote("max(#{$min-hex-clearance-tablet}, calc(50vw - #{$hex-width-tablet * 1.5}))")});
+      transform: translateX(#{string.unquote("max(#{$min-hex-clearance-tablet}, calc(50vw - #{$hex-width-tablet * 1.5}))")});
     }
 
     .leftHex {
-      transform: translateX(#{unquote("min(#{-$min-hex-clearance-tablet}, calc(-50vw + #{$hex-width-tablet * 1.5}))")});
+      transform: translateX(#{string.unquote("min(#{-$min-hex-clearance-tablet}, calc(-50vw + #{$hex-width-tablet * 1.5}))")});
     }
   }
 
@@ -273,11 +274,11 @@ $min-hex-clearance: 320px;
     }
 
     .rightHex {
-      transform: translateX(#{unquote("max(#{$min-hex-clearance-mobile}, calc(50vw - #{$hex-width-mobile}))")});
+      transform: translateX(#{string.unquote("max(#{$min-hex-clearance-mobile}, calc(50vw - #{$hex-width-mobile}))")});
     }
 
     .leftHex {
-      transform: translateX(#{unquote("min(#{-$min-hex-clearance-mobile}, calc(-50vw + #{$hex-width-mobile}))")});
+      transform: translateX(#{string.unquote("min(#{-$min-hex-clearance-mobile}, calc(-50vw + #{$hex-width-mobile}))")});
     }
   }
 
