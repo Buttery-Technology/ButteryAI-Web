@@ -123,9 +123,9 @@ const HomeHero = () => {
         return;
       }
 
-      // Parallax effect for text - moves slower than scroll (0.3x speed)
+      // Parallax effect for text - higher value = text moves slower relative to scroll
       const baseYOffset = -60.5;
-      const textParallax = scrollY * 0.3;
+      const textParallax = scrollY * 0.75;
       textRef.current.style.transform = `translate(-50%, ${baseYOffset + textParallax}px)`;
 
       const startPos = logoStartPos.current;
