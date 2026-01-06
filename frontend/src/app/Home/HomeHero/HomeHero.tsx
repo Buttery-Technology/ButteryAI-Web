@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import styles from "./HomeHero.module.scss";
 
@@ -18,6 +18,10 @@ const DIAGONAL_COLORS = [
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
+  const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({});
+  const rootRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
 
   const centerCol = Math.floor(COLS / 2);
   const centerRow = Math.floor(ROWS / 2);
@@ -90,8 +94,62 @@ const HomeHero = () => {
     };
   }, []);
 
+  // Scroll-linked animation for logo - only active after initial animation completes
+  useEffect(() => {
+    if (phase !== "complete") return;
+
+    // Capture logo's starting position once
+    if (!logoStartPos.current && logoRef.current) {
+      const rect = logoRef.current.getBoundingClientRect();
+      logoStartPos.current = {
+        top: rect.top,
+        left: rect.left + rect.width / 2,
+        width: rect.width,
+      };
+    }
+
+    const handleScroll = () => {
+      if (!rootRef.current || !logoStartPos.current) return;
+
+      const heroHeight = rootRef.current.offsetHeight;
+      const scrollY = window.scrollY;
+      // Progress from 0 to 1 - complete transition in 1/3 of hero height for faster animation
+      const progress = Math.min(Math.max(scrollY / (heroHeight / 3), 0), 1);
+
+      // Don't apply any style until user starts scrolling
+      if (progress === 0) {
+        setLogoStyle({});
+        return;
+      }
+
+      const startPos = logoStartPos.current;
+
+      // The CSS transform moves logo up by one row height: -(hexHeight * 0.75 + gap)
+      // We need to include this offset since inline transform replaces CSS transform
+      const cssTransformOffset = -(startPos.width * (242 / 210) * 0.75 + 16); // Approximate row height based on hex proportions
+
+      const endTop = -60; // Position at very top edge
+      const endScale = 0.5;
+
+      // At progress 0: match CSS transform to keep logo in place
+      // At progress 1: position logo at endTop from viewport top
+      const endTransformY = endTop - startPos.top + cssTransformOffset;
+      const currentTranslateY = cssTransformOffset + (endTransformY - cssTransformOffset) * progress;
+      const currentScale = 1 - (1 - endScale) * progress;
+
+      setLogoStyle({
+        transform: `translateY(${currentTranslateY}px) scale(${currentScale})`,
+        zIndex: 100,
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [phase]);
+
   return (
-    <main className={styles.root}>
+    <main className={styles.root} ref={rootRef}>
       <div className={`${styles.gridContainer} ${styles[phase]}`}>
         {hexagons.map(({ row, col, color, isLogo, position, delay }) => (
           <div
@@ -103,10 +161,12 @@ const HomeHero = () => {
               ${position === "left" ? styles.leftHex : ""}
               ${row % 2 === 1 ? styles.oddRow : ""}
             `}
+            ref={isLogo ? logoRef : undefined}
             style={{
               "--row": row,
               "--col": col,
               "--delay": `${delay}s`,
+              ...(isLogo && phase === "complete" ? logoStyle : {}),
             } as React.CSSProperties}
           >
             {!isLogo && (
