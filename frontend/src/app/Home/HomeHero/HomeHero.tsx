@@ -18,9 +18,9 @@ const DIAGONAL_COLORS = [
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
-  const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({});
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
 
   const centerCol = Math.floor(COLS / 2);
@@ -109,7 +109,7 @@ const HomeHero = () => {
     }
 
     const handleScroll = () => {
-      if (!rootRef.current || !logoStartPos.current) return;
+      if (!rootRef.current || !logoStartPos.current || !logoRef.current || !textRef.current) return;
 
       const heroHeight = rootRef.current.offsetHeight;
       const scrollY = window.scrollY;
@@ -118,29 +118,30 @@ const HomeHero = () => {
 
       // Don't apply any style until user starts scrolling
       if (progress === 0) {
-        setLogoStyle({});
+        logoRef.current.style.transform = "";
+        textRef.current.style.transform = "";
         return;
       }
+
+      // Parallax effect for text - moves slower than scroll (0.3x speed)
+      const baseYOffset = -60.5;
+      const textParallax = scrollY * 0.3;
+      textRef.current.style.transform = `translate(-50%, ${baseYOffset + textParallax}px)`;
 
       const startPos = logoStartPos.current;
 
       // The CSS transform moves logo up by one row height: -(hexHeight * 0.75 + gap)
-      // We need to include this offset since inline transform replaces CSS transform
-      const cssTransformOffset = -(startPos.width * (242 / 210) * 0.75 + 16); // Approximate row height based on hex proportions
+      const cssTransformOffset = -(startPos.width * (242 / 210) * 0.75 + 16);
 
-      const endTop = -60; // Position at very top edge
+      const endTop = -60;
       const endScale = 0.5;
 
-      // At progress 0: match CSS transform to keep logo in place
-      // At progress 1: position logo at endTop from viewport top
       const endTransformY = endTop - startPos.top + cssTransformOffset;
       const currentTranslateY = cssTransformOffset + (endTransformY - cssTransformOffset) * progress;
       const currentScale = 1 - (1 - endScale) * progress;
 
-      setLogoStyle({
-        transform: `translateY(${currentTranslateY}px) scale(${currentScale})`,
-        zIndex: 100,
-      });
+      logoRef.current.style.transform = `translateY(${currentTranslateY}px) scale(${currentScale})`;
+      logoRef.current.style.zIndex = "100";
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -166,7 +167,6 @@ const HomeHero = () => {
               "--row": row,
               "--col": col,
               "--delay": `${delay}s`,
-              ...(isLogo && phase === "complete" ? logoStyle : {}),
             } as React.CSSProperties}
           >
             {!isLogo && (
@@ -219,7 +219,7 @@ const HomeHero = () => {
       </div>
 
       {/* Text content - appears after transition */}
-      <div className={`${styles.textSection} ${styles[phase]}`}>
+      <div ref={textRef} className={`${styles.textSection} ${styles[phase]}`}>
         <h1 className={styles.title}>Buttery AI</h1>
         <h2 className={styles.subtitle}>Buttery Smooth AI Development</h2>
         <p className={styles.description}>
@@ -227,6 +227,9 @@ const HomeHero = () => {
           security, workflows, and governance.
         </p>
       </div>
+
+      {/* Start button - stays fixed */}
+      <button className={`${styles.startButton} ${styles[phase]}`}>Start</button>
     </main>
   );
 };

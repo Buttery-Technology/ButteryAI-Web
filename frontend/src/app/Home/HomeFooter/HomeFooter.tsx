@@ -1,12 +1,7 @@
-import { LinkButton } from "@global";
 import styles from "./HomeFooter.module.scss";
 
 const HomeFooter = () => (
   <div className={styles.root}>
-    <h1>Get started now!</h1>
-    <LinkButton to="/login" hasBackground>
-      Start
-    </LinkButton>
     <h2>Connect with us</h2>
     <ul>
       <li>

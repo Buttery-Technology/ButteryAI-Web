@@ -1,4 +1,3 @@
-import { LinkButton } from "@global";
 import styles from "./HomeNextGen.module.scss";
 
 const HomeNextGen = () => (
@@ -26,9 +25,6 @@ const HomeNextGen = () => (
           </p>
         </li>
       </ul>
-      <LinkButton to="/login" hasBackground>
-        Start
-      </LinkButton>
     </div>
   </section>
 );
