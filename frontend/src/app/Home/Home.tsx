@@ -11,7 +11,7 @@ import { HomeDesign } from "./HomeDesign";
 import { HomeFooter } from "./HomeFooter";
 import styles from "./Home.module.scss";
 
-// Section wrapper with fade-out/fade-in effect
+// Section wrapper with fade-out/fade-in effect and parallax
 const Section = ({ children }: { children: ReactNode }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +24,11 @@ const Section = ({ children }: { children: ReactNode }) => {
       const section = sectionRef.current;
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      // Parallax effect - same rate as hero text (0.75)
+      const parallax = scrollY * 0.75;
+      section.style.transform = `translateY(${parallax}px)`;
 
       // Sections hidden until previous section scrolls away
       const distanceFromBottom = viewportHeight - rect.top;
