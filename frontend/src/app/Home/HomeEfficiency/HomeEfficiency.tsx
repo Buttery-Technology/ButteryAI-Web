@@ -1,4 +1,3 @@
-import { LinkButton } from "@global";
 import styles from "./HomeEfficiency.module.scss";
 
 const HomeEfficiency = () => (
@@ -6,7 +5,7 @@ const HomeEfficiency = () => (
     <div className={styles.content}>
       <h1 className={styles.title}>Increase Efficiency & Output</h1>
       <p>
-        ButteryAI makes it easier for you and your team to build exceptional AI functionality at scale. With ButteryAI’s
+        ButteryAI makes it easier for you and your team to build exceptional AI functionality at scale. With ButteryAI's
         intelligent engines, value and knowledge stores, and integrated tooling and integrations, your team can increase
         efficiency and output with building AI functionality. Make your team better, today.
       </p>
@@ -26,9 +25,6 @@ const HomeEfficiency = () => (
           </p>
         </li>
       </ul>
-      <LinkButton to="/login" hasBackground>
-        Start
-      </LinkButton>
     </div>
   </section>
 );

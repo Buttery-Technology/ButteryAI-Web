@@ -1,4 +1,3 @@
-import { LinkButton } from "@global";
 import styles from "./HomeSmart.module.scss";
 
 const HomeSmart = () => (
@@ -10,9 +9,6 @@ const HomeSmart = () => (
         extensions to take your orchestration to the next level. ButteryAI is built upon a patented distributed
         architecture that requires no additional overhead and no token loss - I say that again, no token loss.
       </p>
-      <LinkButton to="/login" hasBackground>
-        Start
-      </LinkButton>
     </div>
   </section>
 );
