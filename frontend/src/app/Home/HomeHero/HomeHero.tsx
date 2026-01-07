@@ -18,16 +18,36 @@ const DIAGONAL_COLORS = [
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
-  const [heroHeight, setHeroHeight] = useState<number | null>(null);
+  const [initialDimensions, setInitialDimensions] = useState<{ height: number; width: number } | null>(null);
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
   const lastScrollY = useRef(window.scrollY);
 
-  // Capture initial viewport height once on mount - prevents resize issues
+  // Capture initial viewport dimensions once on mount - prevents resize issues
   useEffect(() => {
-    setHeroHeight(window.innerHeight);
+    setInitialDimensions({
+      height: window.innerHeight,
+      width: window.innerWidth,
+    });
   }, []);
+
+  // Calculate hexagon transforms based on initial viewport width
+  const getHexTransform = (position: "left" | "logo" | "right") => {
+    if (!initialDimensions || phase === "loading") return undefined;
+
+    const hexWidth = 210; // $hex-width
+    const minClearance = 320; // $min-hex-clearance
+
+    if (position === "right") {
+      const translateX = Math.max(minClearance, initialDimensions.width / 2 - hexWidth * 2.5);
+      return `translateX(${translateX}px)`;
+    } else if (position === "left") {
+      const translateX = Math.min(-minClearance, -initialDimensions.width / 2 + hexWidth * 2.5);
+      return `translateX(${translateX}px)`;
+    }
+    return undefined;
+  };
 
   const centerCol = Math.floor(COLS / 2);
   const centerRow = Math.floor(ROWS / 2);
@@ -159,10 +179,18 @@ const HomeHero = () => {
     <main
       className={styles.root}
       ref={rootRef}
-      style={heroHeight ? { minHeight: heroHeight } : undefined}
+      style={initialDimensions ? { minHeight: initialDimensions.height } : undefined}
     >
-      <div className={`${styles.gridContainer} ${styles[phase]}`}>
-        {hexagons.map(({ row, col, color, isLogo, position, delay }) => (
+      <div
+        className={`${styles.gridContainer} ${styles[phase]}`}
+        style={initialDimensions && phase !== "loading" ? {
+          left: initialDimensions.width / 2,
+          top: initialDimensions.height / 2,
+        } : undefined}
+      >
+        {hexagons.map(({ row, col, color, isLogo, position, delay }) => {
+          const hexTransform = getHexTransform(position);
+          return (
           <div
             key={`${row}-${col}`}
             className={`
@@ -177,6 +205,7 @@ const HomeHero = () => {
               "--row": row,
               "--col": col,
               "--delay": `${delay}s`,
+              ...(hexTransform && { transform: hexTransform }),
             } as React.CSSProperties}
           >
             {!isLogo && (
@@ -225,7 +254,8 @@ const HomeHero = () => {
               </>
             )}
           </div>
-        ))}
+        );
+        })}
       </div>
 
       {/* Text content - appears after transition */}
