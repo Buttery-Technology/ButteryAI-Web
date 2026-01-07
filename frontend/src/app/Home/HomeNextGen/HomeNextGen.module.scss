@@ -45,9 +45,9 @@
 
 .card {
   background: #f9f9f9;
-  border-radius: 30px;
-  padding: 32px;
-  max-width: 320px;
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 280px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -55,23 +55,23 @@
 
   h2 {
     font-family: var(--sf-pro-rounded-bold);
-    font-size: 20px;
-    color: #1a9cb0;
-    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #288ED2;
+    margin: 0 0 10px 0;
   }
 
   p {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.5;
     color: #576773;
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
     flex-grow: 1;
   }
 }
 
 .checkIcon {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   align-self: center;
 }
 
@@ -90,15 +90,15 @@
   }
 
   .card {
-    padding: 24px;
-    max-width: 280px;
+    padding: 20px;
+    max-width: 240px;
 
     h2 {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     p {
-      font-size: 14px;
+      font-size: 13px;
     }
   }
 }
@@ -134,19 +134,19 @@
 
   .card {
     max-width: 100%;
-    padding: 24px;
+    padding: 20px;
 
     h2 {
       font-size: 16px;
     }
 
     p {
-      font-size: 14px;
+      font-size: 13px;
     }
   }
 
   .checkIcon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
 }
