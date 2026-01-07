@@ -20,8 +20,8 @@ const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
+  const lastScrollY = useRef(window.scrollY);
 
   const centerCol = Math.floor(COLS / 2);
   const centerRow = Math.floor(ROWS / 2);
@@ -94,7 +94,7 @@ const HomeHero = () => {
     };
   }, []);
 
-  // Scroll-linked animation for logo - only active after initial animation completes
+  // Scroll-linked animation for logo only - active after initial animation completes
   useEffect(() => {
     if (phase !== "complete") return;
 
@@ -109,24 +109,22 @@ const HomeHero = () => {
     }
 
     const handleScroll = () => {
-      if (!rootRef.current || !logoStartPos.current || !logoRef.current || !textRef.current) return;
+      if (!rootRef.current || !logoStartPos.current || !logoRef.current) return;
+
+      // Only update if scrollY actually changed (ignores resize-triggered scroll events)
+      const scrollY = window.scrollY;
+      if (scrollY === lastScrollY.current) return;
+      lastScrollY.current = scrollY;
 
       const heroHeight = rootRef.current.offsetHeight;
-      const scrollY = window.scrollY;
       // Progress from 0 to 1 - complete transition in 1/3 of hero height for faster animation
       const progress = Math.min(Math.max(scrollY / (heroHeight / 3), 0), 1);
 
       // Don't apply any style until user starts scrolling
       if (progress === 0) {
         logoRef.current.style.transform = "";
-        textRef.current.style.transform = "";
         return;
       }
-
-      // Parallax effect for text - higher value = text moves slower relative to scroll
-      const baseYOffset = -60.5;
-      const textParallax = scrollY * 0.75;
-      textRef.current.style.transform = `translate(-50%, ${baseYOffset + textParallax}px)`;
 
       const startPos = logoStartPos.current;
 
@@ -146,7 +144,9 @@ const HomeHero = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [phase]);
 
   return (
@@ -219,7 +219,7 @@ const HomeHero = () => {
       </div>
 
       {/* Text content - appears after transition */}
-      <div ref={textRef} className={`${styles.textSection} ${styles[phase]}`}>
+      <div className={`${styles.textSection} ${styles[phase]}`}>
         <h1 className={styles.title}>Buttery AI</h1>
         <h2 className={styles.subtitle}>Buttery Smooth AI Development</h2>
         <p className={styles.description}>

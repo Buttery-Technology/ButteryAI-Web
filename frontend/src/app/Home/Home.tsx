@@ -11,24 +11,26 @@ import { HomeDesign } from "./HomeDesign";
 import { HomeFooter } from "./HomeFooter";
 import styles from "./Home.module.scss";
 
-// Section wrapper with fade-out/fade-in effect and parallax
+// Section wrapper with fade-out/fade-in effect
 const Section = ({ children }: { children: ReactNode }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
+    const section = sectionRef.current;
 
-      const section = sectionRef.current;
+    const handleScroll = () => {
+      if (!section) return;
+
+      // Only update if scrollY actually changed (ignores resize-triggered events)
+      const currentScrollY = window.scrollY;
+      if (currentScrollY === lastScrollY.current) return;
+      lastScrollY.current = currentScrollY;
+
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-
-      // Parallax effect - same rate as hero text (0.75)
-      const parallax = scrollY * 0.75;
-      section.style.transform = `translateY(${parallax}px)`;
 
       // Sections hidden until previous section scrolls away
       const distanceFromBottom = viewportHeight - rect.top;
@@ -48,9 +50,16 @@ const Section = ({ children }: { children: ReactNode }) => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Initial render - temporarily allow update
+    const initialScrollY = lastScrollY.current;
+    lastScrollY.current = -1;
+    handleScroll();
+    lastScrollY.current = initialScrollY;
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
