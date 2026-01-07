@@ -9,10 +9,17 @@
 }
 
 .content {
-  max-width: 600px;
+  max-width: 800px;
   text-align: center;
   padding: 40px;
   z-index: 5;
+}
+
+.icon {
+  width: 120px;
+  height: auto;
+  margin: 0 auto 24px;
+  display: block;
 }
 
 .title {
@@ -27,36 +34,45 @@
   font-size: 18px;
   line-height: 1.6;
   color: #576773;
-  margin: 0 0 32px 0;
+  margin: 0 0 48px 0;
 }
 
 .features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 32px 0;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.card {
+  background: #f9f9f9;
+  border-radius: 30px;
+  padding: 32px;
+  max-width: 320px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
-  li {
-    margin-bottom: 24px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    h2 {
-      font-family: var(--sf-pro-rounded-bold);
-      font-size: 24px;
-      color: #272d31;
-      margin: 0 0 8px 0;
-    }
-
-    p {
-      font-size: 16px;
-      line-height: 1.5;
-      color: #576773;
-      margin: 0;
-    }
+  h2 {
+    font-family: var(--sf-pro-rounded-bold);
+    font-size: 20px;
+    color: #1a9cb0;
+    margin: 0 0 12px 0;
   }
+
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #576773;
+    margin: 0 0 24px 0;
+    flex-grow: 1;
+  }
+}
+
+.checkIcon {
+  width: 40px;
+  height: 40px;
+  align-self: center;
 }
 
 // Tablet
@@ -72,6 +88,19 @@
   .description {
     font-size: 16px;
   }
+
+  .card {
+    padding: 24px;
+    max-width: 280px;
+
+    h2 {
+      font-size: 18px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
 }
 
 // Mobile
@@ -84,28 +113,40 @@
     padding: 20px;
   }
 
+  .icon {
+    width: 80px;
+    margin-bottom: 16px;
+  }
+
   .title {
     font-size: 28px;
   }
 
   .description {
     font-size: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
   }
 
   .features {
-    margin-bottom: 24px;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    li {
-      margin-bottom: 16px;
+  .card {
+    max-width: 100%;
+    padding: 24px;
 
-      h2 {
-        font-size: 18px;
-      }
-
-      p {
-        font-size: 14px;
-      }
+    h2 {
+      font-size: 16px;
     }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .checkIcon {
+    width: 32px;
+    height: 32px;
   }
 }
