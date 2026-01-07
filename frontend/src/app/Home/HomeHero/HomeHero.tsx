@@ -18,10 +18,16 @@ const DIAGONAL_COLORS = [
 
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
+  const [heroHeight, setHeroHeight] = useState<number | null>(null);
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
   const lastScrollY = useRef(window.scrollY);
+
+  // Capture initial viewport height once on mount - prevents resize issues
+  useEffect(() => {
+    setHeroHeight(window.innerHeight);
+  }, []);
 
   const centerCol = Math.floor(COLS / 2);
   const centerRow = Math.floor(ROWS / 2);
@@ -150,7 +156,11 @@ const HomeHero = () => {
   }, [phase]);
 
   return (
-    <main className={styles.root} ref={rootRef}>
+    <main
+      className={styles.root}
+      ref={rootRef}
+      style={heroHeight ? { minHeight: heroHeight } : undefined}
+    >
       <div className={`${styles.gridContainer} ${styles[phase]}`}>
         {hexagons.map(({ row, col, color, isLogo, position, delay }) => (
           <div
