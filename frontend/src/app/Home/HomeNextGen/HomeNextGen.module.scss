@@ -15,11 +15,26 @@
   z-index: 5;
 }
 
-.icon {
-  width: 120px;
-  height: auto;
+.hexIcon {
+  width: 210px;
+  height: 242px;
   margin: 0 auto 24px;
-  display: block;
+  position: relative;
+}
+
+.hexSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 16px rgba(249, 192, 0, 0.4));
+}
+
+.brainSvg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: auto;
 }
 
 .title {
@@ -81,6 +96,11 @@
     padding: 24px;
   }
 
+  .hexIcon {
+    width: 160px;
+    height: 185px;
+  }
+
   .title {
     font-size: 36px;
   }
@@ -113,8 +133,9 @@
     padding: 20px;
   }
 
-  .icon {
-    width: 80px;
+  .hexIcon {
+    width: 115px;
+    height: 133px;
     margin-bottom: 16px;
   }
 
