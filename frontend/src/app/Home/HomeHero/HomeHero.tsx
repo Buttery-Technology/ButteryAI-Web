@@ -120,7 +120,7 @@ const HomeHero = () => {
     };
   }, []);
 
-  // Scroll-linked animation for logo only - active after initial animation completes
+  // Scroll-linked animation for logo and hexagons - active after initial animation completes
   useEffect(() => {
     if (phase !== "complete") return;
 
@@ -166,6 +166,39 @@ const HomeHero = () => {
 
       logoRef.current.style.transform = `translateY(${currentTranslateY}px) scale(${currentScale})`;
       logoRef.current.style.zIndex = "100";
+
+      // Calculate hexagon spread based on scroll into next-gen section
+      // Start spreading earlier so hexagons move as section comes into view
+      const spreadStart = heroHeight * 0.2;
+      const spreadEnd = heroHeight * 0.7;
+      const spreadProgress = Math.min(Math.max((scrollY - spreadStart) / (spreadEnd - spreadStart), 0), 1);
+
+      // Additional horizontal offset for hexagons (max 150px extra spread)
+      const additionalSpread = spreadProgress * 150;
+
+      // Apply to all hexagon elements
+      const leftHexes = rootRef.current.querySelectorAll(`.${styles.leftHex}`) as NodeListOf<HTMLElement>;
+      const rightHexes = rootRef.current.querySelectorAll(`.${styles.rightHex}`) as NodeListOf<HTMLElement>;
+
+      leftHexes.forEach((hex) => {
+        const baseTransform = hex.dataset.baseTransform || hex.style.transform || '';
+        if (!hex.dataset.baseTransform && hex.style.transform) {
+          hex.dataset.baseTransform = hex.style.transform;
+        }
+        if (additionalSpread > 0) {
+          hex.style.transform = `${baseTransform} translateX(${-additionalSpread}px)`;
+        }
+      });
+
+      rightHexes.forEach((hex) => {
+        const baseTransform = hex.dataset.baseTransform || hex.style.transform || '';
+        if (!hex.dataset.baseTransform && hex.style.transform) {
+          hex.dataset.baseTransform = hex.style.transform;
+        }
+        if (additionalSpread > 0) {
+          hex.style.transform = `${baseTransform} translateX(${additionalSpread}px)`;
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
