@@ -1,8 +1,8 @@
 @use "sass:string";
 @use "@mixins" as *;
 
-$hex-width: 210px;
-$hex-height: 242px;
+$hex-width: 180px;
+$hex-height: 207px;
 $gap: 16px;
 $cols: 14;
 $rows: 3;
@@ -278,8 +278,8 @@ $min-hex-clearance: 320px;
 
 // Tablet
 @include mq(1200) {
-  $hex-width-tablet: 160px;
-  $hex-height-tablet: 185px;
+  $hex-width-tablet: 137px;
+  $hex-height-tablet: 158px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
   $min-hex-clearance-tablet: 280px;
 
@@ -339,8 +339,8 @@ $min-hex-clearance: 320px;
 
 // Mobile
 @include mq(768) {
-  $hex-width-mobile: 115px;
-  $hex-height-mobile: 133px;
+  $hex-width-mobile: 98px;
+  $hex-height-mobile: 113px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
   $min-hex-clearance-mobile: 140px;
