@@ -10,7 +10,7 @@ const HomeSmart = () => (
       {/* Line going straight */}
       <path d="M0 150 Q250 150 500 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going down-right */}
-      <path d="M0 150 Q250 250 500 270" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+      <path d="M0 150 Q200 150 500 290" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
     </svg>
     <div className={styles.content}>
       <div className={styles.hexIcon}>
