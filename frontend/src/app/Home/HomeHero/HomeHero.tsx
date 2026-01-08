@@ -26,12 +26,19 @@ const HomeHero = () => {
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
   const lastScrollY = useRef(window.scrollY);
 
-  // Capture initial viewport dimensions once on mount - prevents resize issues
+  // Capture viewport dimensions and update on horizontal resize
   useEffect(() => {
-    setInitialDimensions({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
+    const updateDimensions = () => {
+      setInitialDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+
+    updateDimensions();
+
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   // Calculate hexagon transforms based on initial viewport width
@@ -126,23 +133,27 @@ const HomeHero = () => {
   useEffect(() => {
     if (phase !== "complete") return;
 
-    // Capture logo's starting position once
-    if (!logoStartPos.current && logoRef.current) {
-      const rect = logoRef.current.getBoundingClientRect();
-      logoStartPos.current = {
-        top: rect.top,
-        left: rect.left + rect.width / 2,
-        width: rect.width,
-      };
-    }
-
     const handleScroll = () => {
-      if (!rootRef.current || !logoStartPos.current || !logoRef.current) return;
+      if (!rootRef.current || !logoRef.current) return;
 
       // Only update if scrollY actually changed (ignores resize-triggered scroll events)
       const scrollY = window.scrollY;
       if (scrollY === lastScrollY.current) return;
       lastScrollY.current = scrollY;
+
+      // Capture logo's BASE position (without CSS transform) once
+      if (!logoStartPos.current) {
+        // Temporarily remove transform to get base position
+        logoRef.current.style.transform = "none";
+        const rect = logoRef.current.getBoundingClientRect();
+        logoRef.current.style.transform = "";
+
+        logoStartPos.current = {
+          top: rect.top,
+          left: rect.left + rect.width / 2,
+          width: rect.width,
+        };
+      }
 
       const heroHeight = rootRef.current.offsetHeight;
       // Progress from 0 to 1 - complete transition in 1/3 of hero height for faster animation
@@ -154,16 +165,41 @@ const HomeHero = () => {
         return;
       }
 
-      const startPos = logoStartPos.current;
-
-      // The CSS transform moves logo up by one row height: -(hexHeight * 0.75 + gap)
-      const cssTransformOffset = -(startPos.width * (242 / 210) * 0.75 + 16);
-
-      const endTop = -60;
       const endScale = 0.5;
+      const endTop = 5;
 
-      const endTransformY = endTop - startPos.top + cssTransformOffset;
-      const currentTranslateY = cssTransformOffset + (endTransformY - cssTransformOffset) * progress;
+      // Logo dimensions
+      const logoHeight = 242;
+      const rowHeight = logoHeight * 0.75; // 181.5px per grid row
+      const gap = 16;
+      const scaledLogoHeight = logoHeight * endScale;
+
+      // Grid is centered in viewport via transform: translate(-50%, -50%)
+      // Grid has 3 rows: total track height = 3 * 181.5 + 2 * 16 = 576.5px
+      const gridHeight = 3 * rowHeight + 2 * gap;
+      const viewportCenterY = window.innerHeight / 2;
+
+      // Grid top in viewport = viewportCenter - gridHeight/2
+      const gridTop = viewportCenterY - gridHeight / 2;
+
+      // Logo is in row 1 (middle row, 0-indexed)
+      // Row 1 starts at: rowHeight + gap = 197.5px from grid top
+      const logoTopInGrid = rowHeight + gap;
+      const logoTopInViewport = gridTop + logoTopInGrid;
+      const logoCenterInViewport = logoTopInViewport + logoHeight / 2;
+
+      // CSS transform moves logo up by one row height
+      const cssTransformY = -(rowHeight + gap);
+
+      // Target: top edge at endTop when scaled to 0.5
+      // Center needs to be at: endTop + scaledHeight/2
+      const targetCenterY = endTop + scaledLogoHeight / 2;
+
+      // Calculate the final translateY needed to reach target from grid position
+      const endTranslateY = targetCenterY - logoCenterInViewport;
+
+      // Interpolate from CSS transform to end
+      const currentTranslateY = cssTransformY + (endTranslateY - cssTransformY) * progress;
       const currentScale = 1 - (1 - endScale) * progress;
 
       logoRef.current.style.transform = `translateY(${currentTranslateY}px) scale(${currentScale})`;
