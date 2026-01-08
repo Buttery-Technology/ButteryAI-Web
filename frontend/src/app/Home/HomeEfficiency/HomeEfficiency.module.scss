@@ -59,9 +59,9 @@
 
 .card {
   background: #f9f9f9;
-  border-radius: 16px;
-  padding: 12px 18px;
-  width: 280px;
+  border-radius: 20px;
+  padding: 18px;
+  max-width: 220px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -69,23 +69,23 @@
 
   h2 {
     font-family: var(--sf-pro-rounded-bold);
-    font-size: 15px;
+    font-size: 16px;
     color: #288ED2;
-    margin: 0 0 4px 0;
+    margin: 0 0 8px 0;
   }
 
   p {
-    font-size: 12px;
-    line-height: 1.35;
-    color: #272d31;
-    margin: 0 0 8px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #576773;
+    margin: 0 0 16px 0;
     flex-grow: 1;
   }
 }
 
 .checkIcon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   align-self: center;
 }
 
@@ -109,15 +109,15 @@
   }
 
   .card {
-    width: 220px;
-    padding: 10px 16px;
+    padding: 16px;
+    max-width: 200px;
 
     h2 {
-      font-size: 14px;
+      font-size: 15px;
     }
 
     p {
-      font-size: 11px;
+      font-size: 12px;
     }
   }
 }
@@ -144,7 +144,7 @@
 
   .description {
     font-size: 14px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .features {
@@ -153,20 +153,20 @@
   }
 
   .card {
-    width: 100%;
-    padding: 10px 16px;
+    max-width: 100%;
+    padding: 16px;
 
     h2 {
-      font-size: 14px;
+      font-size: 15px;
     }
 
     p {
-      font-size: 11px;
+      font-size: 12px;
     }
   }
 
   .checkIcon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 }
