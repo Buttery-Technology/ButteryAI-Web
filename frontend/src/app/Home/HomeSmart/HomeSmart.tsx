@@ -7,15 +7,15 @@ const HomeSmart = () => (
     <div className={styles.connectorLines}>
       {/* Line going up-right */}
       <svg className={styles.lineUp} viewBox="0 0 500 100" fill="none">
-        <path d="M0 80 Q250 20 500 40" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round" fill="none"/>
+        <path d="M0 80 Q250 20 500 40" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       </svg>
       {/* Line going straight */}
       <svg className={styles.lineStraight} viewBox="0 0 500 100" fill="none">
-        <line x1="0" y1="50" x2="500" y2="50" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round"/>
+        <line x1="0" y1="50" x2="500" y2="50" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round"/>
       </svg>
       {/* Line going down-right */}
       <svg className={styles.lineDown} viewBox="0 0 500 100" fill="none">
-        <path d="M0 20 Q250 80 500 60" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round" fill="none"/>
+        <path d="M0 20 Q250 80 500 60" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       </svg>
     </div>
     <div className={styles.content}>
