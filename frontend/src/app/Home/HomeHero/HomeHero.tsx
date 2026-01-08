@@ -284,12 +284,21 @@ const HomeHero = () => {
 
   // Drag handlers for hexagons
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+  const wasDragged = useRef(false);
 
   const handleMouseDown = (e: React.MouseEvent, key: string) => {
     e.preventDefault();
     dragStartPos.current = { x: e.clientX, y: e.clientY };
+    wasDragged.current = false;
     setDragState({ key, offsetX: 0, offsetY: 0 });
     setDragOffset({ x: 0, y: 0 });
+  };
+
+  const handleLogoClick = () => {
+    // Only scroll if it wasn't a drag
+    if (!wasDragged.current) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -297,10 +306,13 @@ const HomeHero = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragStartPos.current) return;
-      setDragOffset({
-        x: e.clientX - dragStartPos.current.x,
-        y: e.clientY - dragStartPos.current.y,
-      });
+      const dx = e.clientX - dragStartPos.current.x;
+      const dy = e.clientY - dragStartPos.current.y;
+      // Mark as dragged if moved more than 5px
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        wasDragged.current = true;
+      }
+      setDragOffset({ x: dx, y: dy });
     };
 
     const handleMouseUp = () => {
@@ -350,6 +362,7 @@ const HomeHero = () => {
             `}
             ref={isLogo ? logoRef : undefined}
             onMouseDown={(e) => handleMouseDown(e, hexKey)}
+            onMouseUp={isLogo ? handleLogoClick : undefined}
             onDragStart={(e) => e.preventDefault()}
             style={{
               "--row": row,
