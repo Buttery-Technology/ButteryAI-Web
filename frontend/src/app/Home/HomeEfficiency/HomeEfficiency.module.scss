@@ -2,37 +2,176 @@
 
 .root {
   padding-block: 160px;
-  max-width: 1684px;
-  margin-inline: auto;
   display: flex;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.title {
-  padding-top: 96px;
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 48px;
-  color: #272d31;
-
-  span {
-    color: #755cba;
-  }
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .content {
-  max-width: 522px;
+  max-width: 900px;
+  text-align: center;
+  padding: 0 40px;
+}
+
+.hexIcon {
+  width: 180px;
+  height: 207px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+
+.hexSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 16px rgba(34, 144, 140, 0.3));
+}
+
+.efficiencyIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 55%;
+  height: auto;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 60px;
+  line-height: 1.1;
+  color: #272d31;
+  margin: 0 0 24px 0;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #576773;
+  margin: 0 0 40px 0;
+}
+
+.features {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  background: #f9f9f9;
+  border-radius: 20px;
+  padding: 20px;
+  max-width: 260px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  h2 {
+    font-family: var(--sf-pro-rounded-bold);
+    font-size: 18px;
+    color: #288ED2;
+    margin: 0 0 10px 0;
+  }
 
   p {
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.5;
-    color: #272d31;
-    margin-top: 32px;
+    color: #576773;
+    margin: 0 0 16px 0;
+    flex-grow: 1;
   }
 }
 
-.buttons {
-  margin-top: 32px;
-  display: flex;
-  gap: 32px;
+.checkIcon {
+  width: 32px;
+  height: 32px;
+  align-self: center;
+}
+
+// Tablet
+@include mq(1200) {
+  .content {
+    padding: 0 24px;
+  }
+
+  .hexIcon {
+    width: 137px;
+    height: 158px;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 18px;
+    max-width: 220px;
+
+    h2 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+// Mobile
+@include mq(768) {
+  .root {
+    padding-block: 64px;
+  }
+
+  .content {
+    padding: 0 20px;
+  }
+
+  .hexIcon {
+    width: 98px;
+    height: 113px;
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .description {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 18px;
+
+    h2 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
+  }
 }
