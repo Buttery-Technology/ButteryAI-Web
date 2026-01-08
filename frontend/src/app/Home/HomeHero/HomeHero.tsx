@@ -165,7 +165,7 @@ const HomeHero = () => {
         return;
       }
 
-      const endScale = 0.5;
+      const endScale = 0.4;
       const endTop = 5;
 
       // Logo dimensions
