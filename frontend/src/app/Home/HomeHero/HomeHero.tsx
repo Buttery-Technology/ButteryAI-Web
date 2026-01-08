@@ -268,12 +268,18 @@ const HomeHero = () => {
       const smartSectionEnd = heroHeight * 2.0; // When HomeSmart is fully in view
       const smartProgress = Math.min(Math.max((scrollY - smartSectionStart) / (smartSectionEnd - smartSectionStart), 0), 1);
 
-      // Left hexagons: move completely off screen (HomeSmart content is on left)
-      const leftExtraSpread = smartProgress * (viewportWidth * 0.6); // Move off left edge
+      // Third phase: when HomeEfficiency section comes into view (centered content)
+      // Left hexagons should come back into view
+      const efficiencySectionStart = heroHeight * 2.5; // When HomeEfficiency starts entering
+      const efficiencySectionEnd = heroHeight * 3.0; // When HomeEfficiency is in view
+      const efficiencyProgress = Math.min(Math.max((scrollY - efficiencySectionStart) / (efficiencySectionEnd - efficiencySectionStart), 0), 1);
+
+      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency
+      const leftExtraSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come closer since content is on left
-      const rightRetract = smartProgress * 180; // Come closer to connector lines
+      // Right hexagons: come closer during HomeSmart, stay closer during HomeEfficiency
+      const rightRetract = smartProgress * 180 * (1 - efficiencyProgress * 0.5);
       const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
       // Apply to all hexagon elements
