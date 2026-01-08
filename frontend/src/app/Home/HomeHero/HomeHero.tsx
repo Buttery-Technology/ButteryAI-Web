@@ -272,8 +272,8 @@ const HomeHero = () => {
       const leftExtraSpread = smartProgress * (viewportWidth * 0.6); // Move off left edge
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come slightly closer since content is on left
-      const rightRetract = smartProgress * 80; // Come a bit closer
+      // Right hexagons: come closer since content is on left
+      const rightRetract = smartProgress * 180; // Come closer to connector lines
       const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
       // Apply to all hexagon elements
