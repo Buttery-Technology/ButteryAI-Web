@@ -4,11 +4,11 @@ import CheckCircle from "@assets/icons/check-circle.svg?react";
 const HomeSmart = () => (
   <section className={styles.root}>
     {/* Connector lines from content to hexagons */}
-    <svg className={styles.connectorLines} viewBox="0 0 500 300" fill="none">
+    <svg className={styles.connectorLines} viewBox="0 0 540 300" fill="none">
       {/* Line going up-right */}
       <path d="M0 150 Q300 150 500 50" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
-      {/* Line going straight */}
-      <path d="M0 150 Q250 150 500 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+      {/* Line going straight - extends a bit further */}
+      <path d="M0 150 Q280 150 540 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going down-right */}
       <path d="M0 150 Q300 150 500 250" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
     </svg>
