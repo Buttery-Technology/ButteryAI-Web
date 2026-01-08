@@ -6,7 +6,7 @@ const HomeSmart = () => (
     {/* Connector lines from content to hexagons */}
     <svg className={styles.connectorLines} viewBox="0 0 500 300" fill="none">
       {/* Line going up-right */}
-      <path d="M0 150 Q250 50 500 30" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+      <path d="M0 150 Q200 150 500 10" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going straight */}
       <path d="M0 150 Q250 150 500 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going down-right */}
