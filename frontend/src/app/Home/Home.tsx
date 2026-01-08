@@ -13,8 +13,8 @@ const Home = () => (
   <>
     <HomeHero />
     <HomeNextGen />
-    <HomeEfficiency />
     <HomeSmart />
+    <HomeEfficiency />
     <HomeExtensions />
     <HomeWorkflows />
     <HomeSecurity />
