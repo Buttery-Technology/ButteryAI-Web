@@ -343,7 +343,7 @@ $min-hex-clearance: 320px;
   $hex-height-mobile: 113px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
-  $min-hex-clearance-mobile: 140px;
+  $min-hex-clearance-mobile: 120px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-mobile);
@@ -383,22 +383,22 @@ $min-hex-clearance: 320px;
   }
 
   .textSection {
-    padding: 0 20px;
+    padding: 0 12px;
     transform: translate(-50%, calc($hex-height-mobile * -0.1));
-    max-width: calc($min-hex-clearance-mobile * 2 - 40px);
+    max-width: calc($min-hex-clearance-mobile * 2 - 24px);
   }
 
   .title {
-    font-size: 36px;
-    margin: 16px 0 24px 0;
+    font-size: 32px;
+    margin: 12px 0 20px 0;
   }
 
   .subtitle {
-    font-size: 20px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    margin-bottom: 10px;
   }
 
   .description {
-    font-size: 14px;
+    font-size: 13px;
   }
 }

@@ -33,6 +33,12 @@ const HomeHero = () => {
         height: window.innerHeight,
         width: window.innerWidth,
       });
+
+      // Reset scroll tracking and trigger recalculation
+      lastScrollY.current = -1;
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('scroll'));
+      });
     };
 
     updateDimensions();
@@ -45,14 +51,30 @@ const HomeHero = () => {
   const getHexTransform = (position: "left" | "logo" | "right") => {
     if (!initialDimensions || phase === "loading") return undefined;
 
-    const hexWidth = 210; // $hex-width
-    const minClearance = 320; // $min-hex-clearance
+    // Responsive values matching SCSS breakpoints
+    let hexWidth: number;
+    let minClearance: number;
+    let multiplier: number;
+
+    if (initialDimensions.width <= 768) {
+      hexWidth = 98;
+      minClearance = 120;
+      multiplier = 1;
+    } else if (initialDimensions.width <= 1200) {
+      hexWidth = 137;
+      minClearance = 280;
+      multiplier = 1.5;
+    } else {
+      hexWidth = 180;
+      minClearance = 320;
+      multiplier = 2.5;
+    }
 
     if (position === "right") {
-      const translateX = Math.max(minClearance, initialDimensions.width / 2 - hexWidth * 2.5);
+      const translateX = Math.max(minClearance, initialDimensions.width / 2 - hexWidth * multiplier);
       return `translateX(${translateX}px)`;
     } else if (position === "left") {
-      const translateX = Math.min(-minClearance, -initialDimensions.width / 2 + hexWidth * 2.5);
+      const translateX = Math.min(-minClearance, -initialDimensions.width / 2 + hexWidth * multiplier);
       return `translateX(${translateX}px)`;
     }
     return undefined;
@@ -211,31 +233,45 @@ const HomeHero = () => {
       const spreadEnd = heroHeight * 0.7;
       const spreadProgress = Math.min(Math.max((scrollY - spreadStart) / (spreadEnd - spreadStart), 0), 1);
 
-      // Additional horizontal offset for hexagons (max 150px extra spread)
-      const additionalSpread = spreadProgress * 150;
+      // Calculate base clearance and spread based on current viewport
+      const viewportWidth = window.innerWidth;
+      let baseHexClearance: number;
+      let maxSpread: number;
+      let hexWidthForCalc: number;
+      let multiplierForCalc: number;
+
+      if (viewportWidth <= 768) {
+        baseHexClearance = 120;
+        maxSpread = 250;
+        hexWidthForCalc = 98;
+        multiplierForCalc = 1;
+      } else if (viewportWidth <= 1200) {
+        baseHexClearance = 280;
+        maxSpread = 150;
+        hexWidthForCalc = 137;
+        multiplierForCalc = 1.5;
+      } else {
+        baseHexClearance = 320;
+        maxSpread = 150;
+        hexWidthForCalc = 180;
+        multiplierForCalc = 2.5;
+      }
+
+      // Calculate base transform (matching CSS logic)
+      const baseTranslateX = Math.max(baseHexClearance, viewportWidth / 2 - hexWidthForCalc * multiplierForCalc);
+      const additionalSpread = spreadProgress * maxSpread;
+      const totalSpread = baseTranslateX + additionalSpread;
 
       // Apply to all hexagon elements
       const leftHexes = rootRef.current.querySelectorAll(`.${styles.leftHex}`) as NodeListOf<HTMLElement>;
       const rightHexes = rootRef.current.querySelectorAll(`.${styles.rightHex}`) as NodeListOf<HTMLElement>;
 
       leftHexes.forEach((hex) => {
-        const baseTransform = hex.dataset.baseTransform || hex.style.transform || '';
-        if (!hex.dataset.baseTransform && hex.style.transform) {
-          hex.dataset.baseTransform = hex.style.transform;
-        }
-        if (additionalSpread > 0) {
-          hex.style.transform = `${baseTransform} translateX(${-additionalSpread}px)`;
-        }
+        hex.style.transform = `translateX(${-totalSpread}px)`;
       });
 
       rightHexes.forEach((hex) => {
-        const baseTransform = hex.dataset.baseTransform || hex.style.transform || '';
-        if (!hex.dataset.baseTransform && hex.style.transform) {
-          hex.dataset.baseTransform = hex.style.transform;
-        }
-        if (additionalSpread > 0) {
-          hex.style.transform = `${baseTransform} translateX(${additionalSpread}px)`;
-        }
+        hex.style.transform = `translateX(${totalSpread}px)`;
       });
     };
 
