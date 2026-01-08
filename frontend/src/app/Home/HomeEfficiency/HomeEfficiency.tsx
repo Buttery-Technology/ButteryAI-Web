@@ -24,25 +24,7 @@ const HomeEfficiency = () => (
             fill="#22908C"
           />
         </svg>
-        {/* Rabbit/hare icon (SF Symbol 􀓎) */}
-        <svg className={styles.efficiencyIcon} viewBox="0 0 100 80" fill="none">
-          {/* Rabbit body running right */}
-          <ellipse cx="45" cy="50" rx="28" ry="18" fill="white"/>
-          {/* Head */}
-          <ellipse cx="75" cy="42" rx="14" ry="12" fill="white"/>
-          {/* Long ear back */}
-          <path d="M68 30 Q62 8 70 5 Q78 8 74 30" fill="white"/>
-          {/* Long ear front */}
-          <path d="M78 32 Q75 12 82 8 Q90 12 84 32" fill="white"/>
-          {/* Back legs */}
-          <ellipse cx="22" cy="58" rx="12" ry="8" fill="white"/>
-          {/* Front legs */}
-          <ellipse cx="60" cy="62" rx="6" ry="4" fill="white"/>
-          {/* Tail */}
-          <circle cx="12" cy="48" r="6" fill="white"/>
-          {/* Eye */}
-          <circle cx="80" cy="40" r="2.5" fill="#22908C"/>
-        </svg>
+        <span className={styles.efficiencyIcon}>􀓎</span>
       </div>
 
       <h1 className={styles.title}>Increase Efficiency & Output</h1>
