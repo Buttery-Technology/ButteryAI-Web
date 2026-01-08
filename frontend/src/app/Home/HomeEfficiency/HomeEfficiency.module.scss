@@ -60,8 +60,8 @@
 .card {
   background: #f9f9f9;
   border-radius: 20px;
-  padding: 18px;
-  max-width: 220px;
+  padding: 20px;
+  max-width: 260px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -69,13 +69,13 @@
 
   h2 {
     font-family: var(--sf-pro-rounded-bold);
-    font-size: 16px;
+    font-size: 18px;
     color: #288ED2;
-    margin: 0 0 8px 0;
+    margin: 0 0 10px 0;
   }
 
   p {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.5;
     color: #576773;
     margin: 0 0 16px 0;
@@ -84,8 +84,8 @@
 }
 
 .checkIcon {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   align-self: center;
 }
 
@@ -109,16 +109,21 @@
   }
 
   .card {
-    padding: 16px;
-    max-width: 200px;
+    padding: 18px;
+    max-width: 220px;
 
     h2 {
-      font-size: 15px;
+      font-size: 16px;
     }
 
     p {
-      font-size: 12px;
+      font-size: 14px;
     }
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
   }
 }
 
@@ -154,19 +159,19 @@
 
   .card {
     max-width: 100%;
-    padding: 16px;
+    padding: 18px;
 
     h2 {
-      font-size: 15px;
+      font-size: 16px;
     }
 
     p {
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 
   .checkIcon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 }
