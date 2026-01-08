@@ -3,6 +3,21 @@ import CheckCircle from "@assets/icons/check-circle.svg?react";
 
 const HomeSmart = () => (
   <section className={styles.root}>
+    {/* Connector lines from content to hexagons */}
+    <div className={styles.connectorLines}>
+      {/* Line going up-right */}
+      <svg className={styles.lineUp} viewBox="0 0 426 34" fill="none" preserveAspectRatio="none">
+        <path d="M5 29C5 29 129.567 6.695 212.681 5.231C310.974 3.5 420.797 22.759 420.797 22.759" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round"/>
+      </svg>
+      {/* Line going straight */}
+      <svg className={styles.lineStraight} viewBox="0 0 486 10" fill="none" preserveAspectRatio="none">
+        <line x1="5" y1="5" x2="481" y2="5" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round"/>
+      </svg>
+      {/* Line going down-right */}
+      <svg className={styles.lineDown} viewBox="0 0 437 66" fill="none" preserveAspectRatio="none">
+        <path d="M5 10C5 10 128.863 2.544 200.576 6.262C284.883 10.633 431.487 61 431.487 61" stroke="#8D8D8D" strokeWidth="4" strokeLinecap="round"/>
+      </svg>
+    </div>
     <div className={styles.content}>
       <div className={styles.hexIcon}>
         <svg viewBox="0 0 468 540" className={styles.hexSvg}>

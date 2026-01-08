@@ -6,6 +6,44 @@
   align-items: flex-start;
   justify-content: flex-start;
   position: relative;
+  overflow: visible;
+}
+
+// Connector lines from content to hexagons
+.connectorLines {
+  position: absolute;
+  top: 50%;
+  left: 780px;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lineUp,
+.lineStraight,
+.lineDown {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.lineUp {
+  top: 0;
+  height: 60px;
+}
+
+.lineStraight {
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+}
+
+.lineDown {
+  bottom: 0;
+  height: 80px;
 }
 
 .content {
@@ -97,6 +135,10 @@
 
 // Tablet
 @include mq(1200) {
+  .connectorLines {
+    display: none;
+  }
+
   .content {
     padding: 0 24px 0 40px;
   }
