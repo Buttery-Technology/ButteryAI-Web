@@ -19,6 +19,8 @@ const DIAGONAL_COLORS = [
 const HomeHero = () => {
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
   const [initialDimensions, setInitialDimensions] = useState<{ height: number; width: number } | null>(null);
+  const [dragState, setDragState] = useState<{ key: string; offsetX: number; offsetY: number } | null>(null);
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
@@ -208,6 +210,42 @@ const HomeHero = () => {
     };
   }, [phase]);
 
+  // Drag handlers for hexagons
+  const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+
+  const handleMouseDown = (e: React.MouseEvent, key: string) => {
+    e.preventDefault();
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    setDragState({ key, offsetX: 0, offsetY: 0 });
+    setDragOffset({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    if (!dragState || !dragStartPos.current) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!dragStartPos.current) return;
+      setDragOffset({
+        x: e.clientX - dragStartPos.current.x,
+        y: e.clientY - dragStartPos.current.y,
+      });
+    };
+
+    const handleMouseUp = () => {
+      setDragState(null);
+      setDragOffset({ x: 0, y: 0 });
+      dragStartPos.current = null;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [dragState]);
+
   return (
     <main
       className={styles.root}
@@ -223,47 +261,60 @@ const HomeHero = () => {
       >
         {hexagons.map(({ row, col, color, isLogo, position, delay }) => {
           const hexTransform = getHexTransform(position);
+          const hexKey = `${row}-${col}`;
+          const isDragging = dragState?.key === hexKey;
           return (
           <div
-            key={`${row}-${col}`}
+            key={hexKey}
+            data-hex-key={hexKey}
+            draggable={false}
             className={`
               ${styles.hexagon}
               ${isLogo ? styles.logoHex : ""}
               ${position === "right" ? styles.rightHex : ""}
               ${position === "left" ? styles.leftHex : ""}
               ${row % 2 === 1 ? styles.oddRow : ""}
+              ${isDragging ? styles.dragging : ""}
             `}
             ref={isLogo ? logoRef : undefined}
+            onMouseDown={(e) => handleMouseDown(e, hexKey)}
+            onDragStart={(e) => e.preventDefault()}
             style={{
               "--row": row,
               "--col": col,
               "--delay": `${delay}s`,
+              "--hex-color": color,
               ...(hexTransform && { transform: hexTransform }),
             } as React.CSSProperties}
           >
             {!isLogo && (
-              <svg viewBox="0 0 468 540" className={styles.hexSvg}>
-                <path
-                  d="M273 22
-                     L427 112
-                     Q468 135 468 180
-                     L468 360
-                     Q468 405 427 428
-                     L273 518
-                     Q234 540 195 518
-                     L41 428
-                     Q0 405 0 360
-                     L0 180
-                     Q0 135 41 112
-                     L195 22
-                     Q234 0 273 22
-                     Z"
-                  fill={color}
-                />
-              </svg>
+              <div
+                className={styles.hexDragWrapper}
+                style={{ transform: isDragging ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : 'translate(0, 0)' }}
+              >
+                <svg viewBox="0 0 468 540" className={styles.hexSvg}>
+                  <path
+                    d="M273 22
+                       L427 112
+                       Q468 135 468 180
+                       L468 360
+                       Q468 405 427 428
+                       L273 518
+                       Q234 540 195 518
+                       L41 428
+                       Q0 405 0 360
+                       L0 180
+                       Q0 135 41 112
+                       L195 22
+                       Q234 0 273 22
+                       Z"
+                    fill={color}
+                  />
+                </svg>
+              </div>
             )}
             {isLogo && (
-              <>
+              <div style={{ transform: isDragging ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : 'translate(0, 0)', transition: isDragging ? 'none' : 'transform 0.4s ease-out' }}>
                 <svg viewBox="0 0 468 540" className={`${styles.hexSvg} ${styles.logoHexSvg}`}>
                   <path
                     d="M273 22
@@ -284,7 +335,7 @@ const HomeHero = () => {
                   />
                 </svg>
                 <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
-              </>
+              </div>
             )}
           </div>
         );

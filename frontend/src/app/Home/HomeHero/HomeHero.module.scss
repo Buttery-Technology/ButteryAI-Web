@@ -31,6 +31,7 @@ $transition-duration: 0.5s;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  overflow: visible;
 }
 
 .hexagon {
@@ -56,6 +57,40 @@ $transition-duration: 0.5s;
   transform-origin: center;
   animation: scaleIn 0.6s ease-out forwards;
   animation-delay: inherit;
+  transition: filter 0.3s ease;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.hexagon {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  overflow: visible;
+}
+
+.hexDragWrapper {
+  background: none;
+  transition: transform 0.4s ease-out;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hexagon:hover .hexSvg {
+  filter: drop-shadow(0 0 8px var(--hex-color));
+}
+
+.hexagon.dragging {
+  z-index: 100;
+}
+
+.hexagon.dragging .hexDragWrapper {
+  transition: none;
+}
+
+.hexagon.dragging .hexSvg {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
 }
 
 // Logo hexagon
@@ -91,6 +126,8 @@ $transition-duration: 0.5s;
   z-index: 2;
   opacity: 0;
   transition: opacity 0.15s ease-out, width 0.5s ease-out;
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 // Transition states
