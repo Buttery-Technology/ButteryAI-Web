@@ -37,28 +37,12 @@
   height: auto;
 }
 
-.titleWrapper {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 24px;
-}
-
 .title {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 48px;
   line-height: 1.1;
   color: #272d31;
-  margin: 0;
-}
-
-.titleUnderline {
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 12px;
-  overflow: visible;
+  margin: 0 0 24px 0;
 }
 
 .description {

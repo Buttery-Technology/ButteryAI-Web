@@ -3,12 +3,7 @@ import styles from "./HomeEfficiency.module.scss";
 const HomeEfficiency = () => (
   <section className={styles.root}>
     <div className={styles.content}>
-      <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>Increase Efficiency & Output</h1>
-        <svg className={styles.titleUnderline} viewBox="0 0 437 66" fill="none" preserveAspectRatio="none">
-          <path d="M5 55.393C5 55.393 128.863 63.456 200.576 59.738C284.883 55.367 431.487 5 431.487 5" stroke="#FFD74D" strokeWidth="10" strokeLinecap="round"/>
-        </svg>
-      </div>
+      <h1 className={styles.title}>Increase Efficiency & Output</h1>
       <p>
         ButteryAI makes it easier for you and your team to build exceptional AI functionality at scale. With ButteryAI's
         intelligent engines, value and knowledge stores, and integrated tooling and integrations, your team can increase
