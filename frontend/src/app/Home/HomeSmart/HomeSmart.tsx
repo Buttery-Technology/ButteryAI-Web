@@ -4,20 +4,14 @@ import CheckCircle from "@assets/icons/check-circle.svg?react";
 const HomeSmart = () => (
   <section className={styles.root}>
     {/* Connector lines from content to hexagons */}
-    <div className={styles.connectorLines}>
+    <svg className={styles.connectorLines} viewBox="0 0 500 300" fill="none">
       {/* Line going up-right */}
-      <svg className={styles.lineUp} viewBox="0 0 500 100" fill="none">
-        <path d="M0 50 Q250 10 500 20" stroke="#8D8D8D" strokeWidth="14" strokeLinecap="round" fill="none"/>
-      </svg>
+      <path d="M0 150 Q250 50 500 30" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going straight */}
-      <svg className={styles.lineStraight} viewBox="0 0 500 100" fill="none">
-        <path d="M0 50 L500 50" stroke="#8D8D8D" strokeWidth="14" strokeLinecap="round" fill="none"/>
-      </svg>
+      <path d="M0 150 Q250 150 500 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
       {/* Line going down-right */}
-      <svg className={styles.lineDown} viewBox="0 0 500 100" fill="none">
-        <path d="M0 50 Q250 90 500 80" stroke="#8D8D8D" strokeWidth="14" strokeLinecap="round" fill="none"/>
-      </svg>
-    </div>
+      <path d="M0 150 Q250 250 500 270" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+    </svg>
     <div className={styles.content}>
       <div className={styles.hexIcon}>
         <svg viewBox="0 0 468 540" className={styles.hexSvg}>
