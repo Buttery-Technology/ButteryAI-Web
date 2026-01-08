@@ -1,8 +1,8 @@
 @use "sass:string";
 @use "@mixins" as *;
 
-$hex-width: 210px;
-$hex-height: 242px;
+$hex-width: 180px;
+$hex-height: 207px;
 $gap: 16px;
 $cols: 14;
 $rows: 3;
@@ -14,7 +14,7 @@ $transition-duration: 0.5s;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: visible;
   padding: 40px 0;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -31,6 +31,7 @@ $transition-duration: 0.5s;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  overflow: visible;
 }
 
 .hexagon {
@@ -56,15 +57,56 @@ $transition-duration: 0.5s;
   transform-origin: center;
   animation: scaleIn 0.6s ease-out forwards;
   animation-delay: inherit;
+  transition: filter 0.3s ease;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.hexagon {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  overflow: visible;
+}
+
+.hexDragWrapper {
+  background: none;
+  transition: transform 0.4s ease-out;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hexagon:hover .hexSvg {
+  filter: drop-shadow(0 0 8px var(--hex-color));
+}
+
+.hexagon.dragging {
+  z-index: 100;
+}
+
+.hexagon.dragging .hexDragWrapper {
+  transition: none;
+}
+
+.hexagon.dragging .hexSvg {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
 }
 
 // Logo hexagon
 .logoHex {
   z-index: 10;
+  will-change: transform;
 
   .hexSvg {
     filter: drop-shadow(0 6px 16px rgba(255, 215, 77, 0.4));
   }
+}
+
+// Keep logo in grid during loading/transitioning
+.gridContainer.loading .logoHex,
+.gridContainer.transitioning .logoHex {
+  position: relative;
 }
 
 // Yellow hexagon - stays visible during loading, fades out during transition
@@ -84,6 +126,8 @@ $transition-duration: 0.5s;
   z-index: 2;
   opacity: 0;
   transition: opacity 0.15s ease-out, width 0.5s ease-out;
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 // Transition states
@@ -120,6 +164,47 @@ $min-hex-clearance: 320px;
   }
 }
 
+// Fixed positioning for hexagons after transition completes
+.gridContainer.complete {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+}
+
+// Logo scroll animation is handled via inline styles from JS
+// This ensures smooth interpolation based on actual element position
+
+// Start button - stays fixed when scrolling
+.startButton {
+  position: fixed;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #288ED2;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease-out, background-color 0.2s ease;
+  z-index: 100;
+
+  &:hover {
+    background-color: darken(#288ED2, 10%);
+  }
+
+  &.transitioning,
+  &.complete {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 // Text section
 .textSection {
   position: absolute;
@@ -135,6 +220,7 @@ $min-hex-clearance: 320px;
   // Text width based on minimum hexagon clearance
   max-width: calc($min-hex-clearance * 2 - 40px);
   padding: 0 40px;
+  will-change: transform;
 }
 
 .textSection.transitioning,
@@ -192,8 +278,8 @@ $min-hex-clearance: 320px;
 
 // Tablet
 @include mq(1200) {
-  $hex-width-tablet: 160px;
-  $hex-height-tablet: 185px;
+  $hex-width-tablet: 137px;
+  $hex-height-tablet: 158px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
   $min-hex-clearance-tablet: 280px;
 
@@ -226,6 +312,13 @@ $min-hex-clearance: 320px;
     }
   }
 
+  .gridContainer.complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 50;
+  }
+
   .textSection {
     transform: translate(-50%, calc($hex-height-tablet * -0.15));
     max-width: calc($min-hex-clearance-tablet * 2 - 40px);
@@ -246,11 +339,11 @@ $min-hex-clearance: 320px;
 
 // Mobile
 @include mq(768) {
-  $hex-width-mobile: 115px;
-  $hex-height-mobile: 133px;
+  $hex-width-mobile: 98px;
+  $hex-height-mobile: 113px;
   $gap-mobile: 10px;
   $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
-  $min-hex-clearance-mobile: 140px;
+  $min-hex-clearance-mobile: 120px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-mobile);
@@ -282,23 +375,30 @@ $min-hex-clearance: 320px;
     }
   }
 
+  .gridContainer.complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 50;
+  }
+
   .textSection {
-    padding: 0 20px;
+    padding: 0 12px;
     transform: translate(-50%, calc($hex-height-mobile * -0.1));
-    max-width: calc($min-hex-clearance-mobile * 2 - 40px);
+    max-width: calc($min-hex-clearance-mobile * 2 - 24px);
   }
 
   .title {
-    font-size: 36px;
-    margin: 16px 0 24px 0;
+    font-size: 32px;
+    margin: 12px 0 20px 0;
   }
 
   .subtitle {
-    font-size: 20px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    margin-bottom: 10px;
   }
 
   .description {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
