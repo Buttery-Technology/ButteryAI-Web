@@ -19,29 +19,7 @@
   height: 300px;
   pointer-events: none;
   z-index: 1;
-}
-
-.lineUp,
-.lineStraight,
-.lineDown {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 40px;
   overflow: visible;
-}
-
-.lineUp {
-  top: 20px;
-}
-
-.lineStraight {
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.lineDown {
-  bottom: 20px;
 }
 
 .content {
