@@ -260,18 +260,32 @@ const HomeHero = () => {
       // Calculate base transform (matching CSS logic)
       const baseTranslateX = Math.max(baseHexClearance, viewportWidth / 2 - hexWidthForCalc * multiplierForCalc);
       const additionalSpread = spreadProgress * maxSpread;
-      const totalSpread = baseTranslateX + additionalSpread;
+
+      // Second phase: when HomeSmart section content would overlap with left hexagons
+      // HomeSmart is after Hero and NextGen sections
+      // Start moving left hexagons off when HomeSmart content comes into contact
+      const smartSectionStart = heroHeight * 1.5; // When HomeSmart starts entering viewport
+      const smartSectionEnd = heroHeight * 2.0; // When HomeSmart is fully in view
+      const smartProgress = Math.min(Math.max((scrollY - smartSectionStart) / (smartSectionEnd - smartSectionStart), 0), 1);
+
+      // Left hexagons: move completely off screen (HomeSmart content is on left)
+      const leftExtraSpread = smartProgress * (viewportWidth * 0.6); // Move off left edge
+      const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
+
+      // Right hexagons: come closer since content is on left
+      const rightRetract = smartProgress * 180; // Come closer to connector lines
+      const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
       // Apply to all hexagon elements
       const leftHexes = rootRef.current.querySelectorAll(`.${styles.leftHex}`) as NodeListOf<HTMLElement>;
       const rightHexes = rootRef.current.querySelectorAll(`.${styles.rightHex}`) as NodeListOf<HTMLElement>;
 
       leftHexes.forEach((hex) => {
-        hex.style.transform = `translateX(${-totalSpread}px)`;
+        hex.style.transform = `translateX(${-leftTotalSpread}px)`;
       });
 
       rightHexes.forEach((hex) => {
-        hex.style.transform = `translateX(${totalSpread}px)`;
+        hex.style.transform = `translateX(${rightTotalSpread}px)`;
       });
     };
 
