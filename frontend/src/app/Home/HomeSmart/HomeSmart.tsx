@@ -39,7 +39,12 @@ const HomeSmart = () => (
         </svg>
       </div>
 
-      <h1 className={styles.title}>Smart Orchestration</h1>
+      <div className={styles.titleWrapper}>
+        <h1 className={styles.title}>Smart Orchestration</h1>
+        <svg className={styles.titleUnderline} viewBox="0 0 426 34" fill="none" preserveAspectRatio="none">
+          <path d="M5 5C5 5 129.567 27.305 212.681 28.769C310.974 30.5 420.797 11.241 420.797 11.241" stroke="#FFD74D" strokeWidth="10" strokeLinecap="round"/>
+        </svg>
+      </div>
       <p className={styles.description}>
         ButteryAI can intelligently orchestrate across multiple AI models simultaneously. Leverage workflows and
         extensions to take your orchestration to the next level. ButteryAI is built upon a patented distributed
