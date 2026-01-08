@@ -12,9 +12,8 @@
 // Connector lines from content to hexagons
 .connectorLines {
   position: absolute;
-  top: 50%;
+  top: 280px;
   left: 700px;
-  transform: translateY(-50%);
   width: 400px;
   height: 300px;
   pointer-events: none;
@@ -23,7 +22,7 @@
 }
 
 .content {
-  max-width: 700px;
+  max-width: 900px;
   text-align: left;
   padding: 0 40px 0 80px;
 }
@@ -79,9 +78,9 @@
 
 .card {
   background: #f9f9f9;
-  border-radius: 16px;
-  padding: 12px 18px;
-  width: 280px;
+  border-radius: 20px;
+  padding: 14px 20px;
+  width: 400px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -89,23 +88,23 @@
 
   h2 {
     font-family: var(--sf-pro-rounded-bold);
-    font-size: 15px;
+    font-size: 18px;
     color: #288ED2;
     margin: 0 0 4px 0;
   }
 
   p {
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.35;
-    color: #272d31;
-    margin: 0 0 8px 0;
+    color: #576773;
+    margin: 0 0 10px 0;
     flex-grow: 1;
   }
 }
 
 .checkIcon {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   align-self: center;
 }
 
@@ -133,16 +132,21 @@
   }
 
   .card {
-    width: 200px;
-    padding: 10px 16px;
+    padding: 12px 16px;
+    width: 300px;
 
     h2 {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     p {
-      font-size: 11px;
+      font-size: 14px;
     }
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
   }
 }
 
@@ -180,20 +184,20 @@
   }
 
   .card {
-    width: 100%;
-    padding: 10px 16px;
+    max-width: 100%;
+    padding: 18px;
 
     h2 {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     p {
-      font-size: 11px;
+      font-size: 14px;
     }
   }
 
   .checkIcon {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
   }
 }
