@@ -278,8 +278,8 @@ const HomeHero = () => {
       const leftExtraSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come closer during HomeSmart, stay closer during HomeEfficiency
-      const rightRetract = smartProgress * 180 * (1 - efficiencyProgress * 0.5);
+      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency
+      const rightRetract = smartProgress * 180 * (1 - efficiencyProgress);
       const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
       // Apply to all hexagon elements
