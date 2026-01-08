@@ -24,7 +24,10 @@ const HomeEfficiency = () => (
             fill="#22908C"
           />
         </svg>
-        <span className={styles.efficiencyIcon}>􀓎</span>
+        {/* Running rabbit icon */}
+        <svg className={styles.efficiencyIcon} viewBox="0 0 24 24" fill="white">
+          <path d="M18.5 8.5c1.5-1 2.5-2.5 2.5-4 0-.5-.5-1-1-1s-1.5.5-2 1c-.5-.5-1.5-1-2-1s-1 .5-1 1c0 1.5 1 3 2.5 4h-4c-2 0-3.5 1-4.5 2.5L7 9c-.5-1-1.5-1.5-2.5-1.5S2 8.5 2 10c0 2 2 4 4.5 4H8l-1.5 3c-.5 1 0 2 1 2.5.5.5 1.5.5 2-.5l2-3h3l1 2c.5 1 1.5 1.5 2.5 1 1-.5 1.5-1.5 1-2.5l-1.5-3c1-.5 2-1.5 2-3 0-1-.5-2-1.5-2h-4z"/>
+        </svg>
       </div>
 
       <h1 className={styles.title}>Increase Efficiency & Output</h1>
