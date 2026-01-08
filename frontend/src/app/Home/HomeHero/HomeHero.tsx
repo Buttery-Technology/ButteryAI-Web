@@ -169,8 +169,8 @@ const HomeHero = () => {
       const endTop = 5;
 
       // Logo dimensions
-      const logoHeight = 242;
-      const rowHeight = logoHeight * 0.75; // 181.5px per grid row
+      const logoHeight = 207;
+      const rowHeight = logoHeight * 0.75; // 155.25px per grid row
       const gap = 16;
       const scaledLogoHeight = logoHeight * endScale;
 
