@@ -287,16 +287,19 @@ const HomeHero = () => {
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
       // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
-      // Calculate minimum spread to avoid overlapping connector lines (which end at 1100px from left edge)
-      const lineRightEdge = 1100; // left: 700px + width: 400px
-      const hexHalfWidth = 90;
-      const buffer = 20;
-      const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
-
       const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
       const extensionsRetract = extensionsProgress * 200;
       const rightRetract = smartRetract + extensionsRetract;
-      const rightTotalSpread = Math.max(minRightSpread, baseTranslateX + additionalSpread - rightRetract);
+      let rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
+
+      // Only apply line collision avoidance during HomeSmart section (when lines are visible)
+      if (smartProgress > 0 && efficiencyProgress < 1) {
+        const lineRightEdge = 1100; // left: 700px + width: 400px
+        const hexHalfWidth = 90;
+        const buffer = 20;
+        const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
 
       // Apply to all hexagon elements
       const leftHexes = rootRef.current.querySelectorAll(`.${styles.leftHex}`) as NodeListOf<HTMLElement>;
