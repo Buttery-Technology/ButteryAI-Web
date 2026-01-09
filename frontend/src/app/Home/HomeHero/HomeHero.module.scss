@@ -281,7 +281,7 @@ $min-hex-clearance: 320px;
   $hex-width-tablet: 137px;
   $hex-height-tablet: 158px;
   $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
-  $min-hex-clearance-tablet: 280px;
+  $min-hex-clearance-tablet: 350px;
 
   .gridContainer {
     grid-template-columns: repeat($cols, $hex-width-tablet);
