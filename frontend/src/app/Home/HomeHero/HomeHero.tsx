@@ -276,8 +276,9 @@ const HomeHero = () => {
 
       // Fourth phase: when HomeExtensions section comes into view (left-aligned content)
       // Left hexagons should move off screen again, right hexagons come closer
-      const extensionsSectionStart = heroHeight * 4.0; // When HomeExtensions starts entering
-      const extensionsSectionEnd = heroHeight * 4.5; // When HomeExtensions is in view
+      // Start after HomeEfficiency is in view, complete as HomeExtensions enters
+      const extensionsSectionStart = heroHeight * 3.5; // Start moving after HomeEfficiency is shown
+      const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
       const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
 
       // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
