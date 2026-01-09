@@ -274,12 +274,22 @@ const HomeHero = () => {
       const efficiencySectionEnd = heroHeight * 3.0; // When HomeEfficiency is in view
       const efficiencyProgress = Math.min(Math.max((scrollY - efficiencySectionStart) / (efficiencySectionEnd - efficiencySectionStart), 0), 1);
 
-      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency
-      const leftExtraSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
+      // Fourth phase: when HomeExtensions section comes into view (left-aligned content)
+      // Left hexagons should move off screen again, right hexagons come closer
+      const extensionsSectionStart = heroHeight * 4.0; // When HomeExtensions starts entering
+      const extensionsSectionEnd = heroHeight * 4.5; // When HomeExtensions is in view
+      const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
+
+      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
+      const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
+      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6);
+      const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency
-      const rightRetract = smartProgress * 180 * (1 - efficiencyProgress);
+      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
+      const smartRetract = smartProgress * 180 * (1 - efficiencyProgress);
+      const extensionsRetract = extensionsProgress * 200;
+      const rightRetract = smartRetract + extensionsRetract;
       const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
       // Apply to all hexagon elements
