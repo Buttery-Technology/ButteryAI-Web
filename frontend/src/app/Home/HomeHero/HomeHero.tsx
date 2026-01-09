@@ -246,7 +246,7 @@ const HomeHero = () => {
         hexWidthForCalc = 98;
         multiplierForCalc = 1;
       } else if (viewportWidth <= 1200) {
-        baseHexClearance = 280;
+        baseHexClearance = 350;
         maxSpread = 150;
         hexWidthForCalc = 137;
         multiplierForCalc = 1.5;
@@ -293,12 +293,22 @@ const HomeHero = () => {
       const rightRetract = smartRetract + extensionsRetract;
       let rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
-      // Only apply line collision avoidance during HomeSmart section (when lines are visible)
+      // Apply collision avoidance during HomeSmart section (connector lines)
       if (smartProgress > 0 && efficiencyProgress < 1) {
         const lineRightEdge = 1100; // left: 700px + width: 400px
         const hexHalfWidth = 90;
         const buffer = 20;
         const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Apply collision avoidance during HomeExtensions section (left-aligned content)
+      if (extensionsProgress > 0) {
+        // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
+        const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
+        const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 10;
+        const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
       }
 
