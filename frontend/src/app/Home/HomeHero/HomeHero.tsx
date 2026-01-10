@@ -246,7 +246,7 @@ const HomeHero = () => {
         hexWidthForCalc = 98;
         multiplierForCalc = 1;
       } else if (viewportWidth <= 1200) {
-        baseHexClearance = 280;
+        baseHexClearance = 350;
         maxSpread = 150;
         hexWidthForCalc = 137;
         multiplierForCalc = 1.5;
@@ -274,13 +274,43 @@ const HomeHero = () => {
       const efficiencySectionEnd = heroHeight * 3.0; // When HomeEfficiency is in view
       const efficiencyProgress = Math.min(Math.max((scrollY - efficiencySectionStart) / (efficiencySectionEnd - efficiencySectionStart), 0), 1);
 
-      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency
-      const leftExtraSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
+      // Fourth phase: when HomeExtensions section comes into view (left-aligned content)
+      // Left hexagons should move off screen again, right hexagons come closer
+      // Start after HomeEfficiency is in view, complete as HomeExtensions enters
+      const extensionsSectionStart = heroHeight * 3.5; // Start moving after HomeEfficiency is shown
+      const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
+      const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
+
+      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
+      const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
+      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6);
+      const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
       const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency
-      const rightRetract = smartProgress * 180 * (1 - efficiencyProgress);
-      const rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
+      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
+      const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
+      const extensionsRetract = extensionsProgress * 200;
+      const rightRetract = smartRetract + extensionsRetract;
+      let rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
+
+      // Apply collision avoidance during HomeSmart section (connector lines)
+      if (smartProgress > 0 && efficiencyProgress < 1) {
+        const lineRightEdge = 1100; // left: 700px + width: 400px
+        const hexHalfWidth = 90;
+        const buffer = 20;
+        const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Apply collision avoidance during HomeExtensions section (left-aligned content)
+      if (extensionsProgress > 0) {
+        // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
+        const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
+        const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 10;
+        const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
 
       // Apply to all hexagon elements
       const leftHexes = rootRef.current.querySelectorAll(`.${styles.leftHex}`) as NodeListOf<HTMLElement>;
