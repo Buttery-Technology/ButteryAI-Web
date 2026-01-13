@@ -2,52 +2,282 @@
 
 .root {
   padding-block: 160px;
-  max-width: 1543px;
-  margin-inline: auto;
+  padding-left: 120px;
+  padding-right: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 32px;
+  gap: 40px;
+  position: relative;
 }
 
 .content {
-  max-width: 658px;
-
-  p {
-    font-size: 18px;
-    line-height: 1.5;
-    color: #272d31;
-    margin-block: 32px;
-  }
-}
-
-.superHeadline {
-  font-size: 32px;
-  line-height: 1.4;
-  font-weight: 400;
-  color: #637684;
+  max-width: 850px;
 }
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 48px;
+  line-height: 1.1;
   color: #272d31;
+  margin: 0 0 16px 0;
+}
 
-  span {
-    background: linear-gradient(to right, #d12a89, #288ed2);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+.description {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #576773;
+  margin: 0 0 32px 0;
+  max-width: 700px;
+}
+
+.cardLabel {
+  font-size: 16px;
+  color: #637684;
+  display: block;
+  margin-bottom: 16px;
+}
+
+// Metric cards row
+.metricCards {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.metricCard {
+  background: #f9f9f9;
+  border-radius: 24px;
+  padding: 20px;
+  width: 170px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.metricTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: #545b69;
+}
+
+.metricIcon {
+  width: 17px;
+  height: 17px;
+  color: #8992a4;
+}
+
+.metricValue {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  margin-bottom: 6px;
+
+  &.good {
+    color: #0f9b81;
+  }
+
+  &.warning {
+    color: #ffd74d;
+  }
+
+  &.bad {
+    color: #d22839;
   }
 }
 
-.link {
-  font-family: var(--sf-pro-rounded-bold);
-  color: #288ed2;
+.metricDescription {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #637684;
+  margin: 0;
 }
 
-.buttons {
-  margin-top: 32px;
+// Feature cards
+.featureCards {
   display: flex;
-  gap: 32px;
+  gap: 16px;
+}
+
+.featureCard {
+  background: #f9f9f9;
+  border-radius: 20px;
+  padding: 20px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.featureTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  line-height: 1.2;
+  color: #288ed2;
+  margin: 0 0 10px 0;
+}
+
+.featureDescription {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #576773;
+  margin: 0 0 16px 0;
+  flex-grow: 1;
+}
+
+.checkIcon {
+  width: 32px;
+  height: 32px;
+  color: #0f9b81;
+  align-self: center;
+}
+
+// Visual section with SVG
+.visualSection {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.colorCodeSvg {
+  width: 750px;
+  height: auto;
+}
+
+// Tablet
+@include mq(1200) {
+  .root {
+    padding-left: 40px;
+    padding-right: 40px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .metricCards {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .metricCard {
+    width: 160px;
+    min-height: 140px;
+    padding: 18px;
+  }
+
+  .featureCards {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .featureCard {
+    padding: 18px;
+    max-width: 220px;
+  }
+
+  .featureTitle {
+    font-size: 16px;
+  }
+
+  .featureDescription {
+    font-size: 14px;
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .visualSection {
+    margin-top: 40px;
+  }
+
+  .colorCodeSvg {
+    width: 550px;
+  }
+}
+
+// Mobile
+@include mq(768) {
+  .root {
+    padding-block: 64px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .title {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .description {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .cardLabel {
+    text-align: center;
+  }
+
+  .metricCards {
+    gap: 8px;
+  }
+
+  .metricCard {
+    width: calc(50% - 4px);
+    min-height: 140px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .metricValue {
+    font-size: 22px;
+  }
+
+  .featureCards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .featureCard {
+    max-width: 100%;
+    padding: 18px;
+  }
+
+  .featureTitle {
+    font-size: 16px;
+  }
+
+  .featureDescription {
+    font-size: 14px;
+  }
+
+  .checkIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .colorCodeSvg {
+    width: 340px;
+  }
 }
