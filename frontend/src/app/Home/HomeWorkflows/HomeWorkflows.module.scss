@@ -2,52 +2,98 @@
 
 .root {
   padding-block: 160px;
-  max-width: 1543px;
-  margin-inline: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+  position: relative;
 }
 
 .content {
-  max-width: 658px;
-
-  p {
-    font-size: 18px;
-    line-height: 1.5;
-    color: #272d31;
-    margin-block: 32px;
-  }
-}
-
-.superHeadline {
-  font-size: 32px;
-  line-height: 1.4;
-  font-weight: 400;
-  color: #637684;
+  max-width: 900px;
+  padding-inline: 120px;
 }
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 48px;
+  line-height: 1.1;
   color: #272d31;
-
-  span {
-    background: linear-gradient(to right, #d12a89, #288ed2);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+  margin: 0 0 16px 0;
 }
 
-.link {
-  font-family: var(--sf-pro-rounded-bold);
+.description {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #576773;
+  margin: 0;
+}
+
+.highlight {
   color: #288ed2;
 }
 
-.buttons {
-  margin-top: 32px;
-  display: flex;
-  gap: 32px;
+.diagramContainer {
+  width: 100%;
+  margin-top: 40px;
+  padding-inline: 80px;
+  overflow: visible;
+}
+
+.diagram {
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+}
+
+// Tablet
+@include mq(1200) {
+  .content {
+    padding-inline: 40px;
+  }
+
+  .title {
+    font-size: 36px;
+    line-height: 1.2;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .diagramContainer {
+    margin-top: 40px;
+    padding-inline: 40px;
+  }
+
+  .diagram {
+    max-width: 100%;
+  }
+}
+
+// Mobile
+@include mq(768) {
+  .root {
+    padding-block: 64px;
+  }
+
+  .content {
+    padding-inline: 20px;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .diagramContainer {
+    margin-top: 32px;
+    overflow-x: auto;
+    padding-inline: 20px;
+  }
+
+  .diagram {
+    min-width: 500px;
+  }
 }
