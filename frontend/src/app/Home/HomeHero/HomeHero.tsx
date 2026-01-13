@@ -281,11 +281,22 @@ const HomeHero = () => {
       const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
       const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
 
+      // Fifth phase: when HomeWorkflows section comes into view (left-aligned diagram)
+      // Use actual element position for more reliable collision detection
+      const workflowsSection = document.querySelector('[data-section="workflows"]');
+      let workflowsInView = false;
+      if (workflowsSection) {
+        const rect = workflowsSection.getBoundingClientRect();
+        // Check if section is in or near viewport (with large buffer to prevent any overlap)
+        const scrollThreshold = heroHeight * 4;
+        workflowsInView = (rect.top < window.innerHeight + 500 && rect.bottom > -500) || scrollY > scrollThreshold;
+      }
+
       // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
       const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
       const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6);
       const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
-      const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
+      let leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
       // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
       const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
@@ -303,13 +314,48 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
-      if (extensionsProgress > 0) {
+      if (extensionsProgress > 0 && !workflowsInView) {
         // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
         const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
         const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
         const buffer = 10;
         const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Apply collision avoidance during HomeWorkflows section (left-aligned diagram)
+      if (workflowsInView) {
+        // Diagram has padding and max-width that varies by breakpoint
+        // Desktop: 80px padding, max-width 1100px -> right edge at min(80 + 1100, viewportWidth - 80)
+        // Tablet: 40px padding, max-width 100% -> right edge at viewportWidth - 40
+        // Mobile: 20px padding, min-width 500px -> right edge at max(520, viewportWidth - 20)
+        let diagramRightEdge: number;
+        if (viewportWidth <= 768) {
+          diagramRightEdge = Math.max(520, viewportWidth - 20);
+        } else if (viewportWidth <= 1200) {
+          diagramRightEdge = viewportWidth - 40; // Full width minus padding
+        } else {
+          diagramRightEdge = Math.min(80 + 1100, viewportWidth - 80);
+        }
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 40;
+        const minRightSpread = Math.max(0, diagramRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Sixth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
+      const designSection = document.querySelector('[data-section="design"]');
+      let designInView = false;
+      if (designSection) {
+        const rect = designSection.getBoundingClientRect();
+        designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+      }
+
+      // When HomeDesign is in view, push both sides off screen
+      if (designInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
+        rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
       }
 
       // Apply to all hexagon elements
