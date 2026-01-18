@@ -1,16 +1,17 @@
+import Checkmark from "@assets/icons/checkmark.svg?react";
 import styles from "./HomeDesign.module.scss";
 
 const HomeDesign = () => (
   <section className={styles.root}>
     <div className={styles.content}>
       <h1 className={styles.title}>Uniquely simple design</h1>
-      <p>
+      <p className={styles.description}>
         ButteryAI is designed to be easy-to-use so you can focus on the important stuff. ButteryAI uses color code
         status to quickly understand how an AI node is performing and quick look cards for high level information at a
         glance.
       </p>
-      <p>Example summary cards</p>
-      <ul>
+      <p className={styles.example}>Example summary cards</p>
+      <ul className={styles.cards}>
         <li>
           <h2>Value</h2>
           <h3>92</h3>
@@ -32,24 +33,25 @@ const HomeDesign = () => (
           <p>Accuracy is down to 85% since 01/01 at 4:21pmEST.</p>
         </li>
       </ul>
-      <ul>
-        <li>
+      <ul className={styles.list}>
+        <li className={styles.item}>
           <h2>Glanceable Highlights</h2>
           <p>
             ButteryAI shows you important information highlights so you can quickly see how it’s performing and what
             needs your attention.
           </p>
+          <Checkmark />
         </li>
-        <li>
+        <li className={styles.item}>
           <h2>Simple and easy</h2>
           <p>
             ButteryAI is designed to abstract as much complexity as possible so it’s easy-to-use but allow you
             complexity when you need it.
           </p>
+          <Checkmark />
         </li>
       </ul>
     </div>
-    <div>Color code status image</div>
   </section>
 );
 
