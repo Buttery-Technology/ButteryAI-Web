@@ -143,14 +143,17 @@
 // Visual section with SVG
 .visualSection {
   position: relative;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .colorCodeSvg {
   width: 750px;
+  max-width: 100%;
   height: auto;
 }
 
@@ -211,10 +214,13 @@
 
   .visualSection {
     margin-top: 40px;
+    width: 100%;
+    justify-content: center;
   }
 
   .colorCodeSvg {
     width: 550px;
+    max-width: 100%;
   }
 }
 
@@ -278,7 +284,13 @@
     height: 28px;
   }
 
+  .visualSection {
+    width: 100%;
+    justify-content: center;
+  }
+
   .colorCodeSvg {
     width: 340px;
+    max-width: 100%;
   }
 }
