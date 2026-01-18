@@ -1,0 +1,36 @@
+@use "@mixins" as *;
+
+.root {
+  padding-block: 160px;
+  max-width: 1543px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.content {
+  max-width: 658px;
+
+  p {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #272d31;
+    margin-block: 32px;
+
+    span {
+      color: #288ed2;
+    }
+  }
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  color: #272d31;
+}
+
+.image {
+  height: auto;
+}

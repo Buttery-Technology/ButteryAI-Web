@@ -1,0 +1,128 @@
+@use "@mixins" as *;
+
+.root {
+  padding-block: 160px;
+  max-width: 1543px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.content {
+  max-width: 960px;
+
+  .description {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #272d31;
+    margin-block: 32px;
+  }
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  color: #272d31;
+}
+
+.example {
+  color: #637684;
+  font-size: 16px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  gap: 12px;
+  max-width: 890px;
+
+  li {
+    padding: 32px;
+    background-color: #f9f9f9;
+    border-radius: 32px;
+    position: relative;
+
+    h2 {
+      font-weight: 700;
+      color: #545b69;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b81;
+      margin-block: 8px;
+
+      &.gradient {
+        display: inline-block;
+        background: linear-gradient(to right, #288ed2, #7d5cad, #d12a89);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 2;
+      color: #637684;
+    }
+
+    &:nth-child(4) h3 {
+      color: #ffd74d;
+    }
+
+    &:nth-child(8) h3 {
+      color: #272d31;
+    }
+
+    &::after {
+      content: "";
+      width: 17px;
+      height: 18px;
+      background-image: url("../../../assets/icons/up.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+  }
+}
+
+.list {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+  margin-top: 32px;
+}
+
+.item {
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 32px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #288ed2;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #272d31;
+  }
+
+  svg {
+    width: 32px;
+    height: 32px;
+    margin-top: 8px;
+    margin-inline: auto;
+  }
+}

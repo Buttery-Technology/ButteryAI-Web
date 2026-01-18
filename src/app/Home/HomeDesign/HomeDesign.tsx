@@ -1,3 +1,4 @@
+import Checkmark from "@assets/icons/checkmark.svg?react";
 import styles from "./HomeDesign.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 import ColorCodeStatus from "./color-code-status.svg?react";
