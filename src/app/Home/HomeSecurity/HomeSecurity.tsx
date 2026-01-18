@@ -4,7 +4,7 @@ import Checkmark from "@assets/icons/checkmark.svg?react";
 import styles from "./HomeSecurity.module.scss";
 
 const HomeSecurity = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="security">
     <div className={styles.content}>
       <HexIcon color="#CB257E" icon={<Padlock />} className={styles.hexIcon} />
       <h1 className={styles.title}>Advanced Security</h1>
