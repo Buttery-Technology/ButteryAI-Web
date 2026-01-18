@@ -281,15 +281,29 @@ const HomeHero = () => {
       const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
       const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
 
-      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
-      const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
-      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6);
-      const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
-      const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
+      // Fifth phase: HomeSecurity section (right-aligned content)
+      // Right hexagons should move off screen, left hexagons should come back
+      const securitySection = document.querySelector('[data-section="security"]');
+      let securityInView = false;
+      let securityProgress = 0;
+      if (securitySection) {
+        const rect = securitySection.getBoundingClientRect();
+        securityInView = rect.top < window.innerHeight && rect.bottom > 0;
+        // Calculate progress for smooth transition
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        securityProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
-      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
+      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions, come back during HomeSecurity
+      const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
+      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6) * (1 - securityProgress);
+      const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
+      let leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
+
+      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions, move off during HomeSecurity
       const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
-      const extensionsRetract = extensionsProgress * 200;
+      const extensionsRetract = extensionsProgress * 200 * (1 - securityProgress);
       const rightRetract = smartRetract + extensionsRetract;
       let rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
@@ -303,13 +317,27 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
-      if (extensionsProgress > 0) {
+      if (extensionsProgress > 0 && !securityInView) {
         // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
         const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
         const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
         const buffer = 10;
         const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Apply HomeSecurity section behavior (right-aligned content)
+      if (securityInView) {
+        // Right hexagons move off screen
+        const offScreenSpread = viewportWidth * 0.6;
+        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
+
+        // Left hexagons come back into view but don't overlap content
+        // Content is max-width 940px aligned right, so left edge is at viewportWidth - 940
+        const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
+        leftTotalSpread = minLeftSpread;
       }
 
       // Apply to all hexagon elements
