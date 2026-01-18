@@ -11,21 +11,16 @@
 }
 
 .content {
-  max-width: 658px;
+  max-width: 940px;
+  text-align: center;
+  margin-inline: auto;
 
-  p {
+  > p {
     font-size: 18px;
     line-height: 1.5;
-    color: #272d31;
+    color: #576773;
     margin-block: 32px;
   }
-}
-
-.superHeadline {
-  font-size: 32px;
-  line-height: 1.4;
-  font-weight: 400;
-  color: #637684;
 }
 
 .title {
@@ -39,15 +34,4 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-}
-
-.link {
-  font-family: var(--sf-pro-rounded-bold);
-  color: #288ed2;
-}
-
-.buttons {
-  margin-top: 32px;
-  display: flex;
-  gap: 32px;
 }
