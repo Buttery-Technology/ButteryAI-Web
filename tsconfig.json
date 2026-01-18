@@ -23,6 +23,7 @@
     /* Aliases */
     "paths": {
       "@assets": ["./src/assets"],
+      "@common/*": ["./src/common/*"],
       "@hooks": ["./src/hooks"],
       "@mixins": ["./src/mixins"],
       "@global": ["./src/app/Global"]
