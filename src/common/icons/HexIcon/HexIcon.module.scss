@@ -1,0 +1,20 @@
+.root {
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 207px;
+  margin: 0 auto 16px;
+}
+
+.hexSvg {
+  grid-area: 1 / 1;
+  // TODO: grab the color from props
+  filter: drop-shadow(0 6px 16px rgba(106, 82, 177, 0.4));
+}
+
+.customIcon {
+  grid-area: 1 / 1;
+  width: 55%;
+  height: auto;
+  z-index: 1;
+}
