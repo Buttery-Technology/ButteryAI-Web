@@ -170,6 +170,12 @@ $min-hex-clearance: 320px;
   top: 50%;
   left: 50%;
   z-index: 50;
+  pointer-events: none;
+
+  // Re-enable pointer events on the hexagons themselves
+  .hexagon {
+    pointer-events: auto;
+  }
 }
 
 // Logo scroll animation is handled via inline styles from JS
@@ -191,7 +197,7 @@ $min-hex-clearance: 320px;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease-out, background-color 0.2s ease;
+  transition: opacity 0.6s ease-out, background-color 0.2s ease, top 0.3s ease-out, bottom 0.3s ease-out;
   z-index: 100;
 
   &:hover {
@@ -202,6 +208,10 @@ $min-hex-clearance: 320px;
   &.complete {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  &.inFooter {
+    // Styles applied via JS for positioning under footer title
   }
 }
 
