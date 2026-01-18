@@ -71,7 +71,7 @@ const HomeFooter = () => (
     </div>
 
     <div className={styles.footerLinks}>
-      <span>© 2025 Buttery Technology Inc.</span>
+      <span>© 2026 Buttery Technology, Inc.</span>
       <a href="/terms">Terms of Service</a>
       <a href="/privacy">Privacy Policy</a>
     </div>
