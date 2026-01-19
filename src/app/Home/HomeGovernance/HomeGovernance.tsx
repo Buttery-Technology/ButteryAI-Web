@@ -1,11 +1,31 @@
-import { HexIcon } from "@common/icons";
 import WhiteHouse from "@assets/icons/white-house.svg?react";
 import styles from "./HomeGovernance.module.scss";
 
 const HomeGovernance = () => (
   <section className={styles.root} data-section="governance">
     <div className={styles.content}>
-      <HexIcon color="#6A52B1" icon={<WhiteHouse />} />
+      <div className={styles.hexIcon}>
+        <svg viewBox="0 0 468 540" className={styles.hexSvg}>
+          <path
+            d="M273 22
+               L427 112
+               Q468 135 468 180
+               L468 360
+               Q468 405 427 428
+               L273 518
+               Q234 540 195 518
+               L41 428
+               Q0 405 0 360
+               L0 180
+               Q0 135 41 112
+               L195 22
+               Q234 0 273 22
+               Z"
+            fill="#6A52B1"
+          />
+        </svg>
+        <WhiteHouse className={styles.governanceIcon} />
+      </div>
       <h1 className={styles.title}>Integrated Governance</h1>
       <p>
         ButteryAI gives you deeply integrated governance by default. This gives you control and oversight like never
