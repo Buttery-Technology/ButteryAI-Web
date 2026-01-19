@@ -453,16 +453,19 @@ const HomeHero = () => {
 
         // Left hexagons: only bring back once section is actually in view AND workflows is out of view
         if (securityInView && !workflowsInView) {
-          if (viewportWidth <= 1200) {
-            // Content takes most of the viewport - keep left hexagons off
-            leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
-          } else {
-            // Desktop: content is max-width 940px aligned right, so left edge is at viewportWidth - 940
-            const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
-            const hexHalfWidth = 90;
-            const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
-            leftTotalSpread = minLeftSpread;
-          }
+          // Calculate where cards actually are to avoid overlap
+          // Section has 80px padding, content is 940px max-width aligned right
+          const sectionPadding = 80;
+          const contentMaxWidth = 940;
+          const availableWidth = viewportWidth - sectionPadding * 2;
+          // Content left edge from viewport left
+          const contentLeftEdge = sectionPadding + Math.max(0, availableWidth - contentMaxWidth);
+          // Calculate spread needed to keep hexagons left of cards
+          const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+          const buffer = 40;
+          // Spread from center to position hexagon edge just left of cards
+          const minLeftSpread = (viewportWidth / 2) - contentLeftEdge + hexHalfWidth + buffer;
+          leftTotalSpread = Math.max(baseTranslateX, minLeftSpread);
         }
       }
 
