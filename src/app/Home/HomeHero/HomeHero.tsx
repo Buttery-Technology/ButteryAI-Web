@@ -302,7 +302,7 @@ const HomeHero = () => {
       const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
       const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6);
       const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
-      const leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
+      let leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
       // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions
       const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
@@ -347,6 +347,21 @@ const HomeHero = () => {
         const buffer = 40;
         const minRightSpread = Math.max(0, diagramRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
+      // Sixth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
+      const designSection = document.querySelector('[data-section="design"]');
+      let designInView = false;
+      if (designSection) {
+        const rect = designSection.getBoundingClientRect();
+        designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+      }
+
+      // When HomeDesign is in view, push both sides off screen
+      if (designInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
+        rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
       }
 
       // Apply to all hexagon elements
