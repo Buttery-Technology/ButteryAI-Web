@@ -289,15 +289,13 @@ const HomeHero = () => {
       const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
 
       // Fifth phase: when HomeWorkflows section comes into view (left-aligned diagram)
-      // Use actual element position for more reliable collision detection
+      // Use actual element position for collision detection
       const workflowsSection = document.querySelector('[data-section="workflows"]');
       let workflowsInView = false;
       if (workflowsSection) {
         const rect = workflowsSection.getBoundingClientRect();
-        // Check if section is in or near viewport (with large buffer to prevent any overlap)
-        // Also check scroll position as fallback - if we've scrolled far enough, assume it could be in view
-        const scrollThreshold = heroHeight * 4;
-        workflowsInView = (rect.top < window.innerHeight + 500 && rect.bottom > -500) || scrollY > scrollThreshold;
+        // Section is in view when it actually overlaps the viewport (small buffer for smooth transition)
+        workflowsInView = rect.top < window.innerHeight && rect.bottom > 100;
       }
       const workflowsProgress = workflowsInView ? 1 : 0;
 
@@ -396,7 +394,14 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeWorkflows section (left-aligned diagram)
-      if (workflowsProgress > 0 && !securityInView) {
+      // Note: Don't check !securityInView here - we need collision avoidance even when
+      // HomeSecurity starts entering viewport, as the diagram may still be visible
+      if (workflowsInView) {
+        // Left hexagons should stay off screen during HomeWorkflows
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
+
+        // Right hexagons collision avoidance for diagram
         // Diagram has padding and max-width that varies by breakpoint
         // Desktop: 80px padding, max-width 1100px -> right edge at min(80 + 1100, viewportWidth - 80)
         // Tablet: 40px padding, max-width 100% -> right edge at viewportWidth - 40
@@ -416,7 +421,8 @@ const HomeHero = () => {
       }
 
       // Apply HomeSecurity section behavior (right-aligned content)
-      if (securityInView && !designInView) {
+      // Only bring left hexagons back when HomeWorkflows diagram is fully out of view
+      if (securityInView && !designInView && !workflowsInView) {
         // Right hexagons move off screen
         const offScreenSpread = viewportWidth * 0.6;
         rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
@@ -427,6 +433,11 @@ const HomeHero = () => {
         const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
         const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
         leftTotalSpread = minLeftSpread;
+      } else if (securityInView && !designInView && workflowsInView) {
+        // HomeSecurity is in view but HomeWorkflows diagram is still visible
+        // Only move right hexagons off, keep left hexagons off (handled by workflowsInView block above)
+        const offScreenSpread = viewportWidth * 0.6;
+        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
       }
 
       // When HomeDesign is in view but footer isn't, push both sides off screen
