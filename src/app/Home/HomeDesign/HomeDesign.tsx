@@ -1,8 +1,57 @@
 import Checkmark from "@assets/icons/checkmark.svg?react";
 import styles from "./HomeDesign.module.scss";
+import CheckCircle from "@assets/icons/check-circle.svg?react";
+import ColorCodeStatus from "./color-code-status.svg?react";
+import ExpandIcon from "./expand-icon.svg?react";
+
+const metricCards = [
+  {
+    id: "value",
+    title: "Value",
+    value: "92",
+    description: "This metric is your current value in the Hive.",
+    status: "good" as const,
+  },
+  {
+    id: "trust",
+    title: "Trust",
+    value: "Excellent",
+    description: "Trust has a >96% stable metric.",
+    status: "good" as const,
+  },
+  {
+    id: "bias",
+    title: "Bias",
+    value: "Great",
+    description: "Bias has been hovering around ~3%.",
+    status: "good" as const,
+  },
+  {
+    id: "accuracy",
+    title: "Accuracy",
+    value: "Needs work",
+    description: "Accuracy is down to 85% since 01/01 at 4:21pmEST.",
+    status: "warning" as const,
+  },
+];
+
+const featureCards = [
+  {
+    id: "highlights",
+    title: "Glanceable Highlights",
+    description:
+      "ButteryAI shows you important information highlights so you can quickly see how it's performing and what needs your attention.",
+  },
+  {
+    id: "simple",
+    title: "Simple and easy",
+    description:
+      "ButteryAI is designed to abstract as much complexity as possible so it's easy-to-use but allow you complexity when you need it.",
+  },
+];
 
 const HomeDesign = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="design">
     <div className={styles.content}>
       <h1 className={styles.title}>Uniquely simple design</h1>
       <p className={styles.description}>
@@ -10,47 +59,35 @@ const HomeDesign = () => (
         status to quickly understand how an AI node is performing and quick look cards for high level information at a
         glance.
       </p>
-      <p className={styles.example}>Example summary cards</p>
-      <ul className={styles.cards}>
-        <li>
-          <h2>Value</h2>
-          <h3>92</h3>
-          <p>This metric is your current value in the Hive.</p>
-        </li>
-        <li>
-          <h2>Trust</h2>
-          <h3>Excellent</h3>
-          <p>Trust has a {">"}96% stable metric.</p>
-        </li>
-        <li>
-          <h2>Bias</h2>
-          <h3>Great</h3>
-          <p>Bias has been hovering around ~3%.</p>
-        </li>
-        <li>
-          <h2>Accuracy</h2>
-          <h3>Needs Work</h3>
-          <p>Accuracy is down to 85% since 01/01 at 4:21pmEST.</p>
-        </li>
-      </ul>
-      <ul className={styles.list}>
-        <li className={styles.item}>
-          <h2>Glanceable Highlights</h2>
-          <p>
-            ButteryAI shows you important information highlights so you can quickly see how it’s performing and what
-            needs your attention.
-          </p>
-          <Checkmark />
-        </li>
-        <li className={styles.item}>
-          <h2>Simple and easy</h2>
-          <p>
-            ButteryAI is designed to abstract as much complexity as possible so it’s easy-to-use but allow you
-            complexity when you need it.
-          </p>
-          <Checkmark />
-        </li>
-      </ul>
+
+      <span className={styles.cardLabel}>Example summary cards</span>
+
+      <div className={styles.metricCards}>
+        {metricCards.map((card) => (
+          <div key={card.id} className={styles.metricCard}>
+            <div className={styles.metricHeader}>
+              <span className={styles.metricTitle}>{card.title}</span>
+              <ExpandIcon className={styles.metricIcon} />
+            </div>
+            <span className={`${styles.metricValue} ${styles[card.status]}`}>{card.value}</span>
+            <p className={styles.metricDescription}>{card.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.featureCards}>
+        {featureCards.map((card) => (
+          <div key={card.id} className={styles.featureCard}>
+            <h2 className={styles.featureTitle}>{card.title}</h2>
+            <p className={styles.featureDescription}>{card.description}</p>
+            <CheckCircle className={styles.checkIcon} />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className={styles.visualSection}>
+      <ColorCodeStatus className={styles.colorCodeSvg} />
     </div>
   </section>
 );

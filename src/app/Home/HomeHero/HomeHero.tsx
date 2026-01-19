@@ -21,8 +21,11 @@ const HomeHero = () => {
   const [initialDimensions, setInitialDimensions] = useState<{ height: number; width: number } | null>(null);
   const [dragState, setDragState] = useState<{ key: string; offsetX: number; offsetY: number } | null>(null);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [buttonInFooter, setButtonInFooter] = useState(false);
+  const [buttonFooterStyle, setButtonFooterStyle] = useState<React.CSSProperties>({});
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const startButtonRef = useRef<HTMLButtonElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
   const lastScrollY = useRef(window.scrollY);
 
@@ -155,13 +158,18 @@ const HomeHero = () => {
   useEffect(() => {
     if (phase !== "complete") return;
 
+    let lastViewportWidth = 0;
+
     const handleScroll = () => {
       if (!rootRef.current || !logoRef.current) return;
 
-      // Only update if scrollY actually changed (ignores resize-triggered scroll events)
       const scrollY = window.scrollY;
-      if (scrollY === lastScrollY.current) return;
+      const viewportWidth = window.innerWidth;
+
+      // Skip if nothing changed (neither scroll nor viewport width)
+      if (scrollY === lastScrollY.current && viewportWidth === lastViewportWidth) return;
       lastScrollY.current = scrollY;
+      lastViewportWidth = viewportWidth;
 
       // Capture logo's BASE position (without CSS transform) once
       if (!logoStartPos.current) {
@@ -234,7 +242,6 @@ const HomeHero = () => {
       const spreadProgress = Math.min(Math.max((scrollY - spreadStart) / (spreadEnd - spreadStart), 0), 1);
 
       // Calculate base clearance and spread based on current viewport
-      const viewportWidth = window.innerWidth;
       let baseHexClearance: number;
       let maxSpread: number;
       let hexWidthForCalc: number;
@@ -281,7 +288,20 @@ const HomeHero = () => {
       const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
       const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
 
-      // Fifth phase: HomeSecurity section (right-aligned content)
+      // Fifth phase: when HomeWorkflows section comes into view (left-aligned diagram)
+      // Use actual element position for more reliable collision detection
+      const workflowsSection = document.querySelector('[data-section="workflows"]');
+      let workflowsInView = false;
+      if (workflowsSection) {
+        const rect = workflowsSection.getBoundingClientRect();
+        // Check if section is in or near viewport (with large buffer to prevent any overlap)
+        // Also check scroll position as fallback - if we've scrolled far enough, assume it could be in view
+        const scrollThreshold = heroHeight * 4;
+        workflowsInView = (rect.top < window.innerHeight + 500 && rect.bottom > -500) || scrollY > scrollThreshold;
+      }
+      const workflowsProgress = workflowsInView ? 1 : 0;
+
+      // Sixth phase: HomeSecurity section (right-aligned content)
       // Right hexagons should move off screen, left hexagons should come back
       const securitySection = document.querySelector('[data-section="security"]');
       let securityInView = false;
@@ -293,6 +313,55 @@ const HomeHero = () => {
         const transitionStart = window.innerHeight;
         const transitionEnd = window.innerHeight * 0.3;
         securityProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
+
+      // Seventh phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
+      const designSection = document.querySelector('[data-section="design"]');
+      let designInView = false;
+      if (designSection) {
+        const rect = designSection.getBoundingClientRect();
+        designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+      }
+
+      // Eighth phase: HomeFooter section - bring hexagons back into view on both sides
+      const footerSection = document.querySelector('[data-section="footer"]');
+      let footerInView = false;
+      let footerProgress = 0;
+      if (footerSection) {
+        const rect = footerSection.getBoundingClientRect();
+        // Start transitioning when footer comes into view
+        footerInView = rect.top < window.innerHeight + 200;
+        // Calculate progress for smooth transition
+        const transitionStart = window.innerHeight + 200;
+        const transitionEnd = window.innerHeight * 0.5;
+        footerProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+
+        // Position button under footer title when footer is in view
+        const footerTitle = footerSection.querySelector('h1');
+        if (footerTitle && startButtonRef.current) {
+          const titleRect = footerTitle.getBoundingClientRect();
+          // Check if footer title is visible in viewport (not just footer section)
+          const titleInView = titleRect.bottom < window.innerHeight && titleRect.top > 0;
+
+          if (titleInView) {
+            // Position button centered under the title
+            const buttonTop = titleRect.bottom + 32; // 32px gap below title
+            setButtonInFooter(true);
+            setButtonFooterStyle({
+              position: 'fixed',
+              top: buttonTop,
+              bottom: 'auto',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            });
+          } else {
+            setButtonInFooter(false);
+            setButtonFooterStyle({});
+          }
+        }
+      } else {
+        setButtonInFooter(false);
+        setButtonFooterStyle({});
       }
 
       // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions, come back during HomeSecurity
@@ -317,7 +386,7 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
-      if (extensionsProgress > 0 && !securityInView) {
+      if (extensionsProgress > 0 && workflowsProgress < 1 && !securityInView) {
         // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
         const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
         const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
@@ -326,8 +395,28 @@ const HomeHero = () => {
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
       }
 
+      // Apply collision avoidance during HomeWorkflows section (left-aligned diagram)
+      if (workflowsProgress > 0 && !securityInView) {
+        // Diagram has padding and max-width that varies by breakpoint
+        // Desktop: 80px padding, max-width 1100px -> right edge at min(80 + 1100, viewportWidth - 80)
+        // Tablet: 40px padding, max-width 100% -> right edge at viewportWidth - 40
+        // Mobile: 20px padding, min-width 500px -> right edge at max(520, viewportWidth - 20)
+        let diagramRightEdge: number;
+        if (viewportWidth <= 768) {
+          diagramRightEdge = Math.max(520, viewportWidth - 20);
+        } else if (viewportWidth <= 1200) {
+          diagramRightEdge = viewportWidth - 40; // Full width minus padding
+        } else {
+          diagramRightEdge = Math.min(80 + 1100, viewportWidth - 80);
+        }
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 40;
+        const minRightSpread = Math.max(0, diagramRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+        rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+      }
+
       // Apply HomeSecurity section behavior (right-aligned content)
-      if (securityInView) {
+      if (securityInView && !designInView) {
         // Right hexagons move off screen
         const offScreenSpread = viewportWidth * 0.6;
         rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
@@ -338,6 +427,24 @@ const HomeHero = () => {
         const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
         const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
         leftTotalSpread = minLeftSpread;
+      }
+
+      // When HomeDesign is in view but footer isn't, push both sides off screen
+      if (designInView && !footerInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
+        rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
+      }
+
+      // When footer is coming into view, smoothly bring hexagons back
+      if (footerInView) {
+        // Target spread for footer - similar to initial spread but both sides visible
+        const footerTargetSpread = baseTranslateX + additionalSpread;
+        const offScreenSpread = viewportWidth * 0.6;
+
+        // Interpolate from off-screen to footer position
+        leftTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
+        rightTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
       }
 
       // Apply to all hexagon elements
@@ -353,10 +460,15 @@ const HomeHero = () => {
       });
     };
 
+    // Run immediately to set correct initial positions
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, [phase]);
 
@@ -515,8 +627,14 @@ const HomeHero = () => {
         </p>
       </div>
 
-      {/* Start button - stays fixed */}
-      <button className={`${styles.startButton} ${styles[phase]}`}>Start</button>
+      {/* Start button - stays fixed, repositions to footer when in view */}
+      <button
+        ref={startButtonRef}
+        className={`${styles.startButton} ${styles[phase]} ${buttonInFooter ? styles.inFooter : ''}`}
+        style={buttonInFooter ? buttonFooterStyle : undefined}
+      >
+        Start
+      </button>
     </main>
   );
 };

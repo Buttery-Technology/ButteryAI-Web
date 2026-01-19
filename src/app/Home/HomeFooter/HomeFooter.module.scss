@@ -1,48 +1,203 @@
 @use "@mixins" as *;
 
 .root {
-  text-align: center;
-  background-color: #ffd74d;
-  margin-inline: -16px;
-  display: grid;
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 80px 20px;
+  overflow: hidden;
 }
 
-.wrapper,
-.melting {
-  grid-area: 1/1;
-}
-
-.melting {
-  order: -1;
-}
-
-.butteryAI {
-  margin-inline: auto;
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  z-index: 10;
 }
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 75px;
+  line-height: 1;
   color: #272d31;
-  margin-block: 32px;
+  text-align: center;
+  margin: 0;
 
   span {
-    background: linear-gradient(to right, #ffd74d, #0f9b81);
+    background: linear-gradient(90deg, #ffd74d 0%, #0f9b81 23.4%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 }
 
-.buttons {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
+.startButton {
+  background-color: #288ed2;
+  color: #f7fbff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 56px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0px 6px 16px 0px rgba(5, 17, 34, 0.1);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #2080c0;
+  }
 }
 
-.copyright {
-  color: #cdac2f;
-  text-align: left;
-  padding-left: 32px;
-  padding-bottom: 32px;
+.connectSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  // Extra margin to account for the Start button positioned below the title
+  margin-top: 140px;
+  position: relative;
+  z-index: 50;
+}
+
+.connectTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 24px;
+  color: #272d31;
+  margin: 0;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+  pointer-events: auto;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    pointer-events: auto;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    svg {
+      pointer-events: none;
+    }
+  }
+}
+
+.productBySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 80px;
+}
+
+.productByText {
+  font-family: var(--sf-pro-rounded-regular);
+  font-size: 24px;
+  color: #272d31;
+}
+
+.butteryLogo {
+  width: 164px;
+  height: auto;
+}
+
+.footerLinks {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-family: var(--sf-pro-rounded-medium);
+  font-size: 16px;
+  color: #272d31;
+  z-index: 10;
+
+  a {
+    color: #272d31;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// Tablet
+@include mq(1200) {
+  .title {
+    font-size: 56px;
+  }
+
+  .connectSection {
+    margin-top: 120px;
+  }
+
+  .productBySection {
+    margin-top: 60px;
+  }
+}
+
+// Mobile
+@include mq(768) {
+  .root {
+    padding: 60px 16px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .startButton {
+    padding: 12px 40px;
+    font-size: 16px;
+  }
+
+  .connectSection {
+    margin-top: 100px;
+  }
+
+  .connectTitle {
+    font-size: 18px;
+  }
+
+  .productBySection {
+    margin-top: 40px;
+  }
+
+  .productByText {
+    font-size: 18px;
+  }
+
+  .butteryLogo {
+    width: 120px;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    font-size: 14px;
+    bottom: 20px;
+  }
 }
