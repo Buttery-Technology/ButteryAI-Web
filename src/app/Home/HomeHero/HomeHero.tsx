@@ -313,12 +313,31 @@ const HomeHero = () => {
         securityProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
 
-      // Seventh phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
+      // Seventh phase: HomeGovernance section (centered content)
+      // Both hexagons should come close to the content but not overlap
+      const governanceSection = document.querySelector('[data-section="governance"]');
+      let governanceInView = false;
+      let governanceProgress = 0;
+      if (governanceSection) {
+        const rect = governanceSection.getBoundingClientRect();
+        governanceInView = rect.top < window.innerHeight && rect.bottom > 100;
+        // Calculate progress for smooth transition (similar to securityProgress)
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        governanceProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
+
+      // Eighth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
       const designSection = document.querySelector('[data-section="design"]');
       let designInView = false;
+      let designProgress = 0;
       if (designSection) {
         const rect = designSection.getBoundingClientRect();
         designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+        // Calculate progress for smooth transition - start pushing hexagons off as design enters
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.5;
+        designProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
 
       // Eighth phase: HomeFooter section - bring hexagons back into view on both sides
@@ -362,15 +381,15 @@ const HomeHero = () => {
         setButtonFooterStyle({});
       }
 
-      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions, come back during HomeSecurity
+      // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions, come back during HomeSecurity, stay for HomeGovernance
       const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
-      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6) * (1 - securityProgress);
+      const extensionsLeftSpread = extensionsProgress * (viewportWidth * 0.6) * (1 - securityProgress) * (1 - governanceProgress);
       const leftExtraSpread = smartLeftSpread + extensionsLeftSpread;
       let leftTotalSpread = baseTranslateX + additionalSpread + leftExtraSpread;
 
-      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions, move off during HomeSecurity
+      // Right hexagons: come closer during HomeSmart, spread back out during HomeEfficiency, come closer again during HomeExtensions, move off during HomeSecurity, come back during HomeGovernance
       const smartRetract = smartProgress * 120 * (1 - efficiencyProgress);
-      const extensionsRetract = extensionsProgress * 200 * (1 - securityProgress);
+      const extensionsRetract = extensionsProgress * 200 * (1 - securityProgress) * (1 - governanceProgress);
       const rightRetract = smartRetract + extensionsRetract;
       let rightTotalSpread = baseTranslateX + additionalSpread - rightRetract;
 
@@ -422,17 +441,20 @@ const HomeHero = () => {
 
       // Apply HomeSecurity section behavior (right-aligned content)
       // Only bring left hexagons back when HomeWorkflows diagram is fully out of view
+      // Effect is reduced as HomeGovernance comes into view
       if (securityInView && !designInView && !workflowsInView) {
-        // Right hexagons move off screen
+        // Right hexagons move off screen, but come back as governance appears
         const offScreenSpread = viewportWidth * 0.6;
-        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
+        const securityEffect = securityProgress * (1 - governanceProgress);
+        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityEffect;
 
         // Left hexagons come back into view but don't overlap content
         // Content is max-width 940px aligned right, so left edge is at viewportWidth - 940
         const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
         const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
         const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
-        leftTotalSpread = minLeftSpread;
+        // Blend between security position and base position as governance appears
+        leftTotalSpread = minLeftSpread + (baseTranslateX - minLeftSpread) * governanceProgress;
       } else if (securityInView && !designInView && workflowsInView) {
         // HomeSecurity is in view but HomeWorkflows diagram is still visible
         // Only move right hexagons off, keep left hexagons off (handled by workflowsInView block above)
@@ -440,8 +462,27 @@ const HomeHero = () => {
         rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
       }
 
+      // Apply HomeGovernance section behavior (centered content)
+      // Both hexagons come close to content but don't overlap
+      // Only apply when HomeSecurity is not in view (to avoid conflicts)
+      if (governanceInView && !securityInView) {
+        // Content is centered with max-width 940px
+        const contentWidth = Math.min(940, viewportWidth - 160); // Account for padding
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 30; // Gap between hexagon and content
+
+        // For centered content, hexagons need to be spread half the content width + hexagon size + buffer
+        // This positions them just outside each edge of the centered content
+        const spreadFromCenter = contentWidth / 2 + hexHalfWidth + buffer;
+        const offScreenSpread = viewportWidth * 0.6;
+
+        // Blend from governance position to off-screen as design comes into view
+        leftTotalSpread = spreadFromCenter + (offScreenSpread - spreadFromCenter) * designProgress;
+        rightTotalSpread = spreadFromCenter + (offScreenSpread - spreadFromCenter) * designProgress;
+      }
+
       // When HomeDesign is in view but footer isn't, push both sides off screen
-      if (designInView && !footerInView) {
+      if (designInView && !footerInView && !governanceInView) {
         const offScreenSpread = viewportWidth * 0.6;
         leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
