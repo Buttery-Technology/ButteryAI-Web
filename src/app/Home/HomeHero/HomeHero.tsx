@@ -439,25 +439,23 @@ const HomeHero = () => {
 
       // Apply HomeSecurity section behavior (right-aligned content)
       // Only bring left hexagons back when HomeWorkflows diagram is fully out of view
-      // Effect is reduced as HomeGovernance comes into view
+      // Keep right hexagons off - governance block will handle bringing them back
       if (securityInView && !designInView && !workflowsInView) {
-        // Right hexagons move off screen, but come back as governance appears
+        // Right hexagons stay off screen during HomeSecurity
         const offScreenSpread = viewportWidth * 0.6;
-        const securityEffect = securityProgress * (1 - governanceProgress);
-        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityEffect;
+        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
 
         // Left hexagons: on narrow viewports, keep them off screen since content takes full width
         // On wider viewports, bring them back but don't overlap the right-aligned content
         if (viewportWidth <= 1200) {
           // Content takes most of the viewport - keep left hexagons off
-          leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread * (1 - governanceProgress));
+          leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         } else {
           // Desktop: content is max-width 940px aligned right, so left edge is at viewportWidth - 940
           const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
           const hexHalfWidth = 90;
           const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
-          // Blend between security position and base position as governance appears
-          leftTotalSpread = minLeftSpread + (baseTranslateX - minLeftSpread) * governanceProgress;
+          leftTotalSpread = minLeftSpread;
         }
       } else if (securityInView && !designInView && workflowsInView) {
         // HomeSecurity is in view but HomeWorkflows diagram is still visible
@@ -467,8 +465,8 @@ const HomeHero = () => {
 
       // Apply HomeGovernance section behavior (centered content)
       // Both hexagons come close to content but don't overlap
-      // Only apply when HomeSecurity is not in view (to avoid conflicts)
-      if (governanceInView && !securityInView) {
+      // This runs even when security is in view to properly blend the transition
+      if (governanceInView) {
         // Content is centered with max-width 940px
         const contentWidth = Math.min(940, viewportWidth - 160); // Account for padding
         const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
@@ -479,9 +477,12 @@ const HomeHero = () => {
         const spreadFromCenter = contentWidth / 2 + hexHalfWidth + buffer;
         const offScreenSpread = viewportWidth * 0.6;
 
-        // Blend from governance position to off-screen as design comes into view
-        leftTotalSpread = spreadFromCenter + (offScreenSpread - spreadFromCenter) * designProgress;
-        rightTotalSpread = spreadFromCenter + (offScreenSpread - spreadFromCenter) * designProgress;
+        // Blend from off-screen to governance position, then back to off-screen as design enters
+        // governanceProgress: 0 = off-screen, 1 = at governance position
+        // designProgress: 0 = at governance position, 1 = off-screen
+        const governanceSpread = offScreenSpread - (offScreenSpread - spreadFromCenter) * governanceProgress * (1 - designProgress);
+        leftTotalSpread = governanceSpread;
+        rightTotalSpread = governanceSpread;
       }
 
       // When HomeDesign is in view but footer isn't, push both sides off screen
