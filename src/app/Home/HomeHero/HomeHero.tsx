@@ -155,13 +155,18 @@ const HomeHero = () => {
   useEffect(() => {
     if (phase !== "complete") return;
 
+    let lastViewportWidth = 0;
+
     const handleScroll = () => {
       if (!rootRef.current || !logoRef.current) return;
 
-      // Only update if scrollY actually changed (ignores resize-triggered scroll events)
       const scrollY = window.scrollY;
-      if (scrollY === lastScrollY.current) return;
+      const viewportWidth = window.innerWidth;
+
+      // Skip if nothing changed (neither scroll nor viewport width)
+      if (scrollY === lastScrollY.current && viewportWidth === lastViewportWidth) return;
       lastScrollY.current = scrollY;
+      lastViewportWidth = viewportWidth;
 
       // Capture logo's BASE position (without CSS transform) once
       if (!logoStartPos.current) {
@@ -234,7 +239,6 @@ const HomeHero = () => {
       const spreadProgress = Math.min(Math.max((scrollY - spreadStart) / (spreadEnd - spreadStart), 0), 1);
 
       // Calculate base clearance and spread based on current viewport
-      const viewportWidth = window.innerWidth;
       let baseHexClearance: number;
       let maxSpread: number;
       let hexWidthForCalc: number;
@@ -288,9 +292,11 @@ const HomeHero = () => {
       if (workflowsSection) {
         const rect = workflowsSection.getBoundingClientRect();
         // Check if section is in or near viewport (with large buffer to prevent any overlap)
+        // Also check scroll position as fallback - if we've scrolled far enough, assume it could be in view
         const scrollThreshold = heroHeight * 4;
         workflowsInView = (rect.top < window.innerHeight + 500 && rect.bottom > -500) || scrollY > scrollThreshold;
       }
+      const workflowsProgress = workflowsInView ? 1 : 0;
 
       // Left hexagons: move off during HomeSmart, come back during HomeEfficiency, move off again during HomeExtensions
       const smartLeftSpread = smartProgress * (viewportWidth * 0.6) * (1 - efficiencyProgress);
@@ -314,7 +320,7 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
-      if (extensionsProgress > 0 && !workflowsInView) {
+      if (extensionsProgress > 0 && workflowsProgress < 1) {
         // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
         const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
         const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
@@ -324,7 +330,7 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeWorkflows section (left-aligned diagram)
-      if (workflowsInView) {
+      if (workflowsProgress > 0) {
         // Diagram has padding and max-width that varies by breakpoint
         // Desktop: 80px padding, max-width 1100px -> right edge at min(80 + 1100, viewportWidth - 80)
         // Tablet: 40px padding, max-width 100% -> right edge at viewportWidth - 40
@@ -371,10 +377,15 @@ const HomeHero = () => {
       });
     };
 
+    // Run immediately to set correct initial positions
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, [phase]);
 
