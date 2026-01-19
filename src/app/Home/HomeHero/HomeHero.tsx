@@ -21,8 +21,11 @@ const HomeHero = () => {
   const [initialDimensions, setInitialDimensions] = useState<{ height: number; width: number } | null>(null);
   const [dragState, setDragState] = useState<{ key: string; offsetX: number; offsetY: number } | null>(null);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [buttonInFooter, setButtonInFooter] = useState(false);
+  const [buttonFooterStyle, setButtonFooterStyle] = useState<React.CSSProperties>({});
   const rootRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const startButtonRef = useRef<HTMLButtonElement>(null);
   const logoStartPos = useRef<{ top: number; left: number; width: number } | null>(null);
   const lastScrollY = useRef(window.scrollY);
 
@@ -329,6 +332,7 @@ const HomeHero = () => {
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
       }
 
+      // Fifth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
       // Apply collision avoidance during HomeWorkflows section (left-aligned diagram)
       if (workflowsProgress > 0) {
         // Diagram has padding and max-width that varies by breakpoint
@@ -357,11 +361,63 @@ const HomeHero = () => {
         designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
       }
 
-      // When HomeDesign is in view, push both sides off screen
-      if (designInView) {
+      // Sixth phase: HomeFooter section - bring hexagons back into view on both sides
+      const footerSection = document.querySelector('[data-section="footer"]');
+      let footerInView = false;
+      let footerProgress = 0;
+      if (footerSection) {
+        const rect = footerSection.getBoundingClientRect();
+        // Start transitioning when footer comes into view
+        footerInView = rect.top < window.innerHeight + 200;
+        // Calculate progress for smooth transition
+        const transitionStart = window.innerHeight + 200;
+        const transitionEnd = window.innerHeight * 0.5;
+        footerProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+
+        // Position button under footer title when footer is in view
+        const footerTitle = footerSection.querySelector('h1');
+        if (footerTitle && startButtonRef.current) {
+          const titleRect = footerTitle.getBoundingClientRect();
+          // Check if footer title is visible in viewport (not just footer section)
+          const titleInView = titleRect.bottom < window.innerHeight && titleRect.top > 0;
+
+          if (titleInView) {
+            // Position button centered under the title
+            const buttonTop = titleRect.bottom + 32; // 32px gap below title
+            setButtonInFooter(true);
+            setButtonFooterStyle({
+              position: 'fixed',
+              top: buttonTop,
+              bottom: 'auto',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            });
+          } else {
+            setButtonInFooter(false);
+            setButtonFooterStyle({});
+          }
+        }
+      } else {
+        setButtonInFooter(false);
+        setButtonFooterStyle({});
+      }
+
+      // When HomeDesign is in view but footer isn't, push both sides off screen
+      if (designInView && !footerInView) {
         const offScreenSpread = viewportWidth * 0.6;
         leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
+      }
+
+      // When footer is coming into view, smoothly bring hexagons back
+      if (footerInView) {
+        // Target spread for footer - similar to initial spread but both sides visible
+        const footerTargetSpread = baseTranslateX + additionalSpread;
+        const offScreenSpread = viewportWidth * 0.6;
+
+        // Interpolate from off-screen to footer position
+        leftTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
+        rightTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
       }
 
       // Apply to all hexagon elements
@@ -544,8 +600,14 @@ const HomeHero = () => {
         </p>
       </div>
 
-      {/* Start button - stays fixed */}
-      <button className={`${styles.startButton} ${styles[phase]}`}>Start</button>
+      {/* Start button - stays fixed, repositions to footer when in view */}
+      <button
+        ref={startButtonRef}
+        className={`${styles.startButton} ${styles[phase]} ${buttonInFooter ? styles.inFooter : ''}`}
+        style={buttonInFooter ? buttonFooterStyle : undefined}
+      >
+        Start
+      </button>
     </main>
   );
 };
