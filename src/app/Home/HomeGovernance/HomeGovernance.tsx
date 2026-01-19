@@ -3,7 +3,7 @@ import WhiteHouse from "@assets/icons/white-house.svg?react";
 import styles from "./HomeGovernance.module.scss";
 
 const HomeGovernance = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="governance">
     <div className={styles.content}>
       <HexIcon color="#6A52B1" icon={<WhiteHouse />} />
       <h1 className={styles.title}>Integrated Governance</h1>
