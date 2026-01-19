@@ -294,8 +294,9 @@ const HomeHero = () => {
       let workflowsInView = false;
       if (workflowsSection) {
         const rect = workflowsSection.getBoundingClientRect();
-        // Section is in view when it actually overlaps the viewport (small buffer for smooth transition)
-        workflowsInView = rect.top < window.innerHeight && rect.bottom > 100;
+        // Section is in view when diagram is actually visible
+        // End when bottom reaches middle of viewport to give HomeSecurity plenty of time
+        workflowsInView = rect.top < window.innerHeight && rect.bottom > window.innerHeight * 0.5;
       }
       const workflowsProgress = workflowsInView ? 1 : 0;
 
@@ -303,12 +304,16 @@ const HomeHero = () => {
       // Right hexagons should move off screen, left hexagons should come back
       const securitySection = document.querySelector('[data-section="security"]');
       let securityInView = false;
+      let securityApproaching = false;
       let securityProgress = 0;
       if (securitySection) {
         const rect = securitySection.getBoundingClientRect();
+        // Detect when section is approaching (within 300px of viewport) to start moving hexagons early
+        const approachBuffer = 300;
+        securityApproaching = rect.top < window.innerHeight + approachBuffer && rect.bottom > 0;
         securityInView = rect.top < window.innerHeight && rect.bottom > 0;
-        // Calculate progress for smooth transition
-        const transitionStart = window.innerHeight;
+        // Calculate progress for smooth transition - start earlier with the approach buffer
+        const transitionStart = window.innerHeight + approachBuffer;
         const transitionEnd = window.innerHeight * 0.3;
         securityProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
@@ -403,7 +408,8 @@ const HomeHero = () => {
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
-      if (extensionsProgress > 0 && workflowsProgress < 1 && !securityInView) {
+      // Stop when security is approaching AND workflows is out of view
+      if (extensionsProgress > 0 && workflowsProgress < 1 && (!securityApproaching || workflowsInView)) {
         // Content extends to about 40px padding + 740px cards at tablet, 80px padding at desktop
         const contentRightEdge = viewportWidth <= 1200 ? 780 : 820;
         const hexHalfWidth = viewportWidth <= 1200 ? 68 : 90;
@@ -438,29 +444,26 @@ const HomeHero = () => {
       }
 
       // Apply HomeSecurity section behavior (right-aligned content)
-      // Only bring left hexagons back when HomeWorkflows diagram is fully out of view
-      // Keep right hexagons off - governance block will handle bringing them back
-      if (securityInView && !designInView && !workflowsInView) {
-        // Right hexagons stay off screen during HomeSecurity
+      // Push right hexagons off when section is APPROACHING (before it enters viewport)
+      // Only after workflows is out of view to avoid premature push-off
+      if (securityApproaching && !designInView && !workflowsInView) {
+        // Right hexagons stay fully off screen as soon as security is approaching
         const offScreenSpread = viewportWidth * 0.6;
-        rightTotalSpread = baseTranslateX + (offScreenSpread - baseTranslateX) * securityProgress;
+        rightTotalSpread = offScreenSpread;
 
-        // Left hexagons: on narrow viewports, keep them off screen since content takes full width
-        // On wider viewports, bring them back but don't overlap the right-aligned content
-        if (viewportWidth <= 1200) {
-          // Content takes most of the viewport - keep left hexagons off
-          leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
-        } else {
-          // Desktop: content is max-width 940px aligned right, so left edge is at viewportWidth - 940
-          const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
-          const hexHalfWidth = 90;
-          const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
-          leftTotalSpread = minLeftSpread;
+        // Left hexagons: only bring back once section is actually in view AND workflows is out of view
+        if (securityInView && !workflowsInView) {
+          if (viewportWidth <= 1200) {
+            // Content takes most of the viewport - keep left hexagons off
+            leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
+          } else {
+            // Desktop: content is max-width 940px aligned right, so left edge is at viewportWidth - 940
+            const contentLeftEdge = Math.max(80, viewportWidth - 940 - 80); // 80px buffer
+            const hexHalfWidth = 90;
+            const minLeftSpread = Math.max(baseTranslateX, contentLeftEdge / 2 + hexHalfWidth);
+            leftTotalSpread = minLeftSpread;
+          }
         }
-      } else if (securityInView && !designInView && workflowsInView) {
-        // HomeSecurity is in view but HomeWorkflows diagram is still visible
-        // Keep right hexagons off (don't override the HomeWorkflows collision avoidance)
-        // Left hexagons stay off (handled by workflowsInView block above)
       }
 
       // Apply HomeGovernance section behavior (centered content)
@@ -481,7 +484,18 @@ const HomeHero = () => {
         // governanceProgress: 0 = off-screen, 1 = at governance position
         // designProgress: 0 = at governance position, 1 = off-screen
         const governanceSpread = offScreenSpread - (offScreenSpread - spreadFromCenter) * governanceProgress * (1 - designProgress);
-        leftTotalSpread = governanceSpread;
+
+        // Only override left hexagons when security is NOT in view
+        // When security is in view (desktop), left hexagons are already positioned correctly
+        // This prevents them from flashing off when governance starts entering
+        if (!securityInView) {
+          leftTotalSpread = governanceSpread;
+        } else if (viewportWidth > 1200) {
+          // On desktop during transition, blend left hexagons from security position to governance position
+          const securityLeftSpread = leftTotalSpread; // Current position set by security block
+          leftTotalSpread = securityLeftSpread + (spreadFromCenter - securityLeftSpread) * governanceProgress * (1 - designProgress);
+        }
+
         rightTotalSpread = governanceSpread;
       }
 
@@ -501,6 +515,17 @@ const HomeHero = () => {
         // Interpolate from off-screen to footer position
         leftTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
         rightTotalSpread = offScreenSpread - (offScreenSpread - footerTargetSpread) * footerProgress;
+      }
+
+      // FALLBACK: If HomeSecurity is entering viewport, ensure right hexagons are off
+      // This catches any edge cases where other logic didn't push them off in time
+      if (securitySection && !governanceInView && !designInView && !footerInView) {
+        const rect = securitySection.getBoundingClientRect();
+        // If HomeSecurity top is in the lower 80% of viewport, force hexagons off
+        if (rect.top < window.innerHeight * 0.8) {
+          const offScreenSpread = viewportWidth * 0.6;
+          rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
+        }
       }
 
       // Apply to all hexagon elements
