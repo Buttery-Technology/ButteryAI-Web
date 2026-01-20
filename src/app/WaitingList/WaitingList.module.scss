@@ -4,7 +4,7 @@
   background-image: url("../../assets/images/melting-footer.svg");
   background-position: center top;
   background-repeat: no-repeat;
-  background-size: max(100%, 190vh) 100vh;
+  background-size: max(100%, 190vh) max(750px, 100vh);
   margin-inline: -16px;
   position: relative;
 }
