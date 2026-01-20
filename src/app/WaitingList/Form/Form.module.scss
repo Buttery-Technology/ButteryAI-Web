@@ -1,0 +1,151 @@
+@use "@mixins" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.label {
+  padding-left: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #47545d;
+}
+
+.input {
+  width: 100%;
+  padding: 16px 30px;
+  border-radius: 30px;
+  background-color: #f7f7f7;
+  color: #384148;
+  font-size: 18px;
+  transition: 0.2s;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #a0a0a0;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.textarea {
+  width: 100%;
+  padding: 16px 30px;
+  border: none;
+  border-radius: 20px;
+  background-color: #f7f7f7;
+  color: #384148;
+  font-size: 18px;
+  font-family: inherit;
+  transition: 0.2s;
+  resize: vertical;
+  min-height: 100px;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #a0a0a0;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  padding-left: 30px;
+  font-size: 14px;
+  color: #d12a89;
+}
+
+.privacy {
+  font-size: 16px;
+  color: #576773;
+  text-align: center;
+  margin-bottom: -16px;
+}
+
+.privacyLink {
+  color: #2da1e6;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.button {
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #288ed2;
+  color: var(--white);
+  border-radius: 30px;
+  padding: 20px 40px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  &:not(:disabled):hover {
+    box-shadow: 0px 0px 12px 2px rgba(40, 142, 210, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.success {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.successTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 32px;
+  color: #272d31;
+  margin-bottom: 16px;
+}
+
+.successMessage {
+  font-size: 16px;
+  color: #576773;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.backButton {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  @include scaleAnimation;
+  background-color: #288ed2;
+  color: var(--white);
+  border-radius: 30px;
+  padding: 15px 40px;
+}
