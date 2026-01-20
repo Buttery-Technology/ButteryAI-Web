@@ -1,5 +1,5 @@
 export const API_URL = "https://dogsapi.origamid.dev/json";
-export const BUTTERY_API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+export const BUTTERY_API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8080/api";
 
 export const POST_TOKEN = (body: unknown) => {
   return {
