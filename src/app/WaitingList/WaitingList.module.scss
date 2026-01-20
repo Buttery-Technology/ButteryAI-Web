@@ -1,0 +1,26 @@
+.root {
+  min-height: 130dvh;
+  background-color: #ffd74d;
+  background-image: url("../../assets/images/melting-footer.svg");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: max(100%, 190vh) 100vh;
+  margin-inline: -16px;
+  position: relative;
+}
+
+.wrapper {
+  padding-inline: 16px;
+  padding-top: 80px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
