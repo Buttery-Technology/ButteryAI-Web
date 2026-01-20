@@ -68,7 +68,7 @@ const Form = () => {
       setSuccessMessage(joinData.message || "You've been added to the waitlist!");
       setIsSubmitted(true);
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("Uh, oh… looks like someone turned the lights off. Give us a few minutes and try again.");
       console.error("Waitlist error:", err);
     } finally {
       setIsSubmitting(false);
@@ -93,7 +93,7 @@ const Form = () => {
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputGroup}>
         <label htmlFor="name" className={styles.label}>
-          Name
+          Name<span className={styles.required}>*</span>
         </label>
         <input
           type="text"
@@ -109,7 +109,7 @@ const Form = () => {
 
       <div className={styles.inputGroup}>
         <label htmlFor="email" className={styles.label}>
-          Email
+          Email<span className={styles.required}>*</span>
         </label>
         <input
           type="email"
