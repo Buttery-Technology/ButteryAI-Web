@@ -1,4 +1,5 @@
 export const API_URL = "https://dogsapi.origamid.dev/json";
+export const BUTTERY_API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8080/api";
 
 export const POST_TOKEN = (body: unknown) => {
   return {
@@ -46,6 +47,33 @@ export const POST_USER = (body: unknown) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
+    },
+  };
+};
+
+// Waitlist API
+export const CHECK_WAITLIST_APPROVAL = (email: string) => {
+  return {
+    url: BUTTERY_API_URL + "/waitlist/check",
+    options: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    },
+  };
+};
+
+export const JOIN_WAITLIST = (name: string, email: string, buildDescription?: string) => {
+  return {
+    url: BUTTERY_API_URL + "/waitlist/join",
+    options: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, buildDescription }),
     },
   };
 };

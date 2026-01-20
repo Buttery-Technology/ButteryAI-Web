@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import styles from "./HomeHero.module.scss";
 
@@ -17,6 +18,7 @@ const DIAGONAL_COLORS = [
 ];
 
 const HomeHero = () => {
+  const navigate = useNavigate();
   const [phase, setPhase] = useState<"loading" | "transitioning" | "complete">("loading");
   const [initialDimensions, setInitialDimensions] = useState<{ height: number; width: number } | null>(null);
   const [dragState, setDragState] = useState<{ key: string; offsetX: number; offsetY: number } | null>(null);
@@ -716,6 +718,7 @@ const HomeHero = () => {
         ref={startButtonRef}
         className={`${styles.startButton} ${styles[phase]} ${buttonInFooter ? styles.inFooter : ''}`}
         style={buttonInFooter ? buttonFooterStyle : undefined}
+        onClick={() => navigate("/waiting-list")}
       >
         Start
       </button>
