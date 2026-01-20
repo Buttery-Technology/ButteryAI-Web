@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { UserContextProvider } from "./UserContext";
 import { Home } from "./app/Home";
 import { Login } from "./app/Login";
+import { WaitingList } from "./app/WaitingList";
 import { ProtectedRoute } from "./app/Helper/ProtectedRoute";
 import { Dashboard } from "./app/Dashboard";
 import { Node } from "./app/Node";
@@ -27,6 +28,7 @@ const App = () => {
         <Wrapper>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/waiting-list" element={<WaitingList />} />
             <Route path="/login" element={<Login />} />
             <Route
               path="/dashboard/*"
