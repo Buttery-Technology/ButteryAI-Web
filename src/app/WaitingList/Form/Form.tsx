@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CHECK_WAITLIST_APPROVAL, JOIN_WAITLIST } from "../../../api";
+import { checkWaitlistApproval, joinWaitlist } from "../../../services/waitlist";
 import styles from "./Form.module.scss";
 
 const Form = () => {
@@ -41,14 +41,7 @@ const Form = () => {
 
     try {
       // Check if user is approved
-      const checkRequest = CHECK_WAITLIST_APPROVAL(email);
-      const checkResponse = await fetch(checkRequest.url, checkRequest.options);
-
-      if (!checkResponse.ok) {
-        throw new Error("Failed to check approval status");
-      }
-
-      const checkData = await checkResponse.json();
+      const checkData = await checkWaitlistApproval(email);
 
       if (checkData.isApproved) {
         // User is approved, navigate to login
@@ -57,14 +50,7 @@ const Form = () => {
       }
 
       // User is not approved, add to waitlist
-      const joinRequest = JOIN_WAITLIST(name, email, buildDescription || undefined);
-      const joinResponse = await fetch(joinRequest.url, joinRequest.options);
-
-      if (!joinResponse.ok) {
-        throw new Error("Failed to join waitlist");
-      }
-
-      const joinData = await joinResponse.json();
+      const joinData = await joinWaitlist(name, email, buildDescription || undefined);
       setSuccessMessage(joinData.message || "You've been added to the waitlist!");
       setIsSubmitted(true);
     } catch (err) {
