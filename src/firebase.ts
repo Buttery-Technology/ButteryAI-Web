@@ -4,6 +4,7 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyD96akZfGciBle4lDQP84BYDYDKOgDwTnE",
   authDomain: "buttery-ai.firebaseapp.com",
+  databaseURL: "https://buttery-ai-default-rtdb.firebaseio.com",
   projectId: "buttery-ai",
   storageBucket: "buttery-ai.firebasestorage.app",
   messagingSenderId: "931125895905",
