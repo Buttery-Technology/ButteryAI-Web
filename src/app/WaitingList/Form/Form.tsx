@@ -44,44 +44,48 @@ const Form = () => {
     // Firebase connection
     try {
       await addDoc(collection(db, "waitlist"), { name, email, buildDescription });
+      setSuccessMessage("You've been added to the waitlist!");
+      setIsSubmitted(true);
     } catch (e) {
       setError("Error adding email to waitlist.");
-    }
-
-    try {
-      // Check if user is approved
-      const checkRequest = CHECK_WAITLIST_APPROVAL(email);
-      const checkResponse = await fetch(checkRequest.url, checkRequest.options);
-
-      if (!checkResponse.ok) {
-        throw new Error("Failed to check approval status");
-      }
-
-      const checkData = await checkResponse.json();
-
-      if (checkData.isApproved) {
-        // User is approved, navigate to login
-        navigate("/login");
-        return;
-      }
-
-      // User is not approved, add to waitlist
-      const joinRequest = JOIN_WAITLIST(name, email, buildDescription || undefined);
-      const joinResponse = await fetch(joinRequest.url, joinRequest.options);
-
-      if (!joinResponse.ok) {
-        throw new Error("Failed to join waitlist");
-      }
-
-      const joinData = await joinResponse.json();
-      setSuccessMessage(joinData.message || "You've been added to the waitlist!");
-      setIsSubmitted(true);
-    } catch (err) {
-      setError("Uh, oh… looks like someone turned the lights off. Give us a few minutes and try again.");
-      console.error("Waitlist error:", err);
     } finally {
       setIsSubmitting(false);
     }
+
+    // try {
+    //   // Check if user is approved
+    //   const checkRequest = CHECK_WAITLIST_APPROVAL(email);
+    //   const checkResponse = await fetch(checkRequest.url, checkRequest.options);
+
+    //   if (!checkResponse.ok) {
+    //     throw new Error("Failed to check approval status");
+    //   }
+
+    //   const checkData = await checkResponse.json();
+
+    //   if (checkData.isApproved) {
+    //     // User is approved, navigate to login
+    //     navigate("/login");
+    //     return;
+    //   }
+
+    //   // User is not approved, add to waitlist
+    //   const joinRequest = JOIN_WAITLIST(name, email, buildDescription || undefined);
+    //   const joinResponse = await fetch(joinRequest.url, joinRequest.options);
+
+    //   if (!joinResponse.ok) {
+    //     throw new Error("Failed to join waitlist");
+    //   }
+
+    //   const joinData = await joinResponse.json();
+    //   setSuccessMessage(joinData.message || "You've been added to the waitlist!");
+    //   setIsSubmitted(true);
+    // } catch (err) {
+    //   setError("Uh, oh… looks like someone turned the lights off. Give us a few minutes and try again.");
+    //   console.error("Waitlist error:", err);
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   if (isSubmitted) {
