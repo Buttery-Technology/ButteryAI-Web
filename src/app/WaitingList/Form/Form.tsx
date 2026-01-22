@@ -1,5 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 import { CHECK_WAITLIST_APPROVAL, JOIN_WAITLIST } from "../../../api";
 import styles from "./Form.module.scss";
 
@@ -38,6 +40,13 @@ const Form = () => {
     }
 
     setIsSubmitting(true);
+
+    // Firebase connection
+    try {
+      await addDoc(collection(db, "waitlist"), { name, email, buildDescription });
+    } catch (e) {
+      setError("Error adding email to waitlist.");
+    }
 
     try {
       // Check if user is approved
@@ -149,11 +158,7 @@ const Form = () => {
         .
       </p>
 
-      <button
-        type="submit"
-        className={styles.button}
-        disabled={isSubmitting}
-      >
+      <button type="submit" className={styles.button} disabled={isSubmitting}>
         {isSubmitting ? "Checking..." : "Continue"}
       </button>
     </form>
