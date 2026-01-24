@@ -365,7 +365,20 @@ const HomeHero = () => {
         designProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
 
-      // Eighth phase: HomeFooter section - bring hexagons back into view on both sides
+      // Ninth phase: HomeSwift section (left-aligned content)
+      // Left hexagons stay off, right hexagons come back
+      const swiftSection = document.querySelector('[data-section="swift"]');
+      let swiftInView = false;
+      let swiftProgress = 0;
+      if (swiftSection) {
+        const rect = swiftSection.getBoundingClientRect();
+        swiftInView = rect.top < window.innerHeight && rect.bottom > 100;
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        swiftProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
+
+      // Tenth phase: HomeFooter section - bring hexagons back into view on both sides
       const footerSection = document.querySelector('[data-section="footer"]');
       let footerInView = false;
       let footerProgress = 0;
@@ -534,11 +547,29 @@ const HomeHero = () => {
         rightTotalSpread = governanceSpread;
       }
 
-      // When HomeDesign is in view but footer isn't, push both sides off screen
-      if (designInView && !footerInView && !governanceInView) {
+      // When HomeDesign is in view but swift/footer isn't, push both sides off screen
+      if (designInView && !swiftInView && !footerInView && !governanceInView) {
         const offScreenSpread = viewportWidth * 0.6;
         leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
+      }
+
+      // When HomeSwift is in view (left-aligned content)
+      // Keep left hexagons off, bring right hexagons back
+      if (swiftInView && !footerInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        // Left hexagons stay off screen
+        leftTotalSpread = offScreenSpread;
+
+        // Right hexagons come back - position them to not overlap with content
+        // Content is left-aligned with 80px padding and max-width 1100px
+        const contentRightEdge = Math.min(80 + 1100, viewportWidth - 40);
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 40;
+        const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+
+        // Blend from off-screen to swift position
+        rightTotalSpread = offScreenSpread - (offScreenSpread - minRightSpread) * swiftProgress;
       }
 
       // When footer is coming into view, smoothly bring hexagons back
