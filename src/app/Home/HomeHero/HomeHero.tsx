@@ -271,24 +271,42 @@ const HomeHero = () => {
       const additionalSpread = spreadProgress * maxSpread;
 
       // Second phase: when HomeSmart section content would overlap with left hexagons
-      // HomeSmart is after Hero and NextGen sections
-      // Start moving left hexagons off when HomeSmart content comes into contact
-      const smartSectionStart = heroHeight * 1.5; // When HomeSmart starts entering viewport
-      const smartSectionEnd = heroHeight * 2.0; // When HomeSmart is fully in view
-      const smartProgress = Math.min(Math.max((scrollY - smartSectionStart) / (smartSectionEnd - smartSectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const smartSection = document.querySelector('[data-section="smart"]');
+      let smartProgress = 0;
+      if (smartSection) {
+        const rect = smartSection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        smartProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Third phase: when HomeEfficiency section comes into view (centered content)
       // Left hexagons should come back into view
-      const efficiencySectionStart = heroHeight * 2.5; // When HomeEfficiency starts entering
-      const efficiencySectionEnd = heroHeight * 3.0; // When HomeEfficiency is in view
-      const efficiencyProgress = Math.min(Math.max((scrollY - efficiencySectionStart) / (efficiencySectionEnd - efficiencySectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const efficiencySection = document.querySelector('[data-section="efficiency"]');
+      let efficiencyProgress = 0;
+      if (efficiencySection) {
+        const rect = efficiencySection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        efficiencyProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Fourth phase: when HomeExtensions section comes into view (left-aligned content)
       // Left hexagons should move off screen again, right hexagons come closer
-      // Start after HomeEfficiency is in view, complete as HomeExtensions enters
-      const extensionsSectionStart = heroHeight * 3.5; // Start moving after HomeEfficiency is shown
-      const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
-      const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const extensionsSection = document.querySelector('[data-section="extensions"]');
+      let extensionsProgress = 0;
+      if (extensionsSection) {
+        const rect = extensionsSection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        extensionsProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Fifth phase: when HomeWorkflows section comes into view (left-aligned diagram)
       // Use actual element position for collision detection
@@ -407,6 +425,18 @@ const HomeHero = () => {
         const buffer = 20;
         const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+
+        // Left hexagons collision avoidance for HomeSmart content (left-aligned)
+        // Content has 80px padding-left, max-width 900px
+        const contentLeftEdge = viewportWidth <= 768 ? 20 : viewportWidth <= 1200 ? 40 : 80;
+        const leftHexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const leftBuffer = 20;
+        // Spread needed to position hexagon right edge left of content
+        // hexagon right edge = viewportWidth/2 - leftTotalSpread + hexHalfWidth
+        // Need: viewportWidth/2 - leftTotalSpread + hexHalfWidth < contentLeftEdge
+        // So: leftTotalSpread > viewportWidth/2 + hexHalfWidth - contentLeftEdge + buffer
+        const minLeftSpread = viewportWidth / 2 + leftHexHalfWidth - contentLeftEdge + leftBuffer;
+        leftTotalSpread = Math.max(minLeftSpread, leftTotalSpread);
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)

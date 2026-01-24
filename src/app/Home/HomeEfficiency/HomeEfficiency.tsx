@@ -2,7 +2,7 @@ import styles from "./HomeEfficiency.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 
 const HomeEfficiency = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="efficiency">
     <div className={styles.content}>
       <div className={styles.hexIcon}>
         <svg viewBox="0 0 468 540" className={styles.hexSvg}>
