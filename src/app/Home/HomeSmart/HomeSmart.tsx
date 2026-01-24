@@ -1,17 +1,327 @@
+import { useEffect, useRef, useState } from "react";
 import styles from "./HomeSmart.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 
-const HomeSmart = () => (
-  <section className={styles.root}>
-    {/* Connector lines from content to hexagons */}
-    <svg className={styles.connectorLines} viewBox="0 0 540 300" fill="none">
-      {/* Line going up-right */}
-      <path d="M0 150 Q300 150 500 50" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
-      {/* Line going straight - extends a bit further */}
-      <path d="M0 150 Q280 150 540 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
-      {/* Line going down-right */}
-      <path d="M0 150 Q300 150 500 250" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
-    </svg>
+interface HexTarget {
+  x: number;
+  y: number;
+}
+
+interface DragOffset {
+  key: string;
+  offsetX: number;
+  offsetY: number;
+}
+
+const HomeSmart = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [middleTarget, setMiddleTarget] = useState<HexTarget | null>(null);
+  const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
+  const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [dragOffset, setDragOffset] = useState<DragOffset | null>(null);
+
+  // Track which hexagon keys are being targeted
+  const targetedHexKeys = useRef<{ top: string | null; middle: string | null; bottom: string | null }>({
+    top: null,
+    middle: null,
+    bottom: null
+  });
+
+  // SVG positioning constants
+  const svgLeft = 700;
+  const svgTop = 280;
+  const svgScaleX = 600 / 450;
+  const svgScaleY = 300 / 300;
+
+  useEffect(() => {
+    const findHexagon = (row: number, minCol: number): Element | null => {
+      const hexagons = document.querySelectorAll(`[data-hex-key^="${row}-"]`);
+      let targetHex: Element | null = null;
+
+      hexagons.forEach((hex) => {
+        const key = hex.getAttribute('data-hex-key');
+        if (key) {
+          const [, col] = key.split('-').map(Number);
+          if (col >= minCol && !targetHex) {
+            targetHex = hex;
+          }
+        }
+      });
+
+      return targetHex;
+    };
+
+    const updateTargets = () => {
+      if (!sectionRef.current) return;
+
+      const sectionRect = sectionRef.current.getBoundingClientRect();
+
+      // Find middle row hexagon (row 1, first right hexagon col >= 7)
+      const middleHex = findHexagon(1, 7);
+      if (middleHex) {
+        const hexKey = middleHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.middle = hexKey;
+        const hexRect = middleHex.getBoundingClientRect();
+        // Left edge of hexagon
+        const hexLeftEdgeX = hexRect.left - sectionRect.left;
+        const hexCenterY = hexRect.top + hexRect.height / 2 - sectionRect.top;
+
+        setMiddleTarget({
+          x: (hexLeftEdgeX - svgLeft) * svgScaleX,
+          y: (hexCenterY - svgTop) * svgScaleY
+        });
+      }
+
+      // Find top row hexagon (row 0, first right hexagon col >= 7)
+      const topHex = findHexagon(0, 7);
+      if (topHex) {
+        const hexKey = topHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.top = hexKey;
+        const hexRect = topHex.getBoundingClientRect();
+        // Inside edge (bottom-left area of the hexagon) - offset from left edge and toward bottom
+        const hexInsideX = hexRect.left - sectionRect.left + hexRect.width * 0.15;
+        const hexInsideY = hexRect.top + hexRect.height * 0.7 - sectionRect.top;
+
+        setTopTarget({
+          x: (hexInsideX - svgLeft) * svgScaleX,
+          y: (hexInsideY - svgTop) * svgScaleY
+        });
+      }
+
+      // Find bottom row hexagon (row 2, first right hexagon col >= 7)
+      const bottomHex = findHexagon(2, 7);
+      if (bottomHex) {
+        const hexKey = bottomHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.bottom = hexKey;
+        const hexRect = bottomHex.getBoundingClientRect();
+        // Inside edge (upper-left angled edge facing the middle hexagons)
+        // Move into the hexagon more to hit the inner edge
+        const hexInsideX = hexRect.left - sectionRect.left + hexRect.width * 0.25;
+        const hexInsideY = hexRect.top + hexRect.height * 0.2 - sectionRect.top;
+
+        setBottomTarget({
+          x: (hexInsideX - svgLeft) * svgScaleX,
+          y: (hexInsideY - svgTop) * svgScaleY
+        });
+      }
+
+      // Check if title is in view (more restrictive than whole section)
+      let inView = false;
+      if (titleRef.current) {
+        const titleRect = titleRef.current.getBoundingClientRect();
+        // Title must be visible in the viewport
+        inView = titleRect.top < window.innerHeight && titleRect.bottom > 0;
+      } else {
+        // Fallback to section check
+        inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
+      }
+
+      setIsInView(inView);
+    };
+
+    updateTargets();
+    window.addEventListener('scroll', updateTargets, { passive: true });
+    window.addEventListener('resize', updateTargets, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', updateTargets);
+      window.removeEventListener('resize', updateTargets);
+    };
+  }, []);
+
+  // Listen for hexagon drag events
+  useEffect(() => {
+    const handleHexDrag = (e: Event) => {
+      const customEvent = e as CustomEvent<{ key: string; offsetX: number; offsetY: number }>;
+      setDragOffset(customEvent.detail);
+    };
+
+    const handleHexDragEnd = () => {
+      setDragOffset(null);
+    };
+
+    window.addEventListener('hexagon-drag', handleHexDrag);
+    window.addEventListener('hexagon-drag-end', handleHexDragEnd);
+
+    return () => {
+      window.removeEventListener('hexagon-drag', handleHexDrag);
+      window.removeEventListener('hexagon-drag-end', handleHexDragEnd);
+    };
+  }, []);
+
+  // Origin point for all lines
+  const originX = 0;
+  const originY = 150;
+
+  // Calculate drag offset for each target (scaled to SVG coordinates)
+  const getDragOffsetForTarget = (targetKey: 'top' | 'middle' | 'bottom') => {
+    if (!dragOffset) return { x: 0, y: 0 };
+    const hexKey = targetedHexKeys.current[targetKey];
+    if (hexKey !== dragOffset.key) return { x: 0, y: 0 };
+    return {
+      x: dragOffset.offsetX * svgScaleX,
+      y: dragOffset.offsetY * svgScaleY
+    };
+  };
+
+  const middleDragOffset = getDragOffsetForTarget('middle');
+  const topDragOffset = getDragOffsetForTarget('top');
+  const bottomDragOffset = getDragOffsetForTarget('bottom');
+
+  // Middle line - target coordinates (with drag offset)
+  const middleTargetX = (middleTarget?.x ?? 600) + middleDragOffset.x;
+  const middleTargetY = (middleTarget?.y ?? 150) + middleDragOffset.y;
+
+  // Middle line: smooth curve from origin to hexagon
+  // Use cubic bezier for smoother curve - control points create a natural horizontal-to-target flow
+  const middleCtrl1X = originX + (middleTargetX - originX) * 0.6;
+  const middleCtrl1Y = originY;
+  const middleCtrl2X = originX + (middleTargetX - originX) * 0.8;
+  const middleCtrl2Y = middleTargetY;
+  const middleFullPath = `M${originX} ${originY} C${middleCtrl1X} ${middleCtrl1Y} ${middleCtrl2X} ${middleCtrl2Y} ${middleTargetX} ${middleTargetY}`;
+
+  // Top line - target coordinates (with drag offset)
+  const topTargetX = (topTarget?.x ?? 600) + topDragOffset.x;
+  const topTargetY = (topTarget?.y ?? 50) + topDragOffset.y;
+
+  // Calculate the angle to the target for proper curve alignment
+  const deltaX = topTargetX - originX;
+  const deltaY = topTargetY - originY;
+
+  // Top line: smooth curve that flows directly toward the hexagon
+  // First control point: start horizontal, then curve
+  const topCtrl1X = originX + deltaX * 0.4;
+  const topCtrl1Y = originY + deltaY * 0.1; // Slight upward bias early
+  // Second control point: align with the direction to the target
+  const topCtrl2X = originX + deltaX * 0.7;
+  const topCtrl2Y = originY + deltaY * 0.7; // Approach target angle
+  const topFullPath = `M${originX} ${originY} C${topCtrl1X} ${topCtrl1Y} ${topCtrl2X} ${topCtrl2Y} ${topTargetX} ${topTargetY}`;
+
+  // Bottom line - target coordinates (with drag offset)
+  const bottomTargetX = (bottomTarget?.x ?? 600) + bottomDragOffset.x;
+  const bottomTargetY = (bottomTarget?.y ?? 250) + bottomDragOffset.y;
+
+  // Calculate the delta to the bottom target
+  const bottomDeltaX = bottomTargetX - originX;
+  const bottomDeltaY = bottomTargetY - originY;
+
+  // Bottom line: smooth curve that flows directly toward the bottom hexagon
+  const bottomCtrl1X = originX + bottomDeltaX * 0.4;
+  const bottomCtrl1Y = originY + bottomDeltaY * 0.1; // Slight downward bias early
+  const bottomCtrl2X = originX + bottomDeltaX * 0.7;
+  const bottomCtrl2Y = originY + bottomDeltaY * 0.7; // Approach target angle
+  const bottomFullPath = `M${originX} ${originY} C${bottomCtrl1X} ${bottomCtrl1Y} ${bottomCtrl2X} ${bottomCtrl2Y} ${bottomTargetX} ${bottomTargetY}`;
+
+  return (
+    <section className={styles.root} ref={sectionRef}>
+      {/* Connector lines from content to hexagons */}
+      <svg className={styles.connectorLines} viewBox="0 0 600 300" fill="none">
+        <defs>
+          {/* Glow filter for synapse effect */}
+          <filter id="synapseGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          {/* Stronger glow for the pulse */}
+          <filter id="pulseGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Main container - only visible when in view */}
+        <g className={`${styles.linesContainer} ${isInView ? styles.visible : ''}`}>
+          {/* Traveling pulses to top hexagon */}
+          <circle
+            className={styles.travelingPulse}
+            r="6"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          >
+            <animateMotion
+              dur="1.8s"
+              repeatCount="indefinite"
+              path={topFullPath}
+            />
+          </circle>
+          <circle
+            className={styles.travelingPulse2}
+            r="4"
+            fill="#755CBA"
+            filter="url(#synapseGlow)"
+          >
+            <animateMotion
+              dur="1.8s"
+              repeatCount="indefinite"
+              path={topFullPath}
+              begin="0.9s"
+            />
+          </circle>
+
+          {/* Traveling pulses to middle hexagon */}
+          <circle
+            className={styles.travelingPulse}
+            r="6"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          >
+            <animateMotion
+              dur="1.5s"
+              repeatCount="indefinite"
+              path={middleFullPath}
+            />
+          </circle>
+          <circle
+            className={styles.travelingPulse2}
+            r="4"
+            fill="#755CBA"
+            filter="url(#synapseGlow)"
+          >
+            <animateMotion
+              dur="1.5s"
+              repeatCount="indefinite"
+              path={middleFullPath}
+              begin="0.75s"
+            />
+          </circle>
+
+          {/* Traveling pulses to bottom hexagon */}
+          <circle
+            className={styles.travelingPulse}
+            r="6"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          >
+            <animateMotion
+              dur="1.8s"
+              repeatCount="indefinite"
+              path={bottomFullPath}
+            />
+          </circle>
+          <circle
+            className={styles.travelingPulse2}
+            r="4"
+            fill="#755CBA"
+            filter="url(#synapseGlow)"
+          >
+            <animateMotion
+              dur="1.8s"
+              repeatCount="indefinite"
+              path={bottomFullPath}
+              begin="0.9s"
+            />
+          </circle>
+        </g>
+      </svg>
     <div className={styles.content}>
       <div className={styles.hexIcon}>
         <svg viewBox="0 0 468 540" className={styles.hexSvg}>
@@ -48,7 +358,7 @@ const HomeSmart = () => (
         </svg>
       </div>
 
-      <h1 className={styles.title}>Smart Orchestration</h1>
+      <h1 className={styles.title} ref={titleRef}>Smart Orchestration</h1>
       <p className={styles.description}>
         ButteryAI can intelligently orchestrate across multiple AI models simultaneously. Leverage workflows and
         extensions to take your orchestration to the next level. ButteryAI is built upon a patented distributed
@@ -83,6 +393,7 @@ const HomeSmart = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default HomeSmart;
