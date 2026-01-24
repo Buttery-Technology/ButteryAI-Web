@@ -34,7 +34,7 @@ const teamMembers = [
 ];
 
 const HomeTeam = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="team">
     <div className={styles.content}>
       <h1 className={styles.title}>Meet the team</h1>
       <div className={styles.team}>
