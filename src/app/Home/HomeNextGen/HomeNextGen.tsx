@@ -52,6 +52,14 @@ const HomeNextGen = () => (
           </p>
           <CheckCircle className={styles.checkIcon} />
         </div>
+        <div className={styles.card}>
+          <h2>Smart Routing</h2>
+          <p>
+            ButteryAI has next-gen intelligence routing by understanding and ranking AI nodes based on truthfulness,
+            accuracy, and key metrics.
+          </p>
+          <CheckCircle className={styles.checkIcon} />
+        </div>
       </div>
     </div>
   </section>
