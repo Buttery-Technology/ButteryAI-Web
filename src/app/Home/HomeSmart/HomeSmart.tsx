@@ -2,80 +2,121 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./HomeSmart.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 
+interface HexTarget {
+  x: number;
+  y: number;
+}
+
 const HomeSmart = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [synapseTarget, setSynapseTarget] = useState<{ x: number; y: number } | null>(null);
+  const [middleTarget, setMiddleTarget] = useState<HexTarget | null>(null);
+  const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
   const [isInView, setIsInView] = useState(false);
 
-  useEffect(() => {
-    const updateSynapseTarget = () => {
-      if (!sectionRef.current) return;
+  // SVG positioning constants
+  const svgLeft = 700;
+  const svgTop = 280;
+  const svgScaleX = 600 / 450;
+  const svgScaleY = 300 / 300;
 
-      // Find all right hexagons (middle row = row 1)
-      const rightHexagons = document.querySelectorAll('[data-hex-key^="1-"]');
+  useEffect(() => {
+    const findHexagon = (row: number, minCol: number): Element | null => {
+      const hexagons = document.querySelectorAll(`[data-hex-key^="${row}-"]`);
       let targetHex: Element | null = null;
 
-      // Find the first right hexagon in the middle row (col >= 7)
-      rightHexagons.forEach((hex) => {
+      hexagons.forEach((hex) => {
         const key = hex.getAttribute('data-hex-key');
         if (key) {
           const [, col] = key.split('-').map(Number);
-          if (col >= 7 && !targetHex) {
+          if (col >= minCol && !targetHex) {
             targetHex = hex;
           }
         }
       });
 
-      if (targetHex) {
-        const hexRect = targetHex.getBoundingClientRect();
-        const sectionRect = sectionRef.current.getBoundingClientRect();
+      return targetHex;
+    };
 
-        // Calculate position relative to the connector lines SVG
-        // SVG is at left: 700px, top: 280px relative to section
-        const svgLeft = 700;
-        const svgTop = 280;
+    const updateTargets = () => {
+      if (!sectionRef.current) return;
 
-        // Get the LEFT EDGE of the hexagon (leading edge) relative to section
+      const sectionRect = sectionRef.current.getBoundingClientRect();
+
+      // Find middle row hexagon (row 1, first right hexagon col >= 7)
+      const middleHex = findHexagon(1, 7);
+      if (middleHex) {
+        const hexRect = middleHex.getBoundingClientRect();
+        // Left edge of hexagon
         const hexLeftEdgeX = hexRect.left - sectionRect.left;
         const hexCenterY = hexRect.top + hexRect.height / 2 - sectionRect.top;
 
-        // Convert to SVG coordinates (SVG viewBox is 600x300, actual size is 450x300)
-        const svgScaleX = 600 / 450;
-        const svgScaleY = 300 / 300;
+        setMiddleTarget({
+          x: (hexLeftEdgeX - svgLeft) * svgScaleX,
+          y: (hexCenterY - svgTop) * svgScaleY
+        });
+      }
 
-        const targetX = (hexLeftEdgeX - svgLeft) * svgScaleX;
-        const targetY = (hexCenterY - svgTop) * svgScaleY;
+      // Find top row hexagon (row 0, first right hexagon col >= 7)
+      const topHex = findHexagon(0, 7);
+      if (topHex) {
+        const hexRect = topHex.getBoundingClientRect();
+        // Inside edge (bottom-left area of the hexagon) - offset from left edge and toward bottom
+        const hexInsideX = hexRect.left - sectionRect.left + hexRect.width * 0.15;
+        const hexInsideY = hexRect.top + hexRect.height * 0.7 - sectionRect.top;
 
-        setSynapseTarget({ x: targetX, y: targetY });
+        setTopTarget({
+          x: (hexInsideX - svgLeft) * svgScaleX,
+          y: (hexInsideY - svgTop) * svgScaleY
+        });
       }
 
       // Check if section is in view
-      const sectionRect = sectionRef.current.getBoundingClientRect();
       const inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
       setIsInView(inView);
     };
 
-    updateSynapseTarget();
-    window.addEventListener('scroll', updateSynapseTarget, { passive: true });
-    window.addEventListener('resize', updateSynapseTarget, { passive: true });
+    updateTargets();
+    window.addEventListener('scroll', updateTargets, { passive: true });
+    window.addEventListener('resize', updateTargets, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', updateSynapseTarget);
-      window.removeEventListener('resize', updateSynapseTarget);
+      window.removeEventListener('scroll', updateTargets);
+      window.removeEventListener('resize', updateTargets);
     };
   }, []);
 
-  // Calculate synapse path and elements based on target
-  const lineEndX = 540;
-  const lineEndY = 150;
-  const targetX = synapseTarget?.x ?? 580;
-  const targetY = synapseTarget?.y ?? 150;
+  // Origin point for all lines
+  const originX = 0;
+  const originY = 150;
 
-  // Create a curved path from line end to hexagon
-  const controlX = lineEndX + (targetX - lineEndX) * 0.5;
-  const controlY = lineEndY;
+  // Middle line - target coordinates
+  const middleTargetX = middleTarget?.x ?? 600;
+  const middleTargetY = middleTarget?.y ?? 150;
 
-  const synapsePath = `M${lineEndX} ${lineEndY} Q${controlX} ${controlY} ${targetX} ${targetY}`;
+  // Middle line: smooth curve from origin to hexagon
+  // Use cubic bezier for smoother curve - control points create a natural horizontal-to-target flow
+  const middleCtrl1X = originX + (middleTargetX - originX) * 0.6;
+  const middleCtrl1Y = originY;
+  const middleCtrl2X = originX + (middleTargetX - originX) * 0.8;
+  const middleCtrl2Y = middleTargetY;
+  const middleFullPath = `M${originX} ${originY} C${middleCtrl1X} ${middleCtrl1Y} ${middleCtrl2X} ${middleCtrl2Y} ${middleTargetX} ${middleTargetY}`;
+
+  // Top line - target coordinates
+  const topTargetX = topTarget?.x ?? 600;
+  const topTargetY = topTarget?.y ?? 50;
+
+  // Calculate the angle to the target for proper curve alignment
+  const deltaX = topTargetX - originX;
+  const deltaY = topTargetY - originY;
+
+  // Top line: smooth curve that flows directly toward the hexagon
+  // First control point: start horizontal, then curve
+  const topCtrl1X = originX + deltaX * 0.4;
+  const topCtrl1Y = originY + deltaY * 0.1; // Slight upward bias early
+  // Second control point: align with the direction to the target
+  const topCtrl2X = originX + deltaX * 0.7;
+  const topCtrl2Y = originY + deltaY * 0.7; // Approach target angle
+  const topFullPath = `M${originX} ${originY} C${topCtrl1X} ${topCtrl1Y} ${topCtrl2X} ${topCtrl2Y} ${topTargetX} ${topTargetY}`;
 
   return (
     <section className={styles.root} ref={sectionRef}>
@@ -105,30 +146,46 @@ const HomeSmart = () => {
             <stop offset="50%" stopColor="#31AFF5" stopOpacity="1"/>
             <stop offset="100%" stopColor="#755CBA" stopOpacity="0.8"/>
           </linearGradient>
+          {/* Gradient for middle line - fades out at the end */}
+          <linearGradient id="middleLineFade" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
+          </linearGradient>
+          {/* Gradient for top line - fades out at the end (angled) */}
+          <linearGradient id="topLineFade" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
+          </linearGradient>
         </defs>
 
-        {/* Line going up-right */}
-        <path d="M0 150 Q300 150 500 50" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
-        {/* Line going down-right */}
+        {/* Line going down-right (static for now) */}
         <path d="M0 150 Q300 150 500 250" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
 
-        {/* Middle line - base */}
-        <path d="M0 150 Q280 150 540 150" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+        {/* Top line - smooth curve from origin to top hexagon */}
+        <path
+          d={topFullPath}
+          stroke="url(#topLineFade)"
+          strokeWidth="10"
+          strokeLinecap="round"
+          fill="none"
+          className={styles.flexibleLine}
+        />
 
-        {/* Synapse connection extension - animated electrical arc */}
+        {/* Middle line - smooth curve from origin to middle hexagon */}
+        <path
+          d={middleFullPath}
+          stroke="url(#middleLineFade)"
+          strokeWidth="10"
+          strokeLinecap="round"
+          fill="none"
+          className={styles.flexibleLine}
+        />
+
+        {/* Top synapse effects */}
         <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
-          {/* Main extending line with glow */}
-          <path
-            className={styles.synapseLine}
-            d={synapsePath}
-            stroke="url(#electricGradient)"
-            strokeWidth="6"
-            strokeLinecap="round"
-            fill="none"
-            filter="url(#synapseGlow)"
-          />
-
-          {/* Traveling energy pulse along the line */}
+          {/* Traveling pulse along full top line */}
           <circle
             className={styles.travelingPulse}
             r="4"
@@ -136,13 +193,12 @@ const HomeSmart = () => {
             filter="url(#pulseGlow)"
           >
             <animateMotion
-              dur="1.5s"
+              dur="2s"
               repeatCount="indefinite"
-              path={synapsePath}
+              path={topFullPath}
             />
           </circle>
 
-          {/* Second traveling pulse (offset) */}
           <circle
             className={styles.travelingPulse2}
             r="3"
@@ -150,47 +206,110 @@ const HomeSmart = () => {
             filter="url(#synapseGlow)"
           >
             <animateMotion
-              dur="1.5s"
+              dur="2s"
               repeatCount="indefinite"
-              path={synapsePath}
-              begin="0.5s"
+              path={topFullPath}
+              begin="0.7s"
             />
           </circle>
 
-          {/* Pulsing endpoint node at hexagon */}
+          {/* Top endpoint node */}
           <circle
             className={styles.synapseNode}
-            cx={targetX}
-            cy={targetY}
+            cx={topTargetX}
+            cy={topTargetY}
             r="8"
             fill="#31AFF5"
             filter="url(#pulseGlow)"
           />
 
-          {/* Outer pulse ring at hexagon */}
           <circle
             className={styles.pulseRing}
-            cx={targetX}
-            cy={targetY}
+            cx={topTargetX}
+            cy={topTargetY}
             r="12"
             fill="none"
             stroke="#31AFF5"
             strokeWidth="2"
             filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${targetX}px ${targetY}px` }}
+            style={{ transformOrigin: `${topTargetX}px ${topTargetY}px` }}
           />
 
-          {/* Secondary pulse ring */}
           <circle
             className={styles.pulseRing2}
-            cx={targetX}
-            cy={targetY}
+            cx={topTargetX}
+            cy={topTargetY}
             r="16"
             fill="none"
             stroke="#755CBA"
             strokeWidth="1"
             filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${targetX}px ${targetY}px` }}
+            style={{ transformOrigin: `${topTargetX}px ${topTargetY}px` }}
+          />
+        </g>
+
+        {/* Middle synapse effects */}
+        <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
+          {/* Traveling energy pulse along full middle line */}
+          <circle
+            className={styles.travelingPulse}
+            r="4"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          >
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={middleFullPath}
+            />
+          </circle>
+
+          <circle
+            className={styles.travelingPulse2}
+            r="3"
+            fill="#755CBA"
+            filter="url(#synapseGlow)"
+          >
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={middleFullPath}
+              begin="0.7s"
+            />
+          </circle>
+
+          {/* Middle endpoint node */}
+          <circle
+            className={styles.synapseNode}
+            cx={middleTargetX}
+            cy={middleTargetY}
+            r="8"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          />
+
+          <circle
+            className={styles.pulseRing}
+            cx={middleTargetX}
+            cy={middleTargetY}
+            r="12"
+            fill="none"
+            stroke="#31AFF5"
+            strokeWidth="2"
+            filter="url(#synapseGlow)"
+            style={{ transformOrigin: `${middleTargetX}px ${middleTargetY}px` }}
+          />
+
+          <circle
+            className={styles.pulseRing2}
+            cx={middleTargetX}
+            cy={middleTargetY}
+            r="16"
+            fill="none"
+            stroke="#755CBA"
+            strokeWidth="1"
+            filter="url(#synapseGlow)"
+            style={{ transformOrigin: `${middleTargetX}px ${middleTargetY}px` }}
           />
         </g>
       </svg>
