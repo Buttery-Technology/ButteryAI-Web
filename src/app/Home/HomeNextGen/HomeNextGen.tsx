@@ -1,6 +1,6 @@
 import styles from "./HomeNextGen.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
-import auditTrailSrc from "@assets/images/visual-audit-trail.svg";
+import auditTrailSrc from "@assets/images/audit-trail-in-window.png";
 
 const HomeNextGen = () => (
   <section className={styles.root}>
