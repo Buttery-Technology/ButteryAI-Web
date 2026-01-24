@@ -14,9 +14,6 @@ const HomeSmart = () => {
   const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
   const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
   const [isInView, setIsInView] = useState(false);
-  const [isStartingUp, setIsStartingUp] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const wasInViewRef = useRef(false);
 
   // SVG positioning constants
   const svgLeft = 700;
@@ -101,24 +98,6 @@ const HomeSmart = () => {
         inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
       }
 
-      // Detect when entering view to trigger startup animation
-      if (inView && !wasInViewRef.current) {
-        setIsStartingUp(true);
-        setHasStarted(false);
-        // After startup pulse completes, switch to normal pulsing
-        setTimeout(() => {
-          setIsStartingUp(false);
-          setHasStarted(true);
-        }, 1200); // Startup pulse duration
-      }
-
-      // When leaving view, reset the animation state
-      if (!inView && wasInViewRef.current) {
-        setHasStarted(false);
-        setIsStartingUp(false);
-      }
-
-      wasInViewRef.current = inView;
       setIsInView(inView);
     };
 
@@ -202,312 +181,90 @@ const HomeSmart = () => {
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          {/* Golden startup glow */}
-          <filter id="startupGlow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          {/* Gradient for the electrical arc */}
-          <linearGradient id="electricGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#288ED2" stopOpacity="0.3"/>
-            <stop offset="50%" stopColor="#31AFF5" stopOpacity="1"/>
-            <stop offset="100%" stopColor="#755CBA" stopOpacity="0.8"/>
-          </linearGradient>
-          {/* Gradient for middle line - fades out at the end */}
-          <linearGradient id="middleLineFade" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
-          </linearGradient>
-          {/* Gradient for top line - fades out at the end (angled) */}
-          <linearGradient id="topLineFade" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
-          </linearGradient>
-          {/* Gradient for bottom line - fades out at the end (angled down) */}
-          <linearGradient id="bottomLineFade" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
-            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
-          </linearGradient>
         </defs>
 
-        {/* Lines container - only visible when section is in view */}
+        {/* Main container - only visible when in view */}
         <g className={`${styles.linesContainer} ${isInView ? styles.visible : ''}`}>
-          {/* Bottom line - smooth curve from origin to bottom hexagon */}
-          <path
-            d={bottomFullPath}
-            stroke="url(#bottomLineFade)"
-            strokeWidth="10"
-            strokeLinecap="round"
-            fill="none"
-            className={styles.flexibleLine}
-          />
-
-          {/* Top line - smooth curve from origin to top hexagon */}
-          <path
-            d={topFullPath}
-            stroke="url(#topLineFade)"
-            strokeWidth="10"
-            strokeLinecap="round"
-            fill="none"
-            className={styles.flexibleLine}
-          />
-
-          {/* Middle line - smooth curve from origin to middle hexagon */}
-          <path
-            d={middleFullPath}
-            stroke="url(#middleLineFade)"
-            strokeWidth="10"
-            strokeLinecap="round"
-            fill="none"
-            className={styles.flexibleLine}
-          />
-
-        {/* Startup pulses - golden pulse that travels through all lines */}
-        {isStartingUp && (
-          <g className={styles.startupGroup}>
-            <circle
-              className={styles.startupPulse}
-              r="8"
-              fill="#F9C000"
-              filter="url(#startupGlow)"
-            >
-              <animateMotion
-                dur="1s"
-                fill="freeze"
-                path={topFullPath}
-              />
-            </circle>
-            <circle
-              className={styles.startupPulse}
-              r="8"
-              fill="#F9C000"
-              filter="url(#startupGlow)"
-            >
-              <animateMotion
-                dur="1s"
-                fill="freeze"
-                path={middleFullPath}
-                begin="0.1s"
-              />
-            </circle>
-            <circle
-              className={styles.startupPulse}
-              r="8"
-              fill="#F9C000"
-              filter="url(#startupGlow)"
-            >
-              <animateMotion
-                dur="1s"
-                fill="freeze"
-                path={bottomFullPath}
-                begin="0.2s"
-              />
-            </circle>
-          </g>
-        )}
-
-        {/* Top synapse effects */}
-        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
-          {/* Traveling pulse along full top line */}
+          {/* Traveling pulses to top hexagon */}
           <circle
             className={styles.travelingPulse}
-            r="4"
+            r="6"
             fill="#31AFF5"
             filter="url(#pulseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.8s"
               repeatCount="indefinite"
               path={topFullPath}
             />
           </circle>
-
           <circle
             className={styles.travelingPulse2}
-            r="3"
+            r="4"
             fill="#755CBA"
             filter="url(#synapseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.8s"
               repeatCount="indefinite"
               path={topFullPath}
-              begin="0.7s"
+              begin="0.9s"
             />
           </circle>
 
-          {/* Top endpoint node */}
-          <circle
-            className={styles.synapseNode}
-            cx={topTargetX}
-            cy={topTargetY}
-            r="8"
-            fill="#31AFF5"
-            filter="url(#pulseGlow)"
-          />
-
-          <circle
-            className={styles.pulseRing}
-            cx={topTargetX}
-            cy={topTargetY}
-            r="12"
-            fill="none"
-            stroke="#31AFF5"
-            strokeWidth="2"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${topTargetX}px ${topTargetY}px` }}
-          />
-
-          <circle
-            className={styles.pulseRing2}
-            cx={topTargetX}
-            cy={topTargetY}
-            r="16"
-            fill="none"
-            stroke="#755CBA"
-            strokeWidth="1"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${topTargetX}px ${topTargetY}px` }}
-          />
-        </g>
-
-        {/* Middle synapse effects */}
-        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
-          {/* Traveling energy pulse along full middle line */}
+          {/* Traveling pulses to middle hexagon */}
           <circle
             className={styles.travelingPulse}
-            r="4"
+            r="6"
             fill="#31AFF5"
             filter="url(#pulseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.5s"
               repeatCount="indefinite"
               path={middleFullPath}
             />
           </circle>
-
           <circle
             className={styles.travelingPulse2}
-            r="3"
+            r="4"
             fill="#755CBA"
             filter="url(#synapseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.5s"
               repeatCount="indefinite"
               path={middleFullPath}
-              begin="0.7s"
+              begin="0.75s"
             />
           </circle>
 
-          {/* Middle endpoint node */}
-          <circle
-            className={styles.synapseNode}
-            cx={middleTargetX}
-            cy={middleTargetY}
-            r="8"
-            fill="#31AFF5"
-            filter="url(#pulseGlow)"
-          />
-
-          <circle
-            className={styles.pulseRing}
-            cx={middleTargetX}
-            cy={middleTargetY}
-            r="12"
-            fill="none"
-            stroke="#31AFF5"
-            strokeWidth="2"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${middleTargetX}px ${middleTargetY}px` }}
-          />
-
-          <circle
-            className={styles.pulseRing2}
-            cx={middleTargetX}
-            cy={middleTargetY}
-            r="16"
-            fill="none"
-            stroke="#755CBA"
-            strokeWidth="1"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${middleTargetX}px ${middleTargetY}px` }}
-          />
-        </g>
-
-        {/* Bottom synapse effects */}
-        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
-          {/* Traveling pulse along full bottom line */}
+          {/* Traveling pulses to bottom hexagon */}
           <circle
             className={styles.travelingPulse}
-            r="4"
+            r="6"
             fill="#31AFF5"
             filter="url(#pulseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.8s"
               repeatCount="indefinite"
               path={bottomFullPath}
             />
           </circle>
-
           <circle
             className={styles.travelingPulse2}
-            r="3"
+            r="4"
             fill="#755CBA"
             filter="url(#synapseGlow)"
           >
             <animateMotion
-              dur="2s"
+              dur="1.8s"
               repeatCount="indefinite"
               path={bottomFullPath}
-              begin="0.7s"
+              begin="0.9s"
             />
           </circle>
-
-          {/* Bottom endpoint node */}
-          <circle
-            className={styles.synapseNode}
-            cx={bottomTargetX}
-            cy={bottomTargetY}
-            r="8"
-            fill="#31AFF5"
-            filter="url(#pulseGlow)"
-          />
-
-          <circle
-            className={styles.pulseRing}
-            cx={bottomTargetX}
-            cy={bottomTargetY}
-            r="12"
-            fill="none"
-            stroke="#31AFF5"
-            strokeWidth="2"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${bottomTargetX}px ${bottomTargetY}px` }}
-          />
-
-          <circle
-            className={styles.pulseRing2}
-            cx={bottomTargetX}
-            cy={bottomTargetY}
-            r="16"
-            fill="none"
-            stroke="#755CBA"
-            strokeWidth="1"
-            filter="url(#synapseGlow)"
-            style={{ transformOrigin: `${bottomTargetX}px ${bottomTargetY}px` }}
-          />
-        </g>
         </g>
       </svg>
     <div className={styles.content}>
