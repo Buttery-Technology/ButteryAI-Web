@@ -8,7 +8,7 @@ const metricCards = [
     id: "value",
     title: "Value",
     value: "92",
-    description: "This metric is your current value in the Hive.",
+    description: "This metric is your current value based on activity, contributions, accuracies, etc.",
     status: "good" as const,
   },
   {
