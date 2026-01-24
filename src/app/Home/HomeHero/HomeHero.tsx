@@ -378,7 +378,15 @@ const HomeHero = () => {
         swiftProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
 
-      // Tenth phase: HomeFooter section - bring hexagons back into view on both sides
+      // Tenth phase: HomeTeam section - keep hexagons off (full-width content)
+      const teamSection = document.querySelector('[data-section="team"]');
+      let teamInView = false;
+      if (teamSection) {
+        const rect = teamSection.getBoundingClientRect();
+        teamInView = rect.top < window.innerHeight && rect.bottom > 100;
+      }
+
+      // Eleventh phase: HomeFooter section - bring hexagons back into view on both sides
       const footerSection = document.querySelector('[data-section="footer"]');
       let footerInView = false;
       let footerProgress = 0;
@@ -556,7 +564,7 @@ const HomeHero = () => {
 
       // When HomeSwift is in view (left-aligned content)
       // Keep left hexagons off, bring right hexagons back
-      if (swiftInView && !footerInView) {
+      if (swiftInView && !teamInView && !footerInView) {
         const offScreenSpread = viewportWidth * 0.6;
         // Left hexagons stay off screen
         leftTotalSpread = offScreenSpread;
@@ -570,6 +578,14 @@ const HomeHero = () => {
 
         // Blend from off-screen to swift position
         rightTotalSpread = offScreenSpread - (offScreenSpread - minRightSpread) * swiftProgress;
+      }
+
+      // When HomeTeam is in view (full-width content)
+      // Keep both hexagons off screen
+      if (teamInView && !footerInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = offScreenSpread;
+        rightTotalSpread = offScreenSpread;
       }
 
       // When footer is coming into view, smoothly bring hexagons back
