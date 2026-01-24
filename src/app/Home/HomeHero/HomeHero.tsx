@@ -355,10 +355,14 @@ const HomeHero = () => {
       // Eighth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
       const designSection = document.querySelector('[data-section="design"]');
       let designInView = false;
+      let designActuallyVisible = false;
       let designProgress = 0;
       if (designSection) {
         const rect = designSection.getBoundingClientRect();
+        // designInView: broad check for transition purposes (approaching or leaving)
         designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+        // designActuallyVisible: strict check for when section is actually in viewport
+        designActuallyVisible = rect.top < window.innerHeight && rect.bottom > 0;
         // Calculate progress for smooth transition - start pushing hexagons off as design enters
         const transitionStart = window.innerHeight;
         const transitionEnd = window.innerHeight * 0.5;
@@ -555,16 +559,17 @@ const HomeHero = () => {
         rightTotalSpread = governanceSpread;
       }
 
-      // When HomeDesign is in view but swift/footer isn't, push both sides off screen
-      if (designInView && !swiftInView && !footerInView && !governanceInView) {
+      // When HomeDesign is actually visible (not just approaching), push both sides off screen
+      // Use strict visibility check to not interfere with HomeGovernance
+      if (designActuallyVisible && !governanceInView && !footerInView) {
         const offScreenSpread = viewportWidth * 0.6;
         leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
       }
 
-      // When HomeSwift is in view (left-aligned content)
+      // When HomeSwift is in view (left-aligned content) and HomeDesign is NOT actually visible
       // Keep left hexagons off, bring right hexagons back
-      if (swiftInView && !teamInView && !footerInView) {
+      if (swiftInView && !designActuallyVisible && !teamInView && !footerInView) {
         const offScreenSpread = viewportWidth * 0.6;
         // Left hexagons stay off screen
         leftTotalSpread = offScreenSpread;
