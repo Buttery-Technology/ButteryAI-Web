@@ -13,6 +13,9 @@ const HomeSmart = () => {
   const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
   const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
   const [isInView, setIsInView] = useState(false);
+  const [isStartingUp, setIsStartingUp] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const wasInViewRef = useRef(false);
 
   // SVG positioning constants
   const svgLeft = 700;
@@ -88,6 +91,25 @@ const HomeSmart = () => {
 
       // Check if section is in view
       const inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
+
+      // Detect when entering view to trigger startup animation
+      if (inView && !wasInViewRef.current) {
+        setIsStartingUp(true);
+        setHasStarted(false);
+        // After startup pulse completes, switch to normal pulsing
+        setTimeout(() => {
+          setIsStartingUp(false);
+          setHasStarted(true);
+        }, 1200); // Startup pulse duration
+      }
+
+      // When leaving view, reset the animation state
+      if (!inView && wasInViewRef.current) {
+        setHasStarted(false);
+        setIsStartingUp(false);
+      }
+
+      wasInViewRef.current = inView;
       setIsInView(inView);
     };
 
@@ -171,6 +193,16 @@ const HomeSmart = () => {
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
+          {/* Golden startup glow */}
+          <filter id="startupGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
           {/* Gradient for the electrical arc */}
           <linearGradient id="electricGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#288ED2" stopOpacity="0.3"/>
@@ -197,38 +229,84 @@ const HomeSmart = () => {
           </linearGradient>
         </defs>
 
-        {/* Bottom line - smooth curve from origin to bottom hexagon */}
-        <path
-          d={bottomFullPath}
-          stroke="url(#bottomLineFade)"
-          strokeWidth="10"
-          strokeLinecap="round"
-          fill="none"
-          className={styles.flexibleLine}
-        />
+        {/* Lines container - only visible when section is in view */}
+        <g className={`${styles.linesContainer} ${isInView ? styles.visible : ''}`}>
+          {/* Bottom line - smooth curve from origin to bottom hexagon */}
+          <path
+            d={bottomFullPath}
+            stroke="url(#bottomLineFade)"
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="none"
+            className={styles.flexibleLine}
+          />
 
-        {/* Top line - smooth curve from origin to top hexagon */}
-        <path
-          d={topFullPath}
-          stroke="url(#topLineFade)"
-          strokeWidth="10"
-          strokeLinecap="round"
-          fill="none"
-          className={styles.flexibleLine}
-        />
+          {/* Top line - smooth curve from origin to top hexagon */}
+          <path
+            d={topFullPath}
+            stroke="url(#topLineFade)"
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="none"
+            className={styles.flexibleLine}
+          />
 
-        {/* Middle line - smooth curve from origin to middle hexagon */}
-        <path
-          d={middleFullPath}
-          stroke="url(#middleLineFade)"
-          strokeWidth="10"
-          strokeLinecap="round"
-          fill="none"
-          className={styles.flexibleLine}
-        />
+          {/* Middle line - smooth curve from origin to middle hexagon */}
+          <path
+            d={middleFullPath}
+            stroke="url(#middleLineFade)"
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="none"
+            className={styles.flexibleLine}
+          />
+
+        {/* Startup pulses - golden pulse that travels through all lines */}
+        {isStartingUp && (
+          <g className={styles.startupGroup}>
+            <circle
+              className={styles.startupPulse}
+              r="8"
+              fill="#F9C000"
+              filter="url(#startupGlow)"
+            >
+              <animateMotion
+                dur="1s"
+                fill="freeze"
+                path={topFullPath}
+              />
+            </circle>
+            <circle
+              className={styles.startupPulse}
+              r="8"
+              fill="#F9C000"
+              filter="url(#startupGlow)"
+            >
+              <animateMotion
+                dur="1s"
+                fill="freeze"
+                path={middleFullPath}
+                begin="0.1s"
+              />
+            </circle>
+            <circle
+              className={styles.startupPulse}
+              r="8"
+              fill="#F9C000"
+              filter="url(#startupGlow)"
+            >
+              <animateMotion
+                dur="1s"
+                fill="freeze"
+                path={bottomFullPath}
+                begin="0.2s"
+              />
+            </circle>
+          </g>
+        )}
 
         {/* Top synapse effects */}
-        <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
+        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
           {/* Traveling pulse along full top line */}
           <circle
             className={styles.travelingPulse}
@@ -293,7 +371,7 @@ const HomeSmart = () => {
         </g>
 
         {/* Middle synapse effects */}
-        <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
+        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
           {/* Traveling energy pulse along full middle line */}
           <circle
             className={styles.travelingPulse}
@@ -358,7 +436,7 @@ const HomeSmart = () => {
         </g>
 
         {/* Bottom synapse effects */}
-        <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
+        <g className={`${styles.synapseGroup} ${hasStarted ? styles.active : ''}`}>
           {/* Traveling pulse along full bottom line */}
           <circle
             className={styles.travelingPulse}
@@ -420,6 +498,7 @@ const HomeSmart = () => {
             filter="url(#synapseGlow)"
             style={{ transformOrigin: `${bottomTargetX}px ${bottomTargetY}px` }}
           />
+        </g>
         </g>
       </svg>
     <div className={styles.content}>
