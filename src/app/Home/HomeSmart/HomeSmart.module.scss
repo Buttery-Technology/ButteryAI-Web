@@ -21,6 +21,11 @@
   overflow: visible;
 }
 
+// Flexible line that curves toward hexagons
+.flexibleLine {
+  transition: d 0.3s ease-out;
+}
+
 // Synapse animation styles
 .synapseGroup {
   opacity: 0.3;
