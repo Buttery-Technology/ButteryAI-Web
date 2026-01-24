@@ -9,6 +9,7 @@ interface HexTarget {
 
 const HomeSmart = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const [middleTarget, setMiddleTarget] = useState<HexTarget | null>(null);
   const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
   const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
@@ -89,8 +90,16 @@ const HomeSmart = () => {
         });
       }
 
-      // Check if section is in view
-      const inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
+      // Check if title is in view (more restrictive than whole section)
+      let inView = false;
+      if (titleRef.current) {
+        const titleRect = titleRef.current.getBoundingClientRect();
+        // Title must be visible in the viewport
+        inView = titleRect.top < window.innerHeight && titleRect.bottom > 0;
+      } else {
+        // Fallback to section check
+        inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
+      }
 
       // Detect when entering view to trigger startup animation
       if (inView && !wasInViewRef.current) {
@@ -537,7 +546,7 @@ const HomeSmart = () => {
         </svg>
       </div>
 
-      <h1 className={styles.title}>Smart Orchestration</h1>
+      <h1 className={styles.title} ref={titleRef}>Smart Orchestration</h1>
       <p className={styles.description}>
         ButteryAI can intelligently orchestrate across multiple AI models simultaneously. Leverage workflows and
         extensions to take your orchestration to the next level. ButteryAI is built upon a patented distributed
