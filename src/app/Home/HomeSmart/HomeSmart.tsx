@@ -7,6 +7,12 @@ interface HexTarget {
   y: number;
 }
 
+interface DragOffset {
+  key: string;
+  offsetX: number;
+  offsetY: number;
+}
+
 const HomeSmart = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -14,6 +20,14 @@ const HomeSmart = () => {
   const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
   const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
   const [isInView, setIsInView] = useState(false);
+  const [dragOffset, setDragOffset] = useState<DragOffset | null>(null);
+
+  // Track which hexagon keys are being targeted
+  const targetedHexKeys = useRef<{ top: string | null; middle: string | null; bottom: string | null }>({
+    top: null,
+    middle: null,
+    bottom: null
+  });
 
   // SVG positioning constants
   const svgLeft = 700;
@@ -47,6 +61,8 @@ const HomeSmart = () => {
       // Find middle row hexagon (row 1, first right hexagon col >= 7)
       const middleHex = findHexagon(1, 7);
       if (middleHex) {
+        const hexKey = middleHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.middle = hexKey;
         const hexRect = middleHex.getBoundingClientRect();
         // Left edge of hexagon
         const hexLeftEdgeX = hexRect.left - sectionRect.left;
@@ -61,6 +77,8 @@ const HomeSmart = () => {
       // Find top row hexagon (row 0, first right hexagon col >= 7)
       const topHex = findHexagon(0, 7);
       if (topHex) {
+        const hexKey = topHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.top = hexKey;
         const hexRect = topHex.getBoundingClientRect();
         // Inside edge (bottom-left area of the hexagon) - offset from left edge and toward bottom
         const hexInsideX = hexRect.left - sectionRect.left + hexRect.width * 0.15;
@@ -75,6 +93,8 @@ const HomeSmart = () => {
       // Find bottom row hexagon (row 2, first right hexagon col >= 7)
       const bottomHex = findHexagon(2, 7);
       if (bottomHex) {
+        const hexKey = bottomHex.getAttribute('data-hex-key');
+        targetedHexKeys.current.bottom = hexKey;
         const hexRect = bottomHex.getBoundingClientRect();
         // Inside edge (upper-left angled edge facing the middle hexagons)
         // Move into the hexagon more to hit the inner edge
@@ -111,13 +131,48 @@ const HomeSmart = () => {
     };
   }, []);
 
+  // Listen for hexagon drag events
+  useEffect(() => {
+    const handleHexDrag = (e: Event) => {
+      const customEvent = e as CustomEvent<{ key: string; offsetX: number; offsetY: number }>;
+      setDragOffset(customEvent.detail);
+    };
+
+    const handleHexDragEnd = () => {
+      setDragOffset(null);
+    };
+
+    window.addEventListener('hexagon-drag', handleHexDrag);
+    window.addEventListener('hexagon-drag-end', handleHexDragEnd);
+
+    return () => {
+      window.removeEventListener('hexagon-drag', handleHexDrag);
+      window.removeEventListener('hexagon-drag-end', handleHexDragEnd);
+    };
+  }, []);
+
   // Origin point for all lines
   const originX = 0;
   const originY = 150;
 
-  // Middle line - target coordinates
-  const middleTargetX = middleTarget?.x ?? 600;
-  const middleTargetY = middleTarget?.y ?? 150;
+  // Calculate drag offset for each target (scaled to SVG coordinates)
+  const getDragOffsetForTarget = (targetKey: 'top' | 'middle' | 'bottom') => {
+    if (!dragOffset) return { x: 0, y: 0 };
+    const hexKey = targetedHexKeys.current[targetKey];
+    if (hexKey !== dragOffset.key) return { x: 0, y: 0 };
+    return {
+      x: dragOffset.offsetX * svgScaleX,
+      y: dragOffset.offsetY * svgScaleY
+    };
+  };
+
+  const middleDragOffset = getDragOffsetForTarget('middle');
+  const topDragOffset = getDragOffsetForTarget('top');
+  const bottomDragOffset = getDragOffsetForTarget('bottom');
+
+  // Middle line - target coordinates (with drag offset)
+  const middleTargetX = (middleTarget?.x ?? 600) + middleDragOffset.x;
+  const middleTargetY = (middleTarget?.y ?? 150) + middleDragOffset.y;
 
   // Middle line: smooth curve from origin to hexagon
   // Use cubic bezier for smoother curve - control points create a natural horizontal-to-target flow
@@ -127,9 +182,9 @@ const HomeSmart = () => {
   const middleCtrl2Y = middleTargetY;
   const middleFullPath = `M${originX} ${originY} C${middleCtrl1X} ${middleCtrl1Y} ${middleCtrl2X} ${middleCtrl2Y} ${middleTargetX} ${middleTargetY}`;
 
-  // Top line - target coordinates
-  const topTargetX = topTarget?.x ?? 600;
-  const topTargetY = topTarget?.y ?? 50;
+  // Top line - target coordinates (with drag offset)
+  const topTargetX = (topTarget?.x ?? 600) + topDragOffset.x;
+  const topTargetY = (topTarget?.y ?? 50) + topDragOffset.y;
 
   // Calculate the angle to the target for proper curve alignment
   const deltaX = topTargetX - originX;
@@ -144,9 +199,9 @@ const HomeSmart = () => {
   const topCtrl2Y = originY + deltaY * 0.7; // Approach target angle
   const topFullPath = `M${originX} ${originY} C${topCtrl1X} ${topCtrl1Y} ${topCtrl2X} ${topCtrl2Y} ${topTargetX} ${topTargetY}`;
 
-  // Bottom line - target coordinates
-  const bottomTargetX = bottomTarget?.x ?? 600;
-  const bottomTargetY = bottomTarget?.y ?? 250;
+  // Bottom line - target coordinates (with drag offset)
+  const bottomTargetX = (bottomTarget?.x ?? 600) + bottomDragOffset.x;
+  const bottomTargetY = (bottomTarget?.y ?? 250) + bottomDragOffset.y;
 
   // Calculate the delta to the bottom target
   const bottomDeltaX = bottomTargetX - originX;

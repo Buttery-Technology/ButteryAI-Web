@@ -589,9 +589,18 @@ const HomeHero = () => {
         wasDragged.current = true;
       }
       setDragOffset({ x: dx, y: dy });
+
+      // Dispatch custom event for other components to track hexagon drag
+      window.dispatchEvent(new CustomEvent('hexagon-drag', {
+        detail: { key: dragState.key, offsetX: dx, offsetY: dy }
+      }));
     };
 
     const handleMouseUp = () => {
+      // Dispatch drag end event
+      window.dispatchEvent(new CustomEvent('hexagon-drag-end', {
+        detail: { key: dragState.key }
+      }));
       setDragState(null);
       setDragOffset({ x: 0, y: 0 });
       dragStartPos.current = null;
