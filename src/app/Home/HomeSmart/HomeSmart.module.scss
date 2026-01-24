@@ -14,11 +14,85 @@
   position: absolute;
   top: 280px;
   left: 700px;
-  width: 400px;
+  width: 450px;
   height: 300px;
   pointer-events: none;
   z-index: 1;
   overflow: visible;
+}
+
+// Synapse animation styles
+.synapseGroup {
+  opacity: 0.3;
+  transition: opacity 0.5s ease-out;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.synapseLine {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 0;
+  animation: synapsePulse 2s ease-in-out infinite;
+}
+
+.synapseNode {
+  animation: nodeGlow 1.5s ease-in-out infinite;
+}
+
+.pulseRing {
+  animation: ringExpand 2s ease-out infinite;
+  transform-origin: 580px 150px;
+}
+
+.pulseRing2 {
+  animation: ringExpand 2s ease-out infinite 0.5s;
+  transform-origin: 580px 150px;
+}
+
+
+@keyframes synapsePulse {
+  0%, 100% {
+    opacity: 0.7;
+    stroke-width: 6;
+  }
+  50% {
+    opacity: 1;
+    stroke-width: 8;
+  }
+}
+
+@keyframes nodeGlow {
+  0%, 100% {
+    r: 8;
+    opacity: 0.8;
+  }
+  50% {
+    r: 10;
+    opacity: 1;
+  }
+}
+
+@keyframes ringExpand {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+
+// Traveling pulse styles
+.travelingPulse {
+  opacity: 0.9;
+}
+
+.travelingPulse2 {
+  opacity: 0.7;
 }
 
 .content {
