@@ -152,14 +152,6 @@ const Form = () => {
 
       {error && <p className={styles.error}>{error}</p>}
 
-      <p className={styles.privacy}>
-        By creating an account, you agree with our{" "}
-        <Link to="/privacy" className={styles.privacyLink}>
-          Privacy Policy
-        </Link>
-        .
-      </p>
-
       <button type="submit" className={styles.button} disabled={isSubmitting}>
         {isSubmitting ? "Checking..." : "Continue"}
       </button>
