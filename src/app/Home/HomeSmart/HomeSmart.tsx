@@ -215,7 +215,7 @@ const HomeSmart = () => {
   const bottomFullPath = `M${originX} ${originY} C${bottomCtrl1X} ${bottomCtrl1Y} ${bottomCtrl2X} ${bottomCtrl2Y} ${bottomTargetX} ${bottomTargetY}`;
 
   return (
-    <section className={styles.root} ref={sectionRef}>
+    <section className={styles.root} ref={sectionRef} data-section="smart">
       {/* Connector lines from content to hexagons */}
       <svg className={styles.connectorLines} viewBox="0 0 600 300" fill="none">
         <defs>

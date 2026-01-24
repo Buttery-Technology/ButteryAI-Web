@@ -271,24 +271,42 @@ const HomeHero = () => {
       const additionalSpread = spreadProgress * maxSpread;
 
       // Second phase: when HomeSmart section content would overlap with left hexagons
-      // HomeSmart is after Hero and NextGen sections
-      // Start moving left hexagons off when HomeSmart content comes into contact
-      const smartSectionStart = heroHeight * 1.5; // When HomeSmart starts entering viewport
-      const smartSectionEnd = heroHeight * 2.0; // When HomeSmart is fully in view
-      const smartProgress = Math.min(Math.max((scrollY - smartSectionStart) / (smartSectionEnd - smartSectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const smartSection = document.querySelector('[data-section="smart"]');
+      let smartProgress = 0;
+      if (smartSection) {
+        const rect = smartSection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        smartProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Third phase: when HomeEfficiency section comes into view (centered content)
       // Left hexagons should come back into view
-      const efficiencySectionStart = heroHeight * 2.5; // When HomeEfficiency starts entering
-      const efficiencySectionEnd = heroHeight * 3.0; // When HomeEfficiency is in view
-      const efficiencyProgress = Math.min(Math.max((scrollY - efficiencySectionStart) / (efficiencySectionEnd - efficiencySectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const efficiencySection = document.querySelector('[data-section="efficiency"]');
+      let efficiencyProgress = 0;
+      if (efficiencySection) {
+        const rect = efficiencySection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        efficiencyProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Fourth phase: when HomeExtensions section comes into view (left-aligned content)
       // Left hexagons should move off screen again, right hexagons come closer
-      // Start after HomeEfficiency is in view, complete as HomeExtensions enters
-      const extensionsSectionStart = heroHeight * 3.5; // Start moving after HomeEfficiency is shown
-      const extensionsSectionEnd = heroHeight * 4.0; // Complete transition as HomeExtensions enters
-      const extensionsProgress = Math.min(Math.max((scrollY - extensionsSectionStart) / (extensionsSectionEnd - extensionsSectionStart), 0), 1);
+      // Use actual element position for collision detection
+      const extensionsSection = document.querySelector('[data-section="extensions"]');
+      let extensionsProgress = 0;
+      if (extensionsSection) {
+        const rect = extensionsSection.getBoundingClientRect();
+        // Start transition when section enters viewport, complete when it's 30% from top
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        extensionsProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
 
       // Fifth phase: when HomeWorkflows section comes into view (left-aligned diagram)
       // Use actual element position for collision detection
@@ -337,17 +355,42 @@ const HomeHero = () => {
       // Eighth phase: HomeDesign section - push ALL hexagons off screen (has its own hexagon visual)
       const designSection = document.querySelector('[data-section="design"]');
       let designInView = false;
+      let designActuallyVisible = false;
       let designProgress = 0;
       if (designSection) {
         const rect = designSection.getBoundingClientRect();
+        // designInView: broad check for transition purposes (approaching or leaving)
         designInView = rect.top < window.innerHeight + 300 && rect.bottom > -300;
+        // designActuallyVisible: strict check for when section is actually in viewport
+        designActuallyVisible = rect.top < window.innerHeight && rect.bottom > 0;
         // Calculate progress for smooth transition - start pushing hexagons off as design enters
         const transitionStart = window.innerHeight;
         const transitionEnd = window.innerHeight * 0.5;
         designProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
       }
 
-      // Eighth phase: HomeFooter section - bring hexagons back into view on both sides
+      // Ninth phase: HomeSwift section (left-aligned content)
+      // Left hexagons stay off, right hexagons come back
+      const swiftSection = document.querySelector('[data-section="swift"]');
+      let swiftInView = false;
+      let swiftProgress = 0;
+      if (swiftSection) {
+        const rect = swiftSection.getBoundingClientRect();
+        swiftInView = rect.top < window.innerHeight && rect.bottom > 100;
+        const transitionStart = window.innerHeight;
+        const transitionEnd = window.innerHeight * 0.3;
+        swiftProgress = Math.min(Math.max((transitionStart - rect.top) / (transitionStart - transitionEnd), 0), 1);
+      }
+
+      // Tenth phase: HomeTeam section - keep hexagons off (full-width content)
+      const teamSection = document.querySelector('[data-section="team"]');
+      let teamInView = false;
+      if (teamSection) {
+        const rect = teamSection.getBoundingClientRect();
+        teamInView = rect.top < window.innerHeight && rect.bottom > 100;
+      }
+
+      // Eleventh phase: HomeFooter section - bring hexagons back into view on both sides
       const footerSection = document.querySelector('[data-section="footer"]');
       let footerInView = false;
       let footerProgress = 0;
@@ -407,6 +450,18 @@ const HomeHero = () => {
         const buffer = 20;
         const minRightSpread = Math.max(0, lineRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
         rightTotalSpread = Math.max(minRightSpread, rightTotalSpread);
+
+        // Left hexagons collision avoidance for HomeSmart content (left-aligned)
+        // Content has 80px padding-left, max-width 900px
+        const contentLeftEdge = viewportWidth <= 768 ? 20 : viewportWidth <= 1200 ? 40 : 80;
+        const leftHexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const leftBuffer = 20;
+        // Spread needed to position hexagon right edge left of content
+        // hexagon right edge = viewportWidth/2 - leftTotalSpread + hexHalfWidth
+        // Need: viewportWidth/2 - leftTotalSpread + hexHalfWidth < contentLeftEdge
+        // So: leftTotalSpread > viewportWidth/2 + hexHalfWidth - contentLeftEdge + buffer
+        const minLeftSpread = viewportWidth / 2 + leftHexHalfWidth - contentLeftEdge + leftBuffer;
+        leftTotalSpread = Math.max(minLeftSpread, leftTotalSpread);
       }
 
       // Apply collision avoidance during HomeExtensions section (left-aligned content)
@@ -504,11 +559,38 @@ const HomeHero = () => {
         rightTotalSpread = governanceSpread;
       }
 
-      // When HomeDesign is in view but footer isn't, push both sides off screen
-      if (designInView && !footerInView && !governanceInView) {
+      // When HomeDesign is actually visible (not just approaching), push both sides off screen
+      // Use strict visibility check to not interfere with HomeGovernance
+      if (designActuallyVisible && !governanceInView && !footerInView) {
         const offScreenSpread = viewportWidth * 0.6;
         leftTotalSpread = Math.max(leftTotalSpread, offScreenSpread);
         rightTotalSpread = Math.max(rightTotalSpread, offScreenSpread);
+      }
+
+      // When HomeSwift is in view (left-aligned content) and HomeDesign is NOT actually visible
+      // Keep left hexagons off, bring right hexagons back
+      if (swiftInView && !designActuallyVisible && !teamInView && !footerInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        // Left hexagons stay off screen
+        leftTotalSpread = offScreenSpread;
+
+        // Right hexagons come back - position them to not overlap with content
+        // Content is left-aligned with 80px padding and max-width 1100px
+        const contentRightEdge = Math.min(80 + 1100, viewportWidth - 40);
+        const hexHalfWidth = viewportWidth <= 768 ? 49 : viewportWidth <= 1200 ? 68 : 90;
+        const buffer = 40;
+        const minRightSpread = Math.max(0, contentRightEdge - viewportWidth / 2 + hexHalfWidth + buffer);
+
+        // Blend from off-screen to swift position
+        rightTotalSpread = offScreenSpread - (offScreenSpread - minRightSpread) * swiftProgress;
+      }
+
+      // When HomeTeam is in view (full-width content)
+      // Keep both hexagons off screen
+      if (teamInView && !footerInView) {
+        const offScreenSpread = viewportWidth * 0.6;
+        leftTotalSpread = offScreenSpread;
+        rightTotalSpread = offScreenSpread;
       }
 
       // When footer is coming into view, smoothly bring hexagons back

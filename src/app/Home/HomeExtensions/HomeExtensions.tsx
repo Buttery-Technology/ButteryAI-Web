@@ -40,7 +40,7 @@ const extensions = [
 ];
 
 const HomeExtensions = () => (
-  <section className={styles.root}>
+  <section className={styles.root} data-section="extensions">
     <div className={styles.content}>
       <h1 className={styles.title}>Extend AI functionality</h1>
       <p className={styles.description}>
