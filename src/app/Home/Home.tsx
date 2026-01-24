@@ -7,6 +7,7 @@ import { HomeWorkflows } from "./HomeWorkflows";
 import { HomeSecurity } from "./HomeSecurity";
 import { HomeGovernance } from "./HomeGovernance";
 import { HomeDesign } from "./HomeDesign";
+import { HomeTeam } from "./HomeTeam";
 import { HomeFooter } from "./HomeFooter";
 
 const Home = () => (
@@ -20,6 +21,7 @@ const Home = () => (
     <HomeSecurity />
     <HomeGovernance />
     <HomeDesign />
+    <HomeTeam />
     <HomeFooter />
   </>
 );
