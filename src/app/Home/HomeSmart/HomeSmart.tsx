@@ -11,6 +11,7 @@ const HomeSmart = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [middleTarget, setMiddleTarget] = useState<HexTarget | null>(null);
   const [topTarget, setTopTarget] = useState<HexTarget | null>(null);
+  const [bottomTarget, setBottomTarget] = useState<HexTarget | null>(null);
   const [isInView, setIsInView] = useState(false);
 
   // SVG positioning constants
@@ -70,6 +71,21 @@ const HomeSmart = () => {
         });
       }
 
+      // Find bottom row hexagon (row 2, first right hexagon col >= 7)
+      const bottomHex = findHexagon(2, 7);
+      if (bottomHex) {
+        const hexRect = bottomHex.getBoundingClientRect();
+        // Inside edge (upper-left angled edge facing the middle hexagons)
+        // Move into the hexagon more to hit the inner edge
+        const hexInsideX = hexRect.left - sectionRect.left + hexRect.width * 0.25;
+        const hexInsideY = hexRect.top + hexRect.height * 0.2 - sectionRect.top;
+
+        setBottomTarget({
+          x: (hexInsideX - svgLeft) * svgScaleX,
+          y: (hexInsideY - svgTop) * svgScaleY
+        });
+      }
+
       // Check if section is in view
       const inView = sectionRect.top < window.innerHeight * 0.8 && sectionRect.bottom > window.innerHeight * 0.2;
       setIsInView(inView);
@@ -118,6 +134,21 @@ const HomeSmart = () => {
   const topCtrl2Y = originY + deltaY * 0.7; // Approach target angle
   const topFullPath = `M${originX} ${originY} C${topCtrl1X} ${topCtrl1Y} ${topCtrl2X} ${topCtrl2Y} ${topTargetX} ${topTargetY}`;
 
+  // Bottom line - target coordinates
+  const bottomTargetX = bottomTarget?.x ?? 600;
+  const bottomTargetY = bottomTarget?.y ?? 250;
+
+  // Calculate the delta to the bottom target
+  const bottomDeltaX = bottomTargetX - originX;
+  const bottomDeltaY = bottomTargetY - originY;
+
+  // Bottom line: smooth curve that flows directly toward the bottom hexagon
+  const bottomCtrl1X = originX + bottomDeltaX * 0.4;
+  const bottomCtrl1Y = originY + bottomDeltaY * 0.1; // Slight downward bias early
+  const bottomCtrl2X = originX + bottomDeltaX * 0.7;
+  const bottomCtrl2Y = originY + bottomDeltaY * 0.7; // Approach target angle
+  const bottomFullPath = `M${originX} ${originY} C${bottomCtrl1X} ${bottomCtrl1Y} ${bottomCtrl2X} ${bottomCtrl2Y} ${bottomTargetX} ${bottomTargetY}`;
+
   return (
     <section className={styles.root} ref={sectionRef}>
       {/* Connector lines from content to hexagons */}
@@ -158,10 +189,23 @@ const HomeSmart = () => {
             <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
             <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
           </linearGradient>
+          {/* Gradient for bottom line - fades out at the end (angled down) */}
+          <linearGradient id="bottomLineFade" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="40%" stopColor="#8D8D8D" stopOpacity="1"/>
+            <stop offset="75%" stopColor="#8D8D8D" stopOpacity="0"/>
+          </linearGradient>
         </defs>
 
-        {/* Line going down-right (static for now) */}
-        <path d="M0 150 Q300 150 500 250" stroke="#8D8D8D" strokeWidth="10" strokeLinecap="round" fill="none"/>
+        {/* Bottom line - smooth curve from origin to bottom hexagon */}
+        <path
+          d={bottomFullPath}
+          stroke="url(#bottomLineFade)"
+          strokeWidth="10"
+          strokeLinecap="round"
+          fill="none"
+          className={styles.flexibleLine}
+        />
 
         {/* Top line - smooth curve from origin to top hexagon */}
         <path
@@ -310,6 +354,71 @@ const HomeSmart = () => {
             strokeWidth="1"
             filter="url(#synapseGlow)"
             style={{ transformOrigin: `${middleTargetX}px ${middleTargetY}px` }}
+          />
+        </g>
+
+        {/* Bottom synapse effects */}
+        <g className={`${styles.synapseGroup} ${isInView ? styles.active : ''}`}>
+          {/* Traveling pulse along full bottom line */}
+          <circle
+            className={styles.travelingPulse}
+            r="4"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          >
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={bottomFullPath}
+            />
+          </circle>
+
+          <circle
+            className={styles.travelingPulse2}
+            r="3"
+            fill="#755CBA"
+            filter="url(#synapseGlow)"
+          >
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={bottomFullPath}
+              begin="0.7s"
+            />
+          </circle>
+
+          {/* Bottom endpoint node */}
+          <circle
+            className={styles.synapseNode}
+            cx={bottomTargetX}
+            cy={bottomTargetY}
+            r="8"
+            fill="#31AFF5"
+            filter="url(#pulseGlow)"
+          />
+
+          <circle
+            className={styles.pulseRing}
+            cx={bottomTargetX}
+            cy={bottomTargetY}
+            r="12"
+            fill="none"
+            stroke="#31AFF5"
+            strokeWidth="2"
+            filter="url(#synapseGlow)"
+            style={{ transformOrigin: `${bottomTargetX}px ${bottomTargetY}px` }}
+          />
+
+          <circle
+            className={styles.pulseRing2}
+            cx={bottomTargetX}
+            cy={bottomTargetY}
+            r="16"
+            fill="none"
+            stroke="#755CBA"
+            strokeWidth="1"
+            filter="url(#synapseGlow)"
+            style={{ transformOrigin: `${bottomTargetX}px ${bottomTargetY}px` }}
           />
         </g>
       </svg>
