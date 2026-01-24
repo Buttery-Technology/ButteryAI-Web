@@ -589,9 +589,18 @@ const HomeHero = () => {
         wasDragged.current = true;
       }
       setDragOffset({ x: dx, y: dy });
+
+      // Dispatch custom event for other components to track hexagon drag
+      window.dispatchEvent(new CustomEvent('hexagon-drag', {
+        detail: { key: dragState.key, offsetX: dx, offsetY: dy }
+      }));
     };
 
     const handleMouseUp = () => {
+      // Dispatch drag end event
+      window.dispatchEvent(new CustomEvent('hexagon-drag-end', {
+        detail: { key: dragState.key }
+      }));
       setDragState(null);
       setDragOffset({ x: 0, y: 0 });
       dragStartPos.current = null;
@@ -708,8 +717,7 @@ const HomeHero = () => {
         <h1 className={styles.title}>Buttery AI</h1>
         <h2 className={styles.subtitle}>Buttery Smooth AI Development</h2>
         <p className={styles.description}>
-          Build unbelievable AI and the tech stack like never before with everything you need, like enterprise-grade
-          security, workflows, and governance.
+          You won't believe how easy it is to build unbelievably smart AI that scales with you automatically. Buttery AI integrates everything you need, like enterprise-grade security, workflows, deep auditing, extensions, and governance.
         </p>
       </div>
 

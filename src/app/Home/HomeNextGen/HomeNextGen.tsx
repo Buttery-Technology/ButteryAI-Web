@@ -1,5 +1,6 @@
 import styles from "./HomeNextGen.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
+import auditTrailSrc from "@assets/images/audit-trail-in-window.png";
 
 const HomeNextGen = () => (
   <section className={styles.root}>
@@ -52,7 +53,16 @@ const HomeNextGen = () => (
           </p>
           <CheckCircle className={styles.checkIcon} />
         </div>
+        <div className={styles.card}>
+          <h2>Smart Routing</h2>
+          <p>
+            ButteryAI has next-gen intelligence routing by understanding and ranking AI nodes based on truthfulness,
+            accuracy, and key metrics.
+          </p>
+          <CheckCircle className={styles.checkIcon} />
+        </div>
       </div>
+      <img src={auditTrailSrc} alt="Visual audit trail" className={styles.auditTrail} />
     </div>
   </section>
 );

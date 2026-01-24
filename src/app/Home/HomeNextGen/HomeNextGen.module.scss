@@ -90,6 +90,13 @@
   align-self: center;
 }
 
+.auditTrail {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin-top: 40px;
+}
+
 // Tablet
 @include mq(1200) {
   .content {
@@ -125,6 +132,11 @@
   .checkIcon {
     width: 28px;
     height: 28px;
+  }
+
+  .auditTrail {
+    max-width: 700px;
+    margin-top: 32px;
   }
 }
 
@@ -174,5 +186,9 @@
   .checkIcon {
     width: 28px;
     height: 28px;
+  }
+
+  .auditTrail {
+    margin-top: 24px;
   }
 }
