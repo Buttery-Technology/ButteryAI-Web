@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { CHECK_WAITLIST_APPROVAL, JOIN_WAITLIST } from "../../../api";
 import styles from "./Form.module.scss";
@@ -43,6 +43,18 @@ const Form = () => {
 
     // Firebase connection
     try {
+      // Check if email already exists in waitlist
+      const waitlistRef = collection(db, "waitlist");
+      const q = query(waitlistRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setSuccessMessage("You're already on the waitlist. Once we're done cooking we'll be in touch with next steps");
+        setIsSubmitted(true);
+        setIsSubmitting(false);
+        return;
+      }
+
       await addDoc(collection(db, "waitlist"), { name, email, buildDescription });
       setSuccessMessage("You've been added to the waitlist!");
       setIsSubmitted(true);
