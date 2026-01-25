@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import dashboardLogo from "@assets/logos/dashboard-logo.png";
 import Close from "@assets/icons/close.svg?react";
@@ -6,7 +8,56 @@ import styles from "./New.module.scss";
 const New = () => {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
+  const [access, setAccess] = useState<"PUBLIC" | "PRIVATE">("PRIVATE");
+  const [error, setError] = useState<string | null>(null);
+
   const handleClose = () => navigate("/dashboard/hive");
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!name.trim()) {
+      setError("Node name is required");
+      return;
+   }
+
+  try {
+    const CLUSTER_ID = "123e4567-e89b-12d3-a456-426614174000";
+
+    const response = await fetch(
+      `http://127.0.0.1:8000/clusters/${CLUSTER_ID}/nodes`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          access,
+          archived: false,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to create node");
+    }
+
+    const data = await response.json();
+    console.log("Node created:", data);
+
+    const existing = JSON.parse(localStorage.getItem("tempNodes") || "[]");
+
+    localStorage.setItem(
+      "tempNodes",
+     JSON.stringify([...existing, data.node])
+    );
+
+    navigate("/dashboard/hive");
+      } catch (err: any) {
+      setError(err.message || "Something went wrong while creating the node");
+   }
+  };
 
   return (
     <section className={styles.root}>
@@ -16,18 +67,27 @@ const New = () => {
             <img src={dashboardLogo} alt="ButteryAI" />
           </Link>
         </div>
+
         <header className={styles.header}>
           <button onClick={handleClose} className={styles.closeButton}>
             <Close />
           </button>
           <h1 className={styles.title}>New Node</h1>
         </header>
-        <form action="POST" className={styles.form}>
+
+        <form onSubmit={handleCreate} className={styles.form}>
           <h2 className={styles.categoryTitle}>General</h2>
-          <label htmlFor="name" className={styles.label}>
-            Name
-          </label>
-          <input type="text" id="name" placeholder="“chatGPT 4.o mini”..." className={styles.input} />
+
+        <label htmlFor="access">Access Level</label>
+        <select
+          id="access"
+          value={access}
+          onChange={(e) => setAccess(e.target.value as "PUBLIC" | "PRIVATE")}
+        >
+          <option value="PUBLIC">Public</option>
+          <option value="PRIVATE">Private</option>
+        </select>
+      
           <h2 className={styles.categoryTitle}>AI functionality</h2>
           <label htmlFor="main-functionality" className={styles.label}>
             Main Functionality
@@ -37,16 +97,31 @@ const New = () => {
             id="main-functionality"
             placeholder="“Conversational AI on patient medical charts”"
             className={styles.input}
+            onChange={() => {}}
           />
+          <h2 className={styles.categoryTitle}>AI functionality</h2>
           <label htmlFor="functionality-keywords" className={styles.label}>
             Functionality Keywords
           </label>
           <input
             type="text"
             id="functionality-keywords"
-            placeholder="“medical, patient records, conversation, ”"
+            placeholder="“medical, patient records, conversation”"
             className={styles.input}
           />
+
+          <label htmlFor = "name" className={styles.label}>Name</label>
+          <input
+              type = "text"
+              id = "name"
+              placeholder = "'assistance node...'"
+              className = {styles.input}
+              value = {name}
+              onChange = {(e) => setName(e.target.value)}
+              />
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
+
           <h2 className={styles.categoryTitle}>AI model</h2>
           <p>Remote</p>
           <div className={styles.inputButtonWrapper}>
@@ -93,7 +168,11 @@ const New = () => {
               Creating the node may take a few minutes. However, you can continue on with your work and we’ll notify you
               when it’s complete.
             </p>
-            <button className={styles.createButton}>Create</button>
+
+            <button type = "submit" className={styles.createButton}>
+              Create
+            </button>
+
           </div>
         </form>
       </div>

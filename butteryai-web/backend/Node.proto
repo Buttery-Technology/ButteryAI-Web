@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package node;
+
+enum AccessLevel {
+  ACCESS_UNSPECIFIED = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
+message Node {
+  string id = 1;
+  string cluster_id = 2;
+  string name = 3;
+  AccessLevel access = 4;
+  bool archived = 5;
+  int32 grade = 6;
+}
+
+message CreateNodeRequest {
+  string node_id = 1;
+  string name = 2;
+  AccessLevel access = 3;
+  string cluster_id = 4;
+}
+
+message GetNodeRequest {
+  string cluster_id = 1;
+  string node_id = 2;
+}
+
+message GetAllNodesRequest {
+  string cluster_id = 1;
+  bool archived = 2;
+}
+
+message UpdateNodeRequest {
+  string cluster_id = 1;
+  string node_id = 2;
+  string name = 3;
+  bool archived = 4;
+  int32 grade = 5;
+}
+
+message DeleteNodeRequest {
+  string cluster_id = 1;
+  string node_id = 2;
+  bool permanent = 3;
+}
+
+message NodeReply {
+  Node node = 1;
+  string message = 2;
+}
+
+message NodeListReply {
+  repeated Node nodes = 1;
+}
+
+service NodeService {
+  rpc CreateNode(CreateNodeRequest) returns (NodeReply);
+  rpc GetNode(GetNodeRequest) returns (NodeReply);
+  rpc GetAllNodes(GetAllNodesRequest) returns (NodeListReply);
+  rpc UpdateNode(UpdateNodeRequest) returns (NodeReply);
+  rpc DeleteNode(DeleteNodeRequest) returns (NodeReply);
+}
