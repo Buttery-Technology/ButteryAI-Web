@@ -31,7 +31,7 @@ const HomeSecurity = () => (
       <p className={styles.description}>
         ButteryAI uses advanced security to ensure your AI is secure and private. For instance, all clients, API's, and
         systems must use security certificates when communicating with ButteryAI and must establish E2EE when possible.
-        This means ButteryAI is starts from a point of no trust and works backwards from there.
+        This means ButteryAI starts from a point of no trust and works backwards from there.
       </p>
       <ul className={styles.list}>
         <li className={styles.item}>
