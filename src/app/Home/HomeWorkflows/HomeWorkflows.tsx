@@ -1,5 +1,5 @@
+import WorkflowDiagram from "@assets/icons/workflow-diagram.svg?react";
 import styles from "./HomeWorkflows.module.scss";
-import WorkflowDiagram from "./workflow-diagram.svg?react";
 
 const HomeWorkflows = () => (
   <section className={styles.root} data-section="workflows">
