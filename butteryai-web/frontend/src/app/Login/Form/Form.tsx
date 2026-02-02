@@ -14,6 +14,7 @@ const Form = () => {
     onBlur: onBlurUsername,
     isValid: isValidUsername,
   } = useForm("username");
+
   const {
     value: password,
     error: passwordError,
@@ -22,12 +23,15 @@ const Form = () => {
     isValid: isValidPassword,
   } = useForm("password");
 
-  const { isLoading, isUserSignedIn, signIn, error } = useUserContext();
+ const { isLoading, isUserSignedIn, signIn, signInWithGoogle, error } = useUserContext();
+
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isValidUsername && isValidPassword) signIn(username, password);
+    if (isValidUsername && isValidPassword) {
+      signIn(username, password);
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -49,6 +53,7 @@ const Form = () => {
           onBlur={onBlurUsername}
           error={usernameError}
         />
+
         <label htmlFor="password" className={styles.label}>
           Password
         </label>
@@ -61,10 +66,25 @@ const Form = () => {
           onBlur={onBlurPassword}
           error={passwordError}
         />
-        <Button type="submit" disabled={!isValidUsername || !isValidPassword} className={styles.button}>
-          Login
-        </Button>
+
+        <Button
+  type="submit"
+  className={styles.button}
+  disabled={!isValidUsername || !isValidPassword}
+>
+  Login
+</Button>
+
+<Button
+  type="button"
+  onClick={signInWithGoogle}
+  className={styles.button}
+>
+  Sign in with Google
+</Button>
+
       </form>
+
       {error && <p className={styles.error}>{error}</p>}
     </>
   );

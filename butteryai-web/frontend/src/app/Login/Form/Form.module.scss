@@ -12,10 +12,23 @@
 }
 
 .button {
-  margin-inline: auto;
+  width: 100%;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .error {
   margin-top: 32px;
   text-align: center;
+}
+
+.googleButton {
+  margin-top: 16px;
+  background: #ffffff;
+  color: #272d31;
+  border: 1px solid #d9d9d9;
 }
