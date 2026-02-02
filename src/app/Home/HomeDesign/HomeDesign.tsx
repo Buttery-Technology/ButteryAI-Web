@@ -1,7 +1,7 @@
 import styles from "./HomeDesign.module.scss";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
-import ColorCodeStatus from "./color-code-status.svg?react";
-import ExpandIcon from "./expand-icon.svg?react";
+import ColorCodeStatus from "@assets/icons/color-code-status.svg?react";
+import ExpandIcon from "@assets/icons/expand-icon.svg?react";
 
 const metricCards = [
   {
