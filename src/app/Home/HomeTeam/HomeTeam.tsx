@@ -7,8 +7,8 @@ const teamMembers = [
     role: "CEO/CTO",
     image: "/images/team/jonny.svg",
     bio: [
-      "Jonny is a serial entrepreneur and is the inventor of Buttery's distributed AI systems (DAIS) technology and the core developer of Buttery AI's intelligence engines.",
-      "Jonny has a passion for technology and creating things. He's crafted a scalable architecture called the Composable Architecture Pattern that enables dynamic scalable software architecture that is self-sustaining for modern programs. Buttery AI uses this architecture to support the intricate intelligence systems and distributed components.",
+      "Jonny is a serial entrepreneur and is the inventor of Buttery's distributed AI systems (DAIS) technology and the core developer of ButteryAI's intelligence engines.",
+      "Jonny has a passion for technology and creating things. He's crafted a scalable architecture called the Composable Architecture Pattern that enables dynamic scalable software architecture that is self-sustaining for modern programs. ButteryAI uses this architecture to support the intricate intelligence systems and distributed components.",
     ],
   },
   {
@@ -17,8 +17,8 @@ const teamMembers = [
     role: "Director of Web Development",
     image: "/images/team/nick.svg",
     bio: [
-      "Nick is a serial entrepreneur and holds a bachelors in advertising and marketing. Nick ensures that Buttery AI's revolutionary technology consistently has a unique and engaging web experience.",
-      "Nick has been programming since he was a teenager and brings over a decade of web development experience to his role. He's worked with healthcare and other companies delivering solid user experiences across a wide range of products. This experience is also helpful because of the handling of sensitive data, which Buttery AI takes very seriously and why E2EE encryption and compliances are so important.",
+      "Nick is a serial entrepreneur and holds a bachelors in advertising and marketing. Nick ensures that ButteryAI's revolutionary technology consistently has a unique and engaging web experience.",
+      "Nick has been programming since he was a teenager and brings over a decade of web development experience to his role. He's worked with healthcare and other companies delivering solid user experiences across a wide range of products. This experience is also helpful because of the handling of sensitive data, which ButteryAI takes very seriously and why E2EE encryption and compliances are so important.",
     ],
   },
   {
