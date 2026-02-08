@@ -26,7 +26,7 @@ const Header = () => (
         </svg>
       </Link>
       <h1 className={styles.title}>
-        Request <span className={styles.gradient}>exclusive</span> access to Buttery AI.
+        Request <span className={styles.gradient}>exclusive</span> access to ButteryAI.
       </h1>
     </div>
     <p className={styles.subtitle}>
