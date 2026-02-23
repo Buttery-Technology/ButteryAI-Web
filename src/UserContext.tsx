@@ -1,14 +1,18 @@
 import { createContext, type ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, GoogleAuthProvider, User } from "firebase/auth";
+import { auth } from "./firebase";
 import { POST_TOKEN, VALIDATE_TOKEN, GET_USER, POST_USER } from "./api";
 
 type TUserContext = {
   data: null;
+  firebaseUser: User | null;
   error: string | null;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   isLoading: boolean;
   isUserSignedIn: boolean;
   signIn: (username: string, password: string) => void;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => void;
   signUp: (username: string, email: string, password: string) => void;
 };
@@ -17,14 +21,27 @@ export const UserContext = createContext<TUserContext | null>(null);
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [isUserSignedIn, setIsUserSignedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
+  // Listen for Firebase auth state changes
   useEffect(() => {
-    autoSignIn();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setFirebaseUser(user);
+      if (user) {
+        setIsUserSignedIn(true);
+        setIsLoading(false);
+      } else {
+        // Check for legacy token auth if no Firebase user
+        autoSignIn();
+      }
+    });
+
+    return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,11 +58,14 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         if (!response.ok) throw new Error("Invalid token");
 
         await getUser(token);
-      } catch (error) {
-        signOut();
+      } catch {
+        localStorage.removeItem("token");
+        setIsUserSignedIn(false);
       } finally {
         setIsLoading(false);
       }
+    } else {
+      setIsLoading(false);
     }
   }
 
@@ -98,8 +118,31 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function signInWithGoogle() {
+    try {
+      setError(null);
+      setIsLoading(true);
+
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      // Auth state change is handled by onAuthStateChanged listener
+      navigate("/dashboard/hive");
+    } catch (error) {
+      if (error && typeof error === "object" && "message" in error) {
+        setError(error.message as string);
+      }
+      setIsUserSignedIn(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function signOut() {
+    // Sign out from Firebase
+    await firebaseSignOut(auth);
+
     setData(null);
+    setFirebaseUser(null);
     setError(null);
     setIsLoading(false);
     setIsUserSignedIn(false);
@@ -113,11 +156,13 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     <UserContext.Provider
       value={{
         data,
+        firebaseUser,
         error,
         setError,
         isLoading,
         isUserSignedIn,
         signIn,
+        signInWithGoogle,
         signOut,
         signUp,
       }}

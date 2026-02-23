@@ -11,8 +11,11 @@
   color: #47545d;
 }
 
-.button {
-  margin-inline: auto;
+.buttonsWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
 }
 
 .error {
