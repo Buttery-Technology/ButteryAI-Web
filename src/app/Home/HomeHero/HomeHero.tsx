@@ -808,7 +808,7 @@ const HomeHero = () => {
         ref={startButtonRef}
         className={`${styles.startButton} ${styles[phase]} ${buttonInFooter ? styles.inFooter : ''}`}
         style={buttonInFooter ? buttonFooterStyle : undefined}
-        onClick={() => navigate("/waiting-list")}
+        onClick={() => navigate("/login")}
       >
         Start
       </button>

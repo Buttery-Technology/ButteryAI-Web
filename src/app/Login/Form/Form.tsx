@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useForm, useUserContext } from "@hooks";
+import { CHECK_WAITLIST_APPROVAL } from "../../../api";
 import { Loading } from "../../Helper/Loading";
 import styles from "./Form.module.scss";
 
@@ -14,7 +15,9 @@ const GoogleLogo = () => (
 );
 
 const Form = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<"email" | "password">("email");
+  const [checkingApproval, setCheckingApproval] = useState(false);
 
   const {
     value: email,
@@ -35,10 +38,24 @@ const Form = () => {
 
   const { isLoading, isUserSignedIn, signIn, signInWithGoogle, error } = useUserContext();
 
-  const handleEmailContinue = (event: FormEvent<HTMLFormElement>) => {
+  const handleEmailContinue = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (validateEmail()) {
-      setStep("password");
+    if (!validateEmail()) return;
+
+    setCheckingApproval(true);
+    try {
+      const { url, options } = CHECK_WAITLIST_APPROVAL(email);
+      const res = await fetch(url, options);
+      const data = await res.json();
+      if (data.isApproved) {
+        setStep("password");
+      } else {
+        navigate("/waiting-list");
+      }
+    } catch {
+      navigate("/waiting-list");
+    } finally {
+      setCheckingApproval(false);
     }
   };
 
@@ -47,7 +64,7 @@ const Form = () => {
     if (isValidEmail && isValidPassword) signIn(email, password);
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading || checkingApproval) return <Loading />;
 
   if (isUserSignedIn) return <Navigate to="/dashboard/hive" />;
 
