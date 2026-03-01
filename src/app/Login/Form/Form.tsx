@@ -7,6 +7,7 @@ import { Loading } from "../../Helper/Loading";
 import styles from "./Form.module.scss";
 
 const Form = () => {
+
   const {
     value: username,
     error: usernameError,
@@ -14,6 +15,7 @@ const Form = () => {
     onBlur: onBlurUsername,
     isValid: isValidUsername,
   } = useForm("username");
+
   const {
     value: password,
     error: passwordError,
@@ -22,7 +24,7 @@ const Form = () => {
     isValid: isValidPassword,
   } = useForm("password");
 
-  const { isLoading, isUserSignedIn, signIn, error } = useUserContext();
+  const { isLoading, isUserSignedIn, signIn, signInWithGoogle, error } = useUserContext();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,9 +63,14 @@ const Form = () => {
           onBlur={onBlurPassword}
           error={passwordError}
         />
-        <Button type="submit" disabled={!isValidUsername || !isValidPassword} className={styles.button}>
-          Login
-        </Button>
+        <div className={styles.buttonsWrapper}>
+          <Button type="submit" disabled={!isValidUsername || !isValidPassword}>
+            Login
+          </Button>
+          <button type="button" onClick={signInWithGoogle}>
+            <img src="https://developers.google.com/identity/images/branding_guideline_sample_lt_rd_lg.svg" />
+          </button>
+        </div>
       </form>
       {error && <p className={styles.error}>{error}</p>}
     </>
