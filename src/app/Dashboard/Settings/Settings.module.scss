@@ -60,3 +60,21 @@
     }
   }
 }
+
+.logoutButton {
+  display: block;
+  margin-top: 64px;
+  margin-inline: auto;
+  padding: 14px 48px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #d12a89;
+  background-color: #f7f7f7;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #efefef;
+  }
+}

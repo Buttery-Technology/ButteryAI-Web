@@ -1,6 +1,10 @@
+import { useUserContext } from "@hooks";
 import styles from "./Settings.module.scss";
 
-const Settings = () => (
+const Settings = () => {
+  const { signOut } = useUserContext();
+
+  return (
   <section className={styles.root}>
     <strong>Universal Value System</strong>
     <p>1.3M Values</p>
@@ -61,8 +65,12 @@ const Settings = () => (
     </ul>
     <strong>Extensions</strong>
     <p>...</p>
-    <br />
+
+    <button className={styles.logoutButton} onClick={signOut}>
+      Log out
+    </button>
   </section>
-);
+  );
+};
 
 export default Settings;
