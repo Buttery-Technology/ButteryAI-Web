@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Menu } from "./Menu";
 import { Hive } from "./Hive";
 import { Chat } from "./Chat";
@@ -9,8 +9,7 @@ const Dashboard = () => (
   <>
     <Menu />
     <Routes>
-      <Route path="/" element={<Navigate to="hive" />} />
-      <Route path="hive" element={<Hive />} />
+      <Route path="/" element={<Hive />} />
       <Route path="chat" element={<Chat />} />
       {/* <Route path="training" element={<Training />} /> */}
       <Route path="settings" element={<Settings />} />

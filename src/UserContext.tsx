@@ -103,7 +103,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       // Step 6: Set user state and navigate
       setUser(verifyData.user);
       setIsUserSignedIn(true);
-      navigate("/dashboard/hive");
+      navigate("/dashboard");
     } catch (error) {
       if (error && typeof error === "object" && "message" in error) {
         setError(error.message as string);
