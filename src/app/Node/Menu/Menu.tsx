@@ -19,7 +19,7 @@ export const Menu = () => {
       </Link>
       <h1 className={styles.title}>
         Med-PaLM2 Node
-        <Link to="/dashboard/hive" className={styles.arrowLeft}>
+        <Link to="/dashboard" className={styles.arrowLeft}>
           <ArrowLeft />
         </Link>
       </h1>

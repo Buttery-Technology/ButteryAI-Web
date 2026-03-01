@@ -25,7 +25,7 @@ export const Menu = () => {
       <ul className={styles.tabList}>
         <li>
           <NavLink
-            to="/dashboard/hive"
+            to="/dashboard"
             onClick={() => setTabName("Hive")}
             className={tabName === "Hive" ? styles.active : ""}
           >

@@ -6,13 +6,13 @@ import styles from "./New.module.scss";
 const New = () => {
   const navigate = useNavigate();
 
-  const handleClose = () => navigate("/dashboard/hive");
+  const handleClose = () => navigate("/dashboard");
 
   return (
     <section className={styles.root}>
       <div className={styles.container}>
         <div className={styles.logoWrapper}>
-          <Link to="/dashboard/hive">
+          <Link to="/dashboard">
             <img src={dashboardLogo} alt="ButteryAI" />
           </Link>
         </div>

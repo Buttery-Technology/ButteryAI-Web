@@ -66,7 +66,7 @@ const Form = () => {
 
   if (isLoading || checkingApproval) return <Loading />;
 
-  if (isUserSignedIn) return <Navigate to="/dashboard/hive" />;
+  if (isUserSignedIn) return <Navigate to="/dashboard" />;
 
   if (step === "password") {
     return (
