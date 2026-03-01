@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
-import Hive from "@assets/icons/hive.svg?react";
+import Cluster from "@assets/icons/cluster.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import Metrics from "@assets/icons/metrics.svg?react";
 import styles from "./Menu.module.scss";
@@ -14,7 +14,7 @@ export const Menu = () => {
 
   return (
     <header className={styles.root}>
-      <Link to="/node/overview" className={styles.link}>
+      <Link to="/dashboard" className={styles.link}>
         <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
       <h1 className={styles.title}>
@@ -48,7 +48,7 @@ export const Menu = () => {
             onClick={() => setTabName("Overview")}
             className={tabName === "Overview" ? styles.active : ""}
           >
-            <Hive />
+            <Cluster />
           </NavLink>
         </li>
         <li>

@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import HiveSample from "@assets/images/hive-sample.svg?react";
+import ClusterSample from "@assets/images/cluster-sample.svg?react";
 import { Chat } from "../Chat";
-import styles from "./Hive.module.scss";
+import styles from "./Cluster.module.scss";
 
-const Hive = () => (
+const Cluster = () => (
   <section className={styles.root}>
     <ul className={styles.cards}>
       <li>
         <h2>Value</h2>
         <h3>92</h3>
-        <p>This metric is your current value in the Hive.</p>
+        <p>This metric is your current value in the Cluster.</p>
       </li>
       <li>
         <h2>Trust</h2>
@@ -48,7 +48,7 @@ const Hive = () => (
       </li>
     </ul>
     <div className={styles.imgWrapper}>
-      <HiveSample className={styles.hiveSample} />
+      <ClusterSample className={styles.clusterSample} />
       <Link to="/node/overview" className={styles.link1} />
       <Link to="/node/new" className={styles.link2} />
     </div>
@@ -56,4 +56,4 @@ const Hive = () => (
   </section>
 );
 
-export default Hive;
+export default Cluster;
