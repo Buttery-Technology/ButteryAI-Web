@@ -1,0 +1,131 @@
+.root {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: #288ed2;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #272d31;
+    margin-bottom: 12px;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+
+  label {
+    flex: 1;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.select,
+.input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #272d31;
+  background-color: #f9f9f9;
+
+  &:focus {
+    outline: none;
+    border-color: #288ed2;
+  }
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #637684;
+  font-weight: 500;
+}
+
+.costEstimate {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #288ed2;
+  font-weight: 500;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  border-radius: 99px;
+  background: none;
+  border: 1px solid #cccccc;
+  color: #637684;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.submitButton {
+  padding: 10px 24px;
+  border-radius: 99px;
+  background-color: #288ed2;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out;
+
+  &:hover {
+    background-color: #1d7abc;
+  }
+
+  &:disabled {
+    background-color: #a0c4e0;
+    cursor: not-allowed;
+  }
+}
