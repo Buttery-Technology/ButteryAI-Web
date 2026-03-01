@@ -53,3 +53,27 @@
   color: #576773;
   margin-top: 4px;
 }
+
+@media (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+
+    li {
+      padding: 20px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+
+    li {
+      padding: 16px;
+
+      h3 {
+        font-size: 20px;
+      }
+    }
+  }
+}

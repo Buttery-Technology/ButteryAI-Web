@@ -64,3 +64,17 @@
     }
   }
 }
+
+@media (max-width: 640px) {
+  .input {
+    padding: 12px 50px 12px 20px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+
+    button {
+      padding: 12px 20px;
+    }
+  }
+}

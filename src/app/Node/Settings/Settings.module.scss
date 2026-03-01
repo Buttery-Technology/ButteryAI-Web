@@ -60,3 +60,30 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 1024px) {
+  .keys {
+    padding: 24px;
+
+    ul {
+      gap: 24px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .keys {
+    flex-direction: column;
+    padding: 20px;
+
+    ul {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    > button {
+      font-size: 14px;
+      padding: 12px 24px;
+    }
+  }
+}

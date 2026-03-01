@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
+import Power from "@assets/icons/power.svg?react";
+import Diagnostics from "@assets/icons/diagnostics.svg?react";
+import Share from "@assets/icons/share.svg?react";
 import Cluster from "@assets/icons/cluster.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import Metrics from "@assets/icons/metrics.svg?react";
@@ -27,20 +30,17 @@ export const Menu = () => {
         <p className={styles.status}>Offline</p>
         <p className={styles.plan}>Pro</p>
       </div>
-      <ul className={styles.detailsMenu}>
-        <li>
-          <button>Power Cycle…</button>
-        </li>
-        <li>
-          <button>Diagnostics</button>
-        </li>
-        <li>
-          <button>Notifications</button>
-        </li>
-        <li>
-          <button>Security</button>
-        </li>
-      </ul>
+      <div className={styles.controlBar}>
+        <button aria-label="Power Cycle">
+          <Power />
+        </button>
+        <button aria-label="Diagnostics">
+          <Diagnostics />
+        </button>
+        <button aria-label="Share">
+          <Share />
+        </button>
+      </div>
       <ul className={styles.tabList}>
         <li>
           <NavLink

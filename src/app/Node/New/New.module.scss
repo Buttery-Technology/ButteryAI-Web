@@ -140,3 +140,40 @@
   border-radius: 99px;
   @include scaleAnimation;
 }
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 32px;
+  }
+
+  .categoryTitle {
+    font-size: 18px;
+  }
+
+  .input {
+    font-size: 16px;
+  }
+
+  .inputButton {
+    font-size: 16px;
+    padding: 12px 28px;
+  }
+
+  .upgradeBox p {
+    font-size: 18px;
+  }
+
+  .upgradeButton {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+
+  .createWrapper {
+    max-width: 100%;
+  }
+
+  .createButton {
+    font-size: 16px;
+    padding: 14px;
+  }
+}
