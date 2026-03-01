@@ -3,10 +3,11 @@ import { Link, NavLink } from "react-router-dom";
 import dashboardLogo from "@assets/logos/dashboard-logo.png";
 import Hive from "@assets/icons/hive.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
+// import Metrics from "@assets/icons/metrics.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Hive" | "Chat" | "Settings";
+type Tabs = "Hive" | "Chat" | /* "Training" | */ "Settings";
 
 export const Menu = () => {
   const [tabName, setTabName] = useState<Tabs>("Hive");
@@ -40,6 +41,15 @@ export const Menu = () => {
             <Chat />
           </NavLink>
         </li>
+        {/* <li>
+          <NavLink
+            to="/dashboard/training"
+            onClick={() => setTabName("Training")}
+            className={tabName === "Training" ? styles.active : ""}
+          >
+            <Metrics />
+          </NavLink>
+        </li> */}
         <li>
           <NavLink
             to="/dashboard/settings"
