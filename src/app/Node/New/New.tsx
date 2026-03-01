@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import Close from "@assets/icons/close.svg?react";
 import styles from "./New.module.scss";
 
@@ -13,7 +13,7 @@ const New = () => {
       <div className={styles.container}>
         <div className={styles.logoWrapper}>
           <Link to="/dashboard">
-            <img src={dashboardLogo} alt="ButteryAI" />
+            <img src={butteryaiLogo} alt="ButteryAI" />
           </Link>
         </div>
         <header className={styles.header}>

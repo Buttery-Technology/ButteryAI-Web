@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import Hive from "@assets/icons/hive.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
@@ -15,7 +15,7 @@ export const Menu = () => {
   return (
     <header className={styles.root}>
       <Link to="/node/overview" className={styles.link}>
-        <img src={dashboardLogo} alt="ButteryAI" />
+        <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
       <h1 className={styles.title}>
         Med-PaLM2 Node
