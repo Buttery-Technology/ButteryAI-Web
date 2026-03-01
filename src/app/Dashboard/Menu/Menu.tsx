@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import dashboardLogo from "@assets/logos/dashboard-logo.png";
+import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import Hive from "@assets/icons/hive.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
 // import Metrics from "@assets/icons/metrics.svg?react";
@@ -15,7 +15,7 @@ export const Menu = () => {
   return (
     <header className={styles.root}>
       <Link to="" className={styles.link}>
-        <img src={dashboardLogo} alt="ButteryAI" />
+        <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
       <h1 className={styles.title}>ButteryAI</h1>
       <div className={styles.wrapper}>
