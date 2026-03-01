@@ -1,24 +1,136 @@
+@use "@mixins" as *;
+
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 20px;
+  width: 480px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-.label {
-  padding-left: 16px;
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  background-color: #f7f7f7;
+  border-radius: 30px;
   font-size: 18px;
   font-weight: 700;
-  color: #47545d;
+  color: #8d8d8d;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  @include scaleAnimation;
+
+  &:hover {
+    background-color: #efefef;
+  }
 }
 
-.buttonsWrapper {
+.divider {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: #dedede;
+}
+
+.dividerText {
+  font-size: 16px;
+  line-height: 24px;
+  color: #576773;
+}
+
+.inputWrapper {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: 56px;
+  padding: 0 24px;
+  border-radius: 30px;
+  background-color: #f7f7f7;
+  color: #47545d;
+  font-size: 18px;
+  transition: 0.2s;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #8d8d8d;
+  }
+}
+
+.inputError {
+  padding-left: 24px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #d12a89;
+
+  @include mq(999) {
+    font-size: 11px;
+  }
+}
+
+.continueButton {
+  width: 100%;
+  height: 58px;
+  background-color: #288ed2;
+  color: white;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+  @include scaleAnimation;
+
+  &:hover {
+    background-color: darken(#288ed2, 8%);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.emailLabel {
+  font-size: 16px;
+  color: #576773;
+}
+
+.backLink {
+  font-size: 14px;
+  color: #288ed2;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .error {
-  margin-top: 32px;
+  margin-top: 8px;
   text-align: center;
+  font-size: 14px;
+  color: #d12a89;
 }
