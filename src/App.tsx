@@ -15,7 +15,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
 
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   return children;
