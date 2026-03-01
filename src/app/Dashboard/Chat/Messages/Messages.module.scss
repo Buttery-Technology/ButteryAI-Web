@@ -46,3 +46,14 @@
 .aiMessage {
   animation-delay: 0.1s;
 }
+
+@media (max-width: 640px) {
+  .root {
+    max-height: 300px;
+    gap: 16px;
+  }
+
+  .userMessage {
+    padding: 12px 20px;
+  }
+}

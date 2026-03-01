@@ -64,32 +64,43 @@
   }
 }
 
-.detailsMenu {
-  width: 100%;
-  padding: 32px 48px;
-  background-color: #f7f7f7;
-  border-radius: 32px;
+.controlBar {
   display: flex;
-  gap: 20px;
+  gap: 32px;
+  padding: 16px 40px;
+  border-radius: 99px;
+  background-color: #f7f7f7;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  position: relative;
   margin-bottom: 32px;
 
-  li:first-child {
-    button {
-      background-color: #d12a89;
-    }
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 99px;
+    background: linear-gradient(to right, #288ed2, #ffd74d);
+    z-index: -1;
   }
 
   button {
-    padding: 16px 32px;
-    background-color: #384148;
-    border-radius: 99px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: 0.2s ease-out;
 
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+
     &:hover {
-      background-color: #d12a89;
+      opacity: 0.6;
     }
   }
 }
@@ -122,4 +133,30 @@
   color: #637684;
   margin-top: 8px;
   margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+  .title {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .wrapper {
+    gap: 16px;
+  }
+
+  .controlBar {
+    gap: 24px;
+    padding: 12px 28px;
+
+    button svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
 }

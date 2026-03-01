@@ -5,3 +5,9 @@
   max-width: 930px;
   margin-inline: auto;
 }
+
+@media (max-width: 640px) {
+  .root {
+    min-height: 40vh;
+  }
+}
