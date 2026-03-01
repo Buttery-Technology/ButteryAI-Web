@@ -23,7 +23,6 @@ const Form = ({ inputValue, handleSubmit, handleChange, inputRef }: FormProps) =
         value={inputValue}
         onChange={handleChange}
         required
-        autoFocus
         className={styles.input}
       />
       <button type="submit" className={styles.submitButton} disabled={!inputValue}>
