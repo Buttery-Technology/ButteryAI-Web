@@ -9,6 +9,7 @@ type ButteryUser = {
   email: string;
   systemAccessLevel: string;
   isOnline: boolean;
+  plan?: string;
 };
 
 type TUserContext = {

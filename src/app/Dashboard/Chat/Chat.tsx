@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { CREATE_CONVERSATION, CREATE_MESSAGE, GET_CONVERSATIONS, GET_MESSAGES } from "../../../api";
 import { History } from "./History";
 import { ResetButton } from "./ResetButton";
 import { Messages } from "./Messages";
@@ -20,21 +21,41 @@ const Chat = () => {
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
-  const [fakeResponses, setFakeResponses] = useState<string[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // Load existing conversation on mount
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/fakeResponse.json");
-        if (!res.ok) throw new Error("Failed to fetch responses");
+        const { url, options } = GET_CONVERSATIONS();
+        const res = await fetch(url, options);
+        if (!res.ok) return;
 
         const data = await res.json();
+        const conversations = data.conversations ?? [];
+        if (conversations.length > 0) {
+          const latest = conversations[0];
+          setConversationId(latest.id);
 
-        if (data.responses && Array.isArray(data.responses)) setFakeResponses(data.responses);
-        else setFakeResponses([ERROR_MESSAGE]);
+          // Load existing messages
+          const msgReq = GET_MESSAGES(latest.id);
+          const msgRes = await fetch(msgReq.url, msgReq.options);
+          if (msgRes.ok) {
+            const msgData = await msgRes.json();
+            const loaded = (msgData.messages ?? []).map(
+              (m: { content: string; authorType: string }) => ({
+                sender: m.authorType === "user" ? "user" : "ai",
+                text: m.content,
+              }),
+            );
+            if (loaded.length > 0) {
+              setMessages([{ sender: "ai", text: WELCOME_MESSAGE }, ...loaded]);
+            }
+          }
+        }
       } catch {
-        setFakeResponses([ERROR_MESSAGE]);
+        // Non-blocking — chat works without conversation history
       }
     })();
   }, []);
@@ -64,48 +85,53 @@ const Chat = () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     setIsThinking(true);
 
-    // Send message to backend
+    // Send message to backend via conversations API
+    let aiResponseText = ERROR_MESSAGE;
     try {
-      const response = await fetch("http://localhost:3001/api/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: Date.now(),
-          subject: "chat",
-          date: new Date().toISOString(),
-          user: "user",
-          message: userText,
-        }),
-      });
+      let activeConvId = conversationId;
 
-      if (!response.ok) throw new Error("Network response was not ok");
-      // We don’t use backend reply for AI response, just log it
-      const data = await response.json();
-      console.log("Backend response:", data);
+      // Create conversation if none exists
+      if (!activeConvId) {
+        const createReq = CREATE_CONVERSATION("Chat");
+        const createRes = await fetch(createReq.url, createReq.options);
+        if (createRes.ok) {
+          const conv = await createRes.json();
+          activeConvId = conv.id;
+          setConversationId(conv.id);
+        }
+      }
+
+      if (activeConvId) {
+        const msgReq = CREATE_MESSAGE(activeConvId, userText);
+        const msgRes = await fetch(msgReq.url, msgReq.options);
+        if (msgRes.ok) {
+          const data = await msgRes.json();
+          // Server may return an AI response alongside the user message
+          if (data.content && data.authorType !== "user") {
+            aiResponseText = data.content;
+          }
+        }
+      }
     } catch (error) {
       console.error("Error communicating with backend:", error);
     }
 
-    // Butter thinking animation duration (2 seconds)
+    // Thinking animation duration
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsThinking(false);
-
-    // Pick a random AI response from loaded JSON or fallback
-    const responsesArray = fakeResponses.length > 0 ? fakeResponses : [ERROR_MESSAGE];
-    const randomResponse = responsesArray[Math.floor(Math.random() * responsesArray.length)];
 
     // Add empty AI message for typing animation
     setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
 
     // Animate AI typing letter by letter
     await new Promise<void>((resolve) => {
-      typewriterEffect(randomResponse, (partialText) => {
+      typewriterEffect(aiResponseText, (partialText) => {
         setMessages((prev) => {
           const updated = [...prev];
           updated[updated.length - 1] = { sender: "ai", text: partialText };
           return updated;
         });
-        if (partialText === randomResponse) resolve();
+        if (partialText === aiResponseText) resolve();
       });
     });
 
@@ -120,6 +146,7 @@ const Chat = () => {
     setInputValue("");
     setIsThinking(false);
     setChatEnded(false);
+    setConversationId(null);
   };
 
   return (

@@ -8,12 +8,21 @@ import Share from "@assets/icons/share.svg?react";
 import Cluster from "@assets/icons/cluster.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import Metrics from "@assets/icons/metrics.svg?react";
+import type { NodeResponse } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
 type Tabs = "Overview" | "Settings" | "Metrics";
 
-export const Menu = () => {
+interface Props {
+  node: NodeResponse | null;
+  isLoading: boolean;
+  nodeId: string | undefined;
+}
+
+export const Menu = ({ node, isLoading, nodeId }: Props) => {
   const [tabName, setTabName] = useState<Tabs>("Overview");
+
+  const basePath = nodeId ? `/node/${nodeId}` : "/node";
 
   return (
     <header className={styles.root}>
@@ -21,13 +30,13 @@ export const Menu = () => {
         <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
       <h1 className={styles.title}>
-        Med-PaLM2 Node
+        {isLoading ? "Loading..." : (node?.name ?? "Node")}
         <Link to="/dashboard" className={styles.arrowLeft}>
           <ArrowLeft />
         </Link>
       </h1>
       <div className={styles.wrapper}>
-        <p className={styles.status}>Offline</p>
+        <p className={styles.status}>{node?.isOnline ? "Online" : "Offline"}</p>
         <p className={styles.plan}>Pro</p>
       </div>
       <div className={styles.controlBar}>
@@ -44,7 +53,7 @@ export const Menu = () => {
       <ul className={styles.tabList}>
         <li>
           <NavLink
-            to="/node/overview"
+            to={`${basePath}/overview`}
             onClick={() => setTabName("Overview")}
             className={tabName === "Overview" ? styles.active : ""}
           >
@@ -53,7 +62,7 @@ export const Menu = () => {
         </li>
         <li>
           <NavLink
-            to="/node/settings"
+            to={`${basePath}/settings`}
             onClick={() => setTabName("Settings")}
             className={tabName === "Settings" ? styles.active : ""}
           >
@@ -62,7 +71,7 @@ export const Menu = () => {
         </li>
         <li>
           <NavLink
-            to="/node/metrics"
+            to={`${basePath}/metrics`}
             onClick={() => setTabName("Metrics")}
             className={tabName === "Metrics" ? styles.active : ""}
           >

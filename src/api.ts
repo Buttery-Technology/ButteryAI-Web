@@ -71,3 +71,93 @@ export const JOIN_WAITLIST = (name: string, email: string, buildDescription?: st
     body: JSON.stringify({ name, email, buildDescription }),
   },
 });
+
+// Dashboard
+export const GET_DASHBOARD = () => ({
+  url: BUTTERY_API_URL + "/dashboard",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+// Nodes
+export const GET_NODES = () => ({
+  url: BUTTERY_API_URL + "/nodes",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const GET_NODE = (nodeId: string) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const CREATE_NODE = (name: string, clusterID: string, access?: string) => ({
+  url: BUTTERY_API_URL + "/nodes",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, clusterID, access }),
+    ...cookieOptions,
+  },
+});
+
+export const GET_NODE_HISTORY = (nodeId: string) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/history`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+// Conversations
+export const GET_CONVERSATIONS = () => ({
+  url: BUTTERY_API_URL + "/conversations",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const CREATE_CONVERSATION = (title: string) => ({
+  url: BUTTERY_API_URL + "/conversations",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title }),
+    ...cookieOptions,
+  },
+});
+
+export const GET_MESSAGES = (conversationId: string) => ({
+  url: BUTTERY_API_URL + `/conversations/${conversationId}/messages`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const CREATE_MESSAGE = (conversationId: string, content: string) => ({
+  url: BUTTERY_API_URL + `/conversations/${conversationId}/messages`,
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
+    ...cookieOptions,
+  },
+});
+
+// Clusters
+export const GET_CLUSTER = () => ({
+  url: BUTTERY_API_URL + "/clusters",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});

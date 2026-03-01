@@ -1,24 +1,31 @@
 import { useUserContext } from "@hooks";
+import type { SummaryCard } from "../../../types/api";
 import styles from "./Settings.module.scss";
 
-const Settings = () => {
+interface Props {
+  summaryCards: SummaryCard[];
+}
+
+const Settings = ({ summaryCards }: Props) => {
   const { signOut } = useUserContext();
+
+  // Extract key metrics from summary cards when available
+  const valueCard = summaryCards.find((c) => c.header === "Value");
+  const trustCard = summaryCards.find((c) => c.header === "Trust");
 
   return (
   <section className={styles.root}>
     <strong>Universal Value System</strong>
-    <p>1.3M Values</p>
+    <p>{valueCard ? `${valueCard.title} Value Score` : "1.3M Values"}</p>
     <ul className={styles.infoCards}>
       <li>
         <h2>Summary</h2>
-        <h3>1.3M</h3>
-        <p>
-          <strong>1.3M</strong> total. <strong>+62</strong> in last 24 hr. <strong>+88 {"<"} 15m.</strong>
-        </p>
+        <h3>{valueCard?.title ?? "—"}</h3>
+        <p>{valueCard?.description ?? "Waiting for cluster data..."}</p>
       </li>
       <li>
         <h2>Value</h2>
-        <h3>92</h3>
+        <h3>{valueCard?.title ?? "—"}</h3>
         <p>This metric is how well these values are consumed in the Cluster.</p>
       </li>
       <li>
@@ -28,26 +35,21 @@ const Settings = () => {
       </li>
       <li>
         <h2>Activity</h2>
-        <h3>10+ users</h3>
-        <p>
-          There have been <strong>12</strong> users contributing to UVS in the last <strong>~15m</strong>.
-        </p>
+        <h3>—</h3>
+        <p>User activity data not yet available from the server.</p>
       </li>
     </ul>
     <strong>Trusted Advisor System</strong>
-    <p>10K Advisors</p>
+    <p>{trustCard ? `${trustCard.title} Trust Score` : "10K Advisors"}</p>
     <ul className={styles.infoCards}>
       <li>
         <h2>Summary</h2>
-        <h3>10K</h3>
-        <p>
-          <strong>10K</strong> total. <strong>+62</strong> in last 24 hr. <strong>+8 {"<"} 15m</strong>.{" "}
-          <strong>-10 {"<"} 15m</strong>.
-        </p>
+        <h3>{trustCard?.title ?? "—"}</h3>
+        <p>{trustCard?.description ?? "Waiting for cluster data..."}</p>
       </li>
       <li>
         <h2>Value</h2>
-        <h3>98</h3>
+        <h3>{trustCard?.title ?? "—"}</h3>
         <p>This metric is how well the advisors perform in the Cluster.</p>
       </li>
       <li>
@@ -57,10 +59,8 @@ const Settings = () => {
       </li>
       <li>
         <h2>Activity</h2>
-        <h3>10+ users</h3>
-        <p>
-          There have been <strong>12</strong> users contributing to UVS in the last <strong>~15m</strong>.
-        </p>
+        <h3>—</h3>
+        <p>User activity data not yet available from the server.</p>
       </li>
     </ul>
     <strong>Extensions</strong>
