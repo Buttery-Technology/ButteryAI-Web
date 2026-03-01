@@ -8,10 +8,10 @@ const Settings = () => (
     <strong>API</strong>
     <p>
       Set specific settings for API interactions with this node. API’s that use this node will not have all the features
-      supplied by the Hive. Please make sure your authorization tokens and secrets are held securely and private -
+      supplied by the Cluster. Please make sure your authorization tokens and secrets are held securely and private -
       please take this seriously as our system will automatically disable and ban connections that abuse the system
       (learn more). Unusual behavior will be flagged and any activity not screened may be subject to security actions to
-      protect the system and Hive. Enterprise versions can disable this feature in the Hive settings.
+      protect the system and Cluster. Enterprise versions can disable this feature in the Cluster settings.
     </p>
     <div className={styles.keys}>
       <ul>

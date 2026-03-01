@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
-import Hive from "@assets/icons/hive.svg?react";
+import Cluster from "@assets/icons/cluster.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
 // import Metrics from "@assets/icons/metrics.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Hive" | "Chat" | /* "Training" | */ "Settings";
+type Tabs = "Cluster" | "Chat" | /* "Training" | */ "Settings";
 
 export const Menu = () => {
-  const [tabName, setTabName] = useState<Tabs>("Hive");
+  const [tabName, setTabName] = useState<Tabs>("Cluster");
 
   return (
     <header className={styles.root}>
-      <Link to="" className={styles.link}>
+      <Link to="/dashboard" className={styles.link}>
         <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
       <h1 className={styles.title}>ButteryAI</h1>
@@ -26,10 +26,10 @@ export const Menu = () => {
         <li>
           <NavLink
             to="/dashboard"
-            onClick={() => setTabName("Hive")}
-            className={tabName === "Hive" ? styles.active : ""}
+            onClick={() => setTabName("Cluster")}
+            className={tabName === "Cluster" ? styles.active : ""}
           >
-            <Hive />
+            <Cluster />
           </NavLink>
         </li>
         <li>

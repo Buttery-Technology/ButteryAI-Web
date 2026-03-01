@@ -19,7 +19,7 @@ const Settings = () => {
       <li>
         <h2>Value</h2>
         <h3>92</h3>
-        <p>This metric is how well these values are consumed in the Hive.</p>
+        <p>This metric is how well these values are consumed in the Cluster.</p>
       </li>
       <li>
         <h2>Security</h2>
@@ -48,7 +48,7 @@ const Settings = () => {
       <li>
         <h2>Value</h2>
         <h3>98</h3>
-        <p>This metric is how well the advisors perform in the Hive.</p>
+        <p>This metric is how well the advisors perform in the Cluster.</p>
       </li>
       <li>
         <h2>Security</h2>
