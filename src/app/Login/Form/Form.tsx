@@ -9,12 +9,12 @@ import styles from "./Form.module.scss";
 const Form = () => {
 
   const {
-    value: username,
-    error: usernameError,
-    onChange: onChangeUsername,
-    onBlur: onBlurUsername,
-    isValid: isValidUsername,
-  } = useForm("username");
+    value: email,
+    error: emailError,
+    onChange: onChangeEmail,
+    onBlur: onBlurEmail,
+    isValid: isValidEmail,
+  } = useForm("email");
 
   const {
     value: password,
@@ -29,7 +29,7 @@ const Form = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isValidUsername && isValidPassword) signIn(username, password);
+    if (isValidEmail && isValidPassword) signIn(email, password);
   };
 
   if (isLoading) return <Loading />;
@@ -39,17 +39,17 @@ const Form = () => {
   return (
     <>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <label htmlFor="username" className={styles.label}>
-          Username
+        <label htmlFor="email" className={styles.label}>
+          Email
         </label>
         <Input
-          type="text"
-          name="username"
-          placeholder="Joana..."
-          value={username}
-          onChange={onChangeUsername}
-          onBlur={onBlurUsername}
-          error={usernameError}
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={onChangeEmail}
+          onBlur={onBlurEmail}
+          error={emailError}
         />
         <label htmlFor="password" className={styles.label}>
           Password
@@ -64,7 +64,7 @@ const Form = () => {
           error={passwordError}
         />
         <div className={styles.buttonsWrapper}>
-          <Button type="submit" disabled={!isValidUsername || !isValidPassword}>
+          <Button type="submit" disabled={!isValidEmail || !isValidPassword}>
             Login
           </Button>
           <button type="button" onClick={signInWithGoogle}>

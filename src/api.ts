@@ -1,79 +1,73 @@
-export const API_URL = "https://dogsapi.origamid.dev/json";
-export const BUTTERY_API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8080/api";
+export const BUTTERY_API_URL = import.meta.env.VITE_API_URL || "/api";
 
-export const POST_TOKEN = (body: unknown) => {
-  return {
-    url: API_URL + "/jwt-auth/v1/token",
-    options: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    },
-  };
+const cookieOptions = {
+  credentials: "include" as RequestCredentials,
 };
 
-export const VALIDATE_TOKEN = (token: string) => {
-  return {
-    url: API_URL + "/jwt-auth/v1/token/validate",
-    options: {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    },
-  };
-};
+// SRP Auth
+export const SRP_LOGIN = (email: string, A: string) => ({
+  url: BUTTERY_API_URL + "/srp/login",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, A }),
+    ...cookieOptions,
+  },
+});
 
-export const GET_USER = (token: string) => {
-  return {
-    url: API_URL + "/api/user",
-    options: {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    },
-  };
-};
+export const SRP_VERIFY = (proof: string) => ({
+  url: BUTTERY_API_URL + "/srp/verify",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ proof }),
+    ...cookieOptions,
+  },
+});
 
-export const POST_USER = (body: unknown) => {
-  return {
-    url: API_URL + "/api/user",
-    options: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    },
-  };
-};
+export const SRP_REGISTER = (name: string, email: string, salt: string, verifier: string) => ({
+  url: BUTTERY_API_URL + "/srp/register",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, salt, verifier }),
+    ...cookieOptions,
+  },
+});
 
-// Waitlist API
-export const CHECK_WAITLIST_APPROVAL = (email: string) => {
-  return {
-    url: BUTTERY_API_URL + "/waitlist/check",
-    options: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    },
-  };
-};
+// User
+export const GET_CURRENT_USER = () => ({
+  url: BUTTERY_API_URL + "/users/me",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
 
-export const JOIN_WAITLIST = (name: string, email: string, buildDescription?: string) => {
-  return {
-    url: BUTTERY_API_URL + "/waitlist/join",
-    options: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, buildDescription }),
-    },
-  };
-};
+// Logout
+export const LOGOUT = () => ({
+  url: BUTTERY_API_URL + "/sso/logout",
+  options: {
+    method: "POST",
+    ...cookieOptions,
+  },
+});
+
+// Waitlist
+export const CHECK_WAITLIST_APPROVAL = (email: string) => ({
+  url: BUTTERY_API_URL + "/waitlist/check",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  },
+});
+
+export const JOIN_WAITLIST = (name: string, email: string, buildDescription?: string) => ({
+  url: BUTTERY_API_URL + "/waitlist/join",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, buildDescription }),
+  },
+});
