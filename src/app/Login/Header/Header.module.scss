@@ -1,11 +1,11 @@
 .root {
-  padding-bottom: 64px;
+  padding-bottom: 48px;
   text-align: center;
 }
 
 .link {
   display: inline-block;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .title {
@@ -15,9 +15,16 @@
   color: #272d31;
 
   span {
-    background: linear-gradient(to right, #d12a89, #755cba);
+    background: linear-gradient(90deg, #0f9b81, #288ed2);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+}
+
+.subtitle {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #576773;
 }

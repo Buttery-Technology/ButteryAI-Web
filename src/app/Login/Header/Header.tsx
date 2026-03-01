@@ -8,8 +8,9 @@ const Header = () => (
       <img src={butteryai} alt="ButteryAI" />
     </Link>
     <h1 className={styles.title}>
-      <span>Welcome</span> to ButteryAI.
+      <span>Welcome</span> to the Buttery AI.
     </h1>
+    <p className={styles.subtitle}>Let's create something awesome together!</p>
   </header>
 );
 
