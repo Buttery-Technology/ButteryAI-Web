@@ -31,7 +31,8 @@
   margin-bottom: 32px;
 }
 
-.status,
+.statusOnline,
+.statusOffline,
 .plan {
   font-size: 14px;
   line-height: 1.5;
@@ -48,7 +49,15 @@
   }
 }
 
-.status {
+.statusOnline {
+  color: #576773;
+
+  &::before {
+    background-image: url("../../../assets/icons/circle.svg");
+  }
+}
+
+.statusOffline {
   color: #576773;
 
   &::before {

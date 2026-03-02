@@ -9,7 +9,6 @@ import styles from "./Chat.module.scss";
 
 const quitCommands = ["exit", "q", "quit"];
 const ERROR_MESSAGE = "Sorry, I'm having trouble right now.";
-const WELCOME_MESSAGE = "Welcome to ButteryAI! Type a message to start.";
 
 export type Message = {
   sender: string;
@@ -17,7 +16,7 @@ export type Message = {
 };
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([{ sender: "ai", text: WELCOME_MESSAGE }]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
@@ -50,7 +49,7 @@ const Chat = () => {
               }),
             );
             if (loaded.length > 0) {
-              setMessages([{ sender: "ai", text: WELCOME_MESSAGE }, ...loaded]);
+              setMessages(loaded);
             }
           }
         }
@@ -142,7 +141,7 @@ const Chat = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
 
   const resetChat = () => {
-    setMessages([{ sender: "ai", text: WELCOME_MESSAGE }]);
+    setMessages([]);
     setInputValue("");
     setIsThinking(false);
     setChatEnded(false);

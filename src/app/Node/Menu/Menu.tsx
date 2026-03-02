@@ -36,7 +36,7 @@ export const Menu = ({ node, isLoading, nodeId }: Props) => {
         </Link>
       </h1>
       <div className={styles.wrapper}>
-        <p className={styles.status}>{node?.isOnline ? "Online" : "Offline"}</p>
+        <p className={node?.isOnline ? styles.statusOnline : styles.statusOffline}>{node?.isOnline ? "Online" : "Offline"}</p>
         <p className={styles.plan}>Pro</p>
       </div>
       <div className={styles.controlBar}>
