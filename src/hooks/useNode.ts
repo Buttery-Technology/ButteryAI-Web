@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { GET_NODE, GET_NODE_HISTORY } from "../api";
 import type { NodeResponse, NodeHistoryEntry } from "../types/api";
 
-export function useNode(nodeId: string | undefined) {
-  const [node, setNode] = useState<NodeResponse | null>(null);
+export function useNode(nodeId: string | undefined, initialNode?: NodeResponse | null) {
+  const [node, setNode] = useState<NodeResponse | null>(initialNode ?? null);
   const [history, setHistory] = useState<NodeHistoryEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!initialNode);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

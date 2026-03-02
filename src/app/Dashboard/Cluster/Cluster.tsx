@@ -70,6 +70,7 @@ function NodeHex({ node, delay }: { node: NodeResponse; delay: string }) {
   return (
     <Link
       to={`/node/${node.id}/overview`}
+      state={{ node }}
       className={styles.hexCell}
       style={{ "--delay": delay } as React.CSSProperties}
     >
