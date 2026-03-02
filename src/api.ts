@@ -143,12 +143,12 @@ export const GET_MESSAGES = (conversationId: string) => ({
   },
 });
 
-export const CREATE_MESSAGE = (conversationId: string, content: string) => ({
+export const CREATE_MESSAGE = (conversationId: string, content: string, nodeId?: string) => ({
   url: BUTTERY_API_URL + `/conversations/${conversationId}/messages`,
   options: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, ...(nodeId ? { nodeId } : {}) }),
     ...cookieOptions,
   },
 });

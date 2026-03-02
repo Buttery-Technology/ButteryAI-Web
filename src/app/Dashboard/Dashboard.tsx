@@ -9,11 +9,16 @@ import { Settings } from "./Settings";
 const Dashboard = () => {
   const dashboard = useDashboard();
 
+  const clusterConnectionInfo =
+    dashboard.clusterStatus?.status === "online"
+      ? dashboard.clusterStatus.cluster.connectionInfo
+      : undefined;
+
   return (
     <>
       <Menu clusterStatus={dashboard.clusterStatus} />
       <Routes>
-        <Route path="/" element={<Cluster summaryCards={dashboard.summaryCards} nodes={dashboard.nodes} isLoading={dashboard.isLoading} />} />
+        <Route path="/" element={<Cluster summaryCards={dashboard.summaryCards} nodes={dashboard.nodes} isLoading={dashboard.isLoading} clusterConnectionInfo={clusterConnectionInfo} />} />
         <Route path="chat" element={<Chat />} />
         {/* <Route path="training" element={<Training />} /> */}
         <Route path="settings" element={<Settings summaryCards={dashboard.summaryCards} />} />
