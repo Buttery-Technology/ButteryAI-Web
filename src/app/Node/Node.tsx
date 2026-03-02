@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useNode } from "../../hooks/useNode";
+import type { NodeResponse } from "../../types/api";
 import { Menu } from "./Menu";
 import { New } from "./New";
 import { Overview } from "./Overview";
@@ -7,13 +8,15 @@ import { Settings } from "./Settings";
 import { Metrics } from "./Metrics";
 
 const Node = () => {
-  const { pathname } = useLocation();
-  const segments = pathname.split("/").filter(Boolean);
+  const location = useLocation();
+  const segments = location.pathname.split("/").filter(Boolean);
   // segments: ["node", nodeId, "overview"] or ["node", "new"]
   const isNewRoute = segments[1] === "new";
   const nodeId = !isNewRoute && segments[1] ? segments[1] : undefined;
 
-  const { node, history, isLoading } = useNode(nodeId);
+  // Use node data passed via router state from the dashboard (avoids re-fetch)
+  const stateNode = (location.state as { node?: NodeResponse } | null)?.node ?? null;
+  const { node, history, isLoading } = useNode(nodeId, stateNode);
 
   return (
     <>
