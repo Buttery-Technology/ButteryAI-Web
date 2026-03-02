@@ -188,3 +188,13 @@ export const REVOKE_API_KEY = (keyID: string) => ({
     ...cookieOptions,
   },
 });
+
+export const CONNECT_TO_CLUSTER = (clusterID: string) => ({
+  url: BUTTERY_API_URL + "/api-keys/connect",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ clusterID }),
+    ...cookieOptions,
+  },
+});
