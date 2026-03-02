@@ -129,6 +129,14 @@ export interface APIKeyListResponse {
   total: number;
 }
 
+// --- Cluster Connect ---
+
+export interface ConnectResponse {
+  token: string;
+  connectionInfo: NetworkInfo;
+  expiresAt: string;
+}
+
 // --- Node History (Interaction Stats) ---
 
 export type NodeHistoryType =
