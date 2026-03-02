@@ -161,3 +161,30 @@ export const GET_CLUSTER = () => ({
     ...cookieOptions,
   },
 });
+
+// API Keys
+export const LIST_API_KEYS = (clusterID?: string) => ({
+  url: BUTTERY_API_URL + "/api-keys" + (clusterID ? `?clusterID=${clusterID}` : ""),
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const CREATE_API_KEY = (name: string, clusterID: string, role: string, expiresInDays: number | null) => ({
+  url: BUTTERY_API_URL + "/api-keys",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, clusterID, role, expiresInDays }),
+    ...cookieOptions,
+  },
+});
+
+export const REVOKE_API_KEY = (keyID: string) => ({
+  url: BUTTERY_API_URL + `/api-keys/${keyID}`,
+  options: {
+    method: "DELETE",
+    ...cookieOptions,
+  },
+});

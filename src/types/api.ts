@@ -104,6 +104,31 @@ export interface MessageListResponse {
   total: number;
 }
 
+// --- API Keys ---
+
+export type APIKeyRole = "basic" | "editor" | "admin";
+
+export interface APIKeyResponse {
+  id: string;
+  name: string;
+  keyPrefix: string;
+  role: APIKeyRole;
+  clusterID: string;
+  createdAt?: string;
+  lastUsedAt?: string;
+  expiresAt?: string;
+  revokedAt?: string;
+}
+
+export interface APIKeyCreationResponse extends APIKeyResponse {
+  rawKey: string;
+}
+
+export interface APIKeyListResponse {
+  keys: APIKeyResponse[];
+  total: number;
+}
+
 // --- Node History (Interaction Stats) ---
 
 export type NodeHistoryType =

@@ -7,6 +7,7 @@ interface Props {
   nodes: NodeResponse[];
   isLoading: boolean;
   clusterConnectionInfo?: NetworkInfo;
+  clusterID?: string;
 }
 
 const FALLBACK_CARDS: SummaryCard[] = [
@@ -66,11 +67,11 @@ const MOCK_NODES: NodeResponse[] = [
   },
 ];
 
-function NodeHex({ node, delay, clusterConnectionInfo }: { node: NodeResponse; delay: string; clusterConnectionInfo?: NetworkInfo }) {
+function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: NodeResponse; delay: string; clusterConnectionInfo?: NetworkInfo; clusterID?: string }) {
   return (
     <Link
       to={`/node/${node.id}/overview`}
-      state={{ node, clusterConnectionInfo }}
+      state={{ node, clusterConnectionInfo, clusterID }}
       className={styles.hexCell}
       style={{ "--delay": delay } as React.CSSProperties}
     >
@@ -95,7 +96,7 @@ function NodeHex({ node, delay, clusterConnectionInfo }: { node: NodeResponse; d
   );
 }
 
-const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo }: Props) => {
+const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, clusterID }: Props) => {
   const cards = summaryCards.length > 0 ? summaryCards : FALLBACK_CARDS;
   const displayNodes = nodes.length > 0 ? nodes : MOCK_NODES;
 
@@ -115,14 +116,14 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo }: Prop
         {/* Row 0: offset row — up to 2 node hexes */}
         {(displayNodes[0] || displayNodes[1]) && (
           <div className={`${styles.hexRow} ${styles.offsetRow}`}>
-            {displayNodes[0] && <NodeHex node={displayNodes[0]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} />}
-            {displayNodes[1] && <NodeHex node={displayNodes[1]} delay="0.12s" clusterConnectionInfo={clusterConnectionInfo} />}
+            {displayNodes[0] && <NodeHex node={displayNodes[0]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
+            {displayNodes[1] && <NodeHex node={displayNodes[1]} delay="0.12s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
           </div>
         )}
 
         {/* Row 1: base row — node, Core, Add Node */}
         <div className={styles.hexRow}>
-          {displayNodes[2] && <NodeHex node={displayNodes[2]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} />}
+          {displayNodes[2] && <NodeHex node={displayNodes[2]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
           <div
             className={styles.hexCell}
             style={{ "--delay": "0s" } as React.CSSProperties}
@@ -154,7 +155,7 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo }: Prop
         {/* Row 2: offset row — 1 node hex */}
         {displayNodes[3] && (
           <div className={`${styles.hexRow} ${styles.offsetRow}`}>
-            <NodeHex node={displayNodes[3]} delay="0.2s" clusterConnectionInfo={clusterConnectionInfo} />
+            <NodeHex node={displayNodes[3]} delay="0.2s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />
           </div>
         )}
       </div>

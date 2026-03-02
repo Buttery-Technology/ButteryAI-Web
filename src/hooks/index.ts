@@ -2,8 +2,9 @@ import useUserContext from "./useUserContext";
 import useForm from "./useForm";
 import useTrainingAPI from "./useTrainingAPI";
 import useTrainingSSE from "./useTrainingSSE";
+import { useAPIKeys } from "./useAPIKeys";
 
-export { useForm, useUserContext, useTrainingAPI, useTrainingSSE };
+export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys };
 
 export type {
   TrainingJobStatus,
