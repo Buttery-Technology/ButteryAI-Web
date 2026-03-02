@@ -9,14 +9,14 @@ import Settings from "@assets/icons/settings.svg?react";
 import type { ClusterStatus } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Cluster" | "Chat" | /* "Training" | */ "Settings";
+type Tabs = "Dashboard" | "Chat" | /* "Training" | */ "Settings";
 
 interface Props {
   clusterStatus: ClusterStatus | null;
 }
 
 export const Menu = ({ clusterStatus }: Props) => {
-  const [tabName, setTabName] = useState<Tabs>("Cluster");
+  const [tabName, setTabName] = useState<Tabs>("Dashboard");
   const { user } = useUserContext();
 
   const isOnline = user?.isOnline ?? false;
@@ -36,8 +36,8 @@ export const Menu = ({ clusterStatus }: Props) => {
         <li>
           <NavLink
             to="/dashboard"
-            onClick={() => setTabName("Cluster")}
-            className={tabName === "Cluster" ? styles.active : ""}
+            onClick={() => setTabName("Dashboard")}
+            className={tabName === "Dashboard" ? styles.active : ""}
           >
             <Cluster />
           </NavLink>
