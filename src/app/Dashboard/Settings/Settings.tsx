@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import type { SummaryCard } from "../../../types/api";
 import styles from "./Settings.module.scss";
@@ -65,6 +66,12 @@ const Settings = ({ summaryCards }: Props) => {
     </ul>
     <strong>Extensions</strong>
     <p>...</p>
+
+    <strong>Developer</strong>
+    <p>Manage API keys for external integrations and scripts.</p>
+    <Link to="/dashboard/api-keys" className={styles.apiKeysLink}>
+      Manage API Keys &rarr;
+    </Link>
 
     <button className={styles.logoutButton} onClick={signOut}>
       Log out

@@ -61,6 +61,23 @@
   }
 }
 
+.apiKeysLink {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #288ed2;
+  background-color: #eef5fb;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #ddeaf5;
+  }
+}
+
 .logoutButton {
   display: block;
   margin-top: 64px;

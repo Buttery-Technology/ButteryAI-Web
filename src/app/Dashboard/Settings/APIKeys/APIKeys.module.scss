@@ -1,0 +1,274 @@
+.root {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-block: 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #272d31;
+  }
+}
+
+// Create form
+.createForm {
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #272d31;
+    margin-bottom: 16px;
+  }
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #637684;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input,
+  select {
+    padding: 10px 14px;
+    border: 1px solid #e2e5e9;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #272d31;
+    background-color: #fff;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #288ed2;
+    }
+  }
+}
+
+.createButton {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #288ed2;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 8px;
+
+  &:hover:not(:disabled) {
+    background-color: #2078b5;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// New key display
+.newKeyBanner {
+  background-color: #eef8ee;
+  border: 1px solid #b8e6b8;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a7a1a;
+    margin-bottom: 4px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #637684;
+    margin-bottom: 12px;
+  }
+}
+
+.keyDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  code {
+    flex: 1;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 13px;
+    background-color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #d4e8d4;
+    word-break: break-all;
+    color: #272d31;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a7a1a;
+    background-color: #d4f0d4;
+    border-radius: 99px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #b8e6b8;
+    }
+  }
+}
+
+.dismissButton {
+  margin-top: 12px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: #637684;
+  background-color: transparent;
+  border-radius: 99px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+// Keys table
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #637684;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e5e9;
+  }
+
+  td {
+    padding: 12px;
+    font-size: 14px;
+    color: #272d31;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+}
+
+.prefix {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  color: #576773;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badgeActive {
+  background-color: #e6f5ee;
+  color: #0f9b81;
+}
+
+.badgeRevoked {
+  background-color: #fce8e8;
+  color: #d12a2a;
+}
+
+.badgeExpired {
+  background-color: #fef3e2;
+  color: #b57614;
+}
+
+.revokeButton {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d12a2a;
+  background-color: #fce8e8;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5d0d0;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px;
+  color: #637684;
+  font-size: 14px;
+}
+
+.error {
+  background-color: #fce8e8;
+  color: #d12a2a;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #288ed2;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .table {
+    font-size: 12px;
+
+    th,
+    td {
+      padding: 8px;
+    }
+  }
+}

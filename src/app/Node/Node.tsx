@@ -15,9 +15,10 @@ const Node = () => {
   const nodeId = !isNewRoute && segments[1] ? segments[1] : undefined;
 
   // Use node data passed via router state from the dashboard (avoids re-fetch)
-  const routerState = location.state as { node?: NodeResponse; clusterConnectionInfo?: NetworkInfo } | null;
+  const routerState = location.state as { node?: NodeResponse; clusterConnectionInfo?: NetworkInfo; clusterID?: string } | null;
   const stateNode = routerState?.node ?? null;
   const clusterConnectionInfo = routerState?.clusterConnectionInfo;
+  const clusterID = routerState?.clusterID;
   const { node, isLoading } = useNode(nodeId, stateNode);
 
   return (
@@ -28,9 +29,9 @@ const Node = () => {
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="new" element={<New />} />
         {/* Routes with nodeId */}
-        <Route path="overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} />} />
+        <Route path="overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path=":nodeId" element={<Navigate to="overview" replace />} />
-        <Route path=":nodeId/overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} />} />
+        <Route path=":nodeId/overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path=":nodeId/settings" element={<Settings node={node} />} />
         {/* <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
