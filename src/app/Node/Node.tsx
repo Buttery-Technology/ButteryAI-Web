@@ -5,7 +5,7 @@ import { Menu } from "./Menu";
 import { New } from "./New";
 import { Overview } from "./Overview";
 import { Settings } from "./Settings";
-import { Metrics } from "./Metrics";
+// import { Metrics } from "./Metrics";
 
 const Node = () => {
   const location = useLocation();
@@ -32,7 +32,7 @@ const Node = () => {
         <Route path=":nodeId" element={<Navigate to="overview" replace />} />
         <Route path=":nodeId/overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} />} />
         <Route path=":nodeId/settings" element={<Settings node={node} />} />
-        <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} />
+        {/* <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>
   );

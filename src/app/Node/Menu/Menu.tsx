@@ -7,11 +7,11 @@ import Diagnostics from "@assets/icons/diagnostics.svg?react";
 import Share from "@assets/icons/share.svg?react";
 import Cluster from "@assets/icons/cluster.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
-import Metrics from "@assets/icons/metrics.svg?react";
+// import Metrics from "@assets/icons/metrics.svg?react";
 import type { NodeResponse } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Overview" | "Settings" | "Metrics";
+type Tabs = "Overview" | "Settings";
 
 interface Props {
   node: NodeResponse | null;
@@ -69,7 +69,7 @@ export const Menu = ({ node, isLoading, nodeId }: Props) => {
             <Settings />
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink
             to={`${basePath}/metrics`}
             onClick={() => setTabName("Metrics")}
@@ -77,7 +77,7 @@ export const Menu = ({ node, isLoading, nodeId }: Props) => {
           >
             <Metrics />
           </NavLink>
-        </li>
+        </li> */}
       </ul>
       <p className={styles.tabName}>{tabName}</p>
     </header>
