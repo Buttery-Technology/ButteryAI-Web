@@ -8,6 +8,7 @@ import { WaitingList } from "./app/WaitingList";
 import { ProtectedRoute } from "./app/Helper/ProtectedRoute";
 import { Dashboard } from "./app/Dashboard";
 import { Node } from "./app/Node";
+import { Setup } from "./app/Setup";
 
 import "./App.scss";
 
@@ -30,6 +31,14 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/waiting-list" element={<WaitingList />} />
             <Route path="/login" element={<Login />} />
+            <Route
+              path="/setup/*"
+              element={
+                <ProtectedRoute>
+                  <Setup />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard/*"
               element={

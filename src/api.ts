@@ -44,6 +44,23 @@ export const GET_CURRENT_USER = () => ({
   },
 });
 
+// Update Profile
+export const UPDATE_PROFILE = (data: {
+  name: string;
+  country: string;
+  industry?: string;
+  purpose?: string;
+  profileImageURL?: string;
+}) => ({
+  url: BUTTERY_API_URL + "/users",
+  options: {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
 // Logout
 export const LOGOUT = () => ({
   url: BUTTERY_API_URL + "/sso/logout",
