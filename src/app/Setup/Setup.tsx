@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import { UPDATE_PROFILE } from "../../api";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
+import { COUNTRIES } from "./countries";
 import styles from "./Setup.module.scss";
 
 type Step = "profile" | "cluster";
@@ -14,12 +15,20 @@ const Setup = () => {
   const [step, setStep] = useState<Step>("profile");
   const [name, setName] = useState(user?.name ?? "");
   const [country, setCountry] = useState("");
+  const [countrySearch, setCountrySearch] = useState("");
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [industry, setIndustry] = useState("");
   const [purpose, setPurpose] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canContinue = name.trim().length > 0 && country.trim().length > 0;
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return COUNTRIES;
+    const term = countrySearch.toLowerCase();
+    return COUNTRIES.filter((c) => c.toLowerCase().includes(term));
+  }, [countrySearch]);
+
+  const canContinue = name.trim().length > 0 && country.length > 0;
 
   async function handleProfileSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,7 +69,9 @@ const Setup = () => {
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
+          <Link to="/" className={styles.logoLink}>
+            <img src={butteryaiLogo} alt="ButteryAI" />
+          </Link>
           <h1 className={styles.clusterHeading}>
             Almost there!
           </h1>
@@ -97,7 +108,9 @@ const Setup = () => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
+        <Link to="/" className={styles.logoLink}>
+          <img src={butteryaiLogo} alt="ButteryAI" />
+        </Link>
 
         {user?.profileImageURL ? (
           <div className={styles.profileImageWrapper}>
@@ -139,13 +152,55 @@ const Setup = () => {
             <label className={styles.label}>
               Country<span className={styles.required}>*</span>
             </label>
-            <input
-              type="text"
-              className={styles.input}
-              placeholder="Your country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            />
+            <div className={styles.selectWrapper}>
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="Search for a country"
+                value={country || countrySearch}
+                onChange={(e) => {
+                  setCountrySearch(e.target.value);
+                  setCountry("");
+                  setShowCountryDropdown(true);
+                }}
+                onFocus={() => setShowCountryDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => {
+                    setShowCountryDropdown(false);
+                    if (!country && countrySearch.trim()) {
+                      const match = COUNTRIES.find(
+                        (c) => c.toLowerCase() === countrySearch.trim().toLowerCase(),
+                      );
+                      if (match) {
+                        setCountry(match);
+                        setCountrySearch("");
+                      } else {
+                        setCountrySearch("");
+                      }
+                    }
+                  }, 150);
+                }}
+              />
+              {showCountryDropdown && filteredCountries.length > 0 && (
+                <ul className={styles.dropdown}>
+                  {filteredCountries.map((c) => (
+                    <li key={c}>
+                      <button
+                        type="button"
+                        className={styles.dropdownItem}
+                        onMouseDown={() => {
+                          setCountry(c);
+                          setCountrySearch("");
+                          setShowCountryDropdown(false);
+                        }}
+                      >
+                        {c}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
 
           <div className={styles.field}>
