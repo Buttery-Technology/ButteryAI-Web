@@ -10,6 +10,8 @@ type ButteryUser = {
   systemAccessLevel: string;
   isOnline: boolean;
   plan?: string;
+  needsOnboarding?: boolean;
+  profileImageURL?: string;
 };
 
 type TUserContext = {
@@ -21,6 +23,7 @@ type TUserContext = {
   signIn: (email: string, password: string) => void;
   signInWithGoogle: () => void;
   signOut: () => void;
+  refreshUser: () => Promise<void>;
 };
 
 export const UserContext = createContext<TUserContext | null>(null);
@@ -115,6 +118,20 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function refreshUser() {
+    try {
+      const { url, options } = GET_CURRENT_USER();
+      const response = await fetch(url, options);
+      if (!response.ok) throw new Error("Not authenticated");
+      const userData = await response.json();
+      setUser(userData);
+      setIsUserSignedIn(true);
+    } catch {
+      setUser(null);
+      setIsUserSignedIn(false);
+    }
+  }
+
   function signInWithGoogle() {
     window.location.href = BUTTERY_API_URL + "/sso/google/authorize";
   }
@@ -145,6 +162,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         signIn,
         signInWithGoogle,
         signOut,
+        refreshUser,
       }}
     >
       {children}
