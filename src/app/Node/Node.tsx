@@ -29,10 +29,10 @@ const Node = () => {
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="new" element={<New />} />
         {/* Routes with nodeId */}
-        <Route path="overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
+        <Route path="overview" element={<Overview node={node} clusterID={clusterID} />} />
         <Route path=":nodeId" element={<Navigate to="overview" replace />} />
-        <Route path=":nodeId/overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
-        <Route path=":nodeId/settings" element={<Settings />} />
+        <Route path=":nodeId/overview" element={<Overview node={node} clusterID={clusterID} />} />
+        <Route path=":nodeId/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         {/* <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>
