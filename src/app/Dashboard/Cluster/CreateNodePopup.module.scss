@@ -1,0 +1,571 @@
+@use "@mixins" as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.popup {
+  z-index: 101;
+}
+
+// ---- Compact view ----
+.compact {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 960px;
+  max-width: 90vw;
+  background: white;
+  border-radius: 60px;
+  box-shadow: 2px 6px 10px 1px rgba(0, 0, 0, 0.15);
+  animation: popIn 0.25s cubic-bezier(0.2, 1, 0.2, 1.4);
+}
+
+.compactInner {
+  padding: 30px;
+}
+
+.compactHeader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include scaleAnimation;
+}
+
+.compactTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  text-align: center;
+  color: #272d31;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include scaleAnimation;
+}
+
+.compactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.compactInputWrapper {
+  display: flex;
+  align-items: center;
+  background: #ededed;
+  border: 1px solid #f7f7f7;
+  border-radius: 30px;
+  height: 56px;
+  padding: 0 10px 0 26px;
+}
+
+.compactInput {
+  flex: 1;
+  font-size: 18px;
+  background: none;
+  border: none;
+  outline: none;
+  color: #272d31;
+
+  &::placeholder {
+    color: #637684;
+  }
+}
+
+.compactSubmit {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &.active {
+    background: #288ed2;
+  }
+}
+
+.compactHint {
+  font-size: 14px;
+  color: #545b69;
+  padding-left: 26px;
+}
+
+.error {
+  color: #d12a89;
+  font-size: 14px;
+  padding-left: 26px;
+}
+
+// ---- Expanded view ----
+.expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1100px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 60px;
+  box-shadow: 2px 6px 10px 1px rgba(0, 0, 0, 0.25);
+  animation: expandIn 0.35s cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+.expandedInner {
+  padding: 40px 200px 60px;
+  position: relative;
+}
+
+.expandedHeader {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.expandedTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 64px;
+  text-align: center;
+  color: #272d31;
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.expandedHeader .closeBtn,
+.expandedHeader .backBtn {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 1;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include scaleAnimation;
+}
+
+.expandedForm {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 20px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.expandedInput {
+  font-size: 18px;
+  background: #ededed;
+  border: 1px solid #f7f7f7;
+  border-radius: 30px;
+  height: 56px;
+  padding: 0 26px;
+  color: #272d31;
+  outline: none;
+  width: 100%;
+
+  &::placeholder {
+    color: #8d8d8d;
+  }
+}
+
+.keywordsInputWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: #ededed;
+  border: 1px solid #f7f7f7;
+  border-radius: 30px;
+  min-height: 56px;
+  padding: 10px 20px;
+}
+
+.keyword {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #272d31;
+  background: white;
+  border-radius: 30px;
+  padding: 6px 14px;
+  line-height: 24px;
+  letter-spacing: 0.16px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #ffd74d;
+  }
+}
+
+.keywordRemove {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.keywordInput {
+  flex: 1;
+  min-width: 120px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  outline: none;
+  color: #272d31;
+  padding: 4px 0;
+
+  &::placeholder {
+    color: #637684;
+  }
+}
+
+.expandedActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.skipBtn {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  color: #637684;
+  @include scaleAnimation;
+}
+
+.continueBtn {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  color: white;
+  background: #288ed2;
+  border-radius: 830px;
+  padding: 18px 48px;
+  @include scaleAnimation;
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+// ---- Model picker (Step 2) ----
+.loadingText,
+.emptyText {
+  text-align: center;
+  color: #637684;
+  font-size: 16px;
+}
+
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.modelCard {
+  background: #f7f7f7;
+  border-radius: 30px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modelCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modelProvider {
+  font-weight: 700;
+  font-size: 16px;
+  color: #545b69;
+}
+
+.modelName {
+  font-weight: 700;
+  font-size: 26px;
+  color: #637684;
+}
+
+.modelStats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.modelStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modelStatLabel {
+  font-size: 16px;
+  color: #8d8d8d;
+}
+
+.modelStatValue {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  color: #272d31;
+}
+
+.modelStatValueGradient {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  background: linear-gradient(139deg, #288ed2 0%, #d12a89 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.modelStatValueYellow {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  color: #ffb500;
+}
+
+.modelStatValuePink {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  color: #d12a89;
+}
+
+.modelCardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.modelCustomizeBtn {
+  font-weight: 700;
+  font-size: 18px;
+  color: #272d31;
+  padding: 13px 31px;
+  border-radius: 830px;
+  @include scaleAnimation;
+}
+
+.modelContinueBtn {
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  background: rgba(204, 204, 204, 0.8);
+  padding: 13px 31px;
+  border-radius: 830px;
+  @include scaleAnimation;
+
+  &:hover {
+    background: #288ed2;
+  }
+}
+
+// ---- Extension setup (Step 2b) ----
+.extensionSubtitle {
+  text-align: center;
+  font-size: 18px;
+  color: #272d31;
+  margin-top: -32px;
+  margin-bottom: 32px;
+}
+
+.extensionProviderHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.extensionProviderName {
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+}
+
+.extensionField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.extensionLabel {
+  font-size: 16px;
+  color: #000;
+}
+
+.required {
+  color: #d12a89;
+}
+
+.extensionHint {
+  font-size: 14px;
+  color: #272d31;
+  line-height: 1.3;
+  margin-bottom: 4px;
+
+  em {
+    font-style: italic;
+  }
+}
+
+// ---- Knowledge & Training (Step 3) ----
+.knowledgeDescription {
+  font-size: 16px;
+  color: #272d31;
+  line-height: 1.5;
+  margin-top: -32px;
+  margin-bottom: 24px;
+  max-width: 633px;
+}
+
+.knowledgeFile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f7f7;
+  border-radius: 30px;
+  padding: 20px 30px;
+}
+
+.knowledgeFileInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  color: #000;
+}
+
+.knowledgeFileRemove {
+  @include scaleAnimation;
+  flex-shrink: 0;
+}
+
+// ---- Animations ----
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+// ---- Responsive ----
+@media (max-width: 1024px) {
+  .expandedInner {
+    padding: 40px 60px 60px;
+  }
+
+  .expandedTitle {
+    font-size: 48px;
+  }
+
+  .modelGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .compact {
+    border-radius: 30px;
+  }
+
+  .compactInner {
+    padding: 20px;
+  }
+
+  .compactTitle {
+    font-size: 32px;
+  }
+
+  .compactInput {
+    font-size: 16px;
+  }
+
+  .expanded {
+    border-radius: 30px;
+    max-width: 96vw;
+  }
+
+  .expandedInner {
+    padding: 24px 24px 40px;
+  }
+
+  .expandedTitle {
+    font-size: 36px;
+  }
+
+  .fieldLabel {
+    font-size: 18px;
+  }
+
+  .expandedInput {
+    font-size: 16px;
+    height: 48px;
+  }
+
+  .continueBtn {
+    padding: 14px 32px;
+    font-size: 16px;
+  }
+
+  .modelName {
+    font-size: 20px;
+  }
+
+  .modelCardActions {
+    flex-direction: column;
+  }
+}

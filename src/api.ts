@@ -206,12 +206,64 @@ export const REVOKE_API_KEY = (keyID: string) => ({
   },
 });
 
+export const REDEEM_CLUSTER_INVITE = (code: string) => ({
+  url: BUTTERY_API_URL + "/clusters/redeem-invite",
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
+    ...cookieOptions,
+  },
+});
+
 export const CONNECT_TO_CLUSTER = (clusterID: string) => ({
   url: BUTTERY_API_URL + "/api-keys/connect",
   options: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ clusterID }),
+    ...cookieOptions,
+  },
+});
+
+// AI Models
+export const GET_AI_MODELS = (search?: string) => ({
+  url: BUTTERY_API_URL + "/ai-models" + (search ? `?search=${encodeURIComponent(search)}` : ""),
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+// User Extension Configs
+export const GET_USER_EXTENSION_CONFIGS = () => ({
+  url: BUTTERY_API_URL + "/user-extension-configs",
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const GET_USER_EXTENSION_CONFIG = (provider: string) => ({
+  url: BUTTERY_API_URL + `/user-extension-configs/${provider}`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const SAVE_USER_EXTENSION_CONFIG = (data: {
+  provider: string;
+  apiKey?: string;
+  organizationID?: string;
+  projectID?: string;
+  adminKey?: string;
+}) => ({
+  url: BUTTERY_API_URL + "/user-extension-configs",
+  options: {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
     ...cookieOptions,
   },
 });

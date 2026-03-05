@@ -32,7 +32,7 @@ const Node = () => {
         <Route path="overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path=":nodeId" element={<Navigate to="overview" replace />} />
         <Route path=":nodeId/overview" element={<Overview node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
-        <Route path=":nodeId/settings" element={<Settings node={node} />} />
+        <Route path=":nodeId/settings" element={<Settings />} />
         {/* <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>

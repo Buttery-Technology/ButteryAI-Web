@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { SummaryCard, NodeResponse, NetworkInfo } from "../../../types/api";
+import CreateNodePopup from "./CreateNodePopup";
 import styles from "./Cluster.module.scss";
 
 interface Props {
@@ -99,6 +101,7 @@ function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: Node
 const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, clusterID }: Props) => {
   const cards = summaryCards.length > 0 ? summaryCards : FALLBACK_CARDS;
   const displayNodes = nodes.length > 0 ? nodes : MOCK_NODES;
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
 
   return (
     <section className={styles.root}>
@@ -135,8 +138,8 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
               <span className={styles.coreName}>Core</span>
             </div>
           </div>
-          <Link
-            to="/node/new"
+          <div
+            onClick={() => setShowCreatePopup(true)}
             className={`${styles.hexCell} ${styles.addNode}`}
             style={{ "--delay": "0.14s" } as React.CSSProperties}
           >
@@ -149,7 +152,7 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
                 <line x1="5" y1="12" x2="19" y2="12" stroke="#9BA3AB" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
-          </Link>
+          </div>
         </div>
 
         {/* Row 2: offset row — 1 node hex */}
@@ -160,6 +163,10 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
         )}
       </div>
 
+      <CreateNodePopup
+        isOpen={showCreatePopup}
+        onClose={() => setShowCreatePopup(false)}
+      />
     </section>
   );
 };
