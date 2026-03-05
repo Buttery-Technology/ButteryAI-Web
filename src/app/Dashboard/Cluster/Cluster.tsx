@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { SummaryCard, NodeResponse, NetworkInfo } from "../../../types/api";
 import CreateNodePopup from "./CreateNodePopup";
@@ -22,52 +22,6 @@ const FALLBACK_CARDS: SummaryCard[] = [
 const HEX_PATH =
   "M273 22 L427 112 Q468 135 468 180 L468 360 Q468 405 427 428 L273 518 Q234 540 195 518 L41 428 Q0 405 0 360 L0 180 Q0 135 41 112 L195 22 Q234 0 273 22 Z";
 
-const MOCK_NODES: NodeResponse[] = [
-  {
-    id: "1",
-    name: "chatGPT 4-o mini",
-    isOnline: true,
-    grade: {
-      overallScore: { value: 92, status: "defined" },
-      trust: { value: 88, status: "defined" },
-      bias: { value: 15, status: "defined" },
-      accuracy: { value: 95, status: "defined" },
-    },
-  },
-  {
-    id: "2",
-    name: "Meta Llama",
-    isOnline: false,
-    grade: {
-      overallScore: { value: 85, status: "defined" },
-      trust: { value: 82, status: "defined" },
-      bias: { value: 20, status: "defined" },
-      accuracy: { value: 88, status: "defined" },
-    },
-  },
-  {
-    id: "3",
-    name: "MediScan AI",
-    isOnline: true,
-    grade: {
-      overallScore: { value: 94, status: "defined" },
-      trust: { value: 91, status: "defined" },
-      bias: { value: 10, status: "defined" },
-      accuracy: { value: 97, status: "defined" },
-    },
-  },
-  {
-    id: "4",
-    name: "Dr. Oracle",
-    isOnline: true,
-    grade: {
-      overallScore: { value: 89, status: "defined" },
-      trust: { value: 86, status: "defined" },
-      bias: { value: 18, status: "defined" },
-      accuracy: { value: 92, status: "defined" },
-    },
-  },
-];
 
 function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: NodeResponse; delay: string; clusterConnectionInfo?: NetworkInfo; clusterID?: string }) {
   return (
@@ -100,12 +54,70 @@ function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: Node
 
 type SheetTarget = "createNode" | "createCluster" | "joinCluster" | "addKnowledge";
 
+/**
+ * Distribute nodes into three honeycomb rows.
+ *
+ * Nodes fill from the top-right, across the top, then wrap around Core
+ * tightly before extending left in columns:
+ *
+ *   0 → T0 (top-right, above Core/Add gap)
+ *   1 → T1 (top, above M1/Core gap — adjacent to T0)
+ *   2 → M1 (left of Core — adjacent to T1)
+ *   3 → B0 (bottom-right — adjacent to Core)
+ *   4 → B1 (bottom, below M1/Core gap — adjacent to M1)
+ *   5+ → columns extending left: top, mid, bottom per column
+ *
+ *           [T2] [T1] [T0]
+ *     [M2]  [M1] [Core] [Add]
+ *           [B2] [B1] [B0]
+ *
+ * Returns arrays in render order (leftmost first).
+ */
+function distributeNodes(nodes: NodeResponse[]) {
+  const top: NodeResponse[] = [];
+  const mid: NodeResponse[] = [];
+  const bot: NodeResponse[] = [];
+
+  nodes.forEach((node, i) => {
+    if (i === 0) top.push(node);       // T0
+    else if (i === 1) top.push(node);  // T1 — adjacent to T0
+    else if (i === 2) mid.push(node);  // M1 — adjacent to T1
+    else if (i === 3) bot.push(node);  // B0 — adjacent to Core
+    else if (i === 4) bot.push(node);  // B1 — adjacent to M1 & B0
+    else {
+      const pos = (i - 5) % 3;
+      if (pos === 0) top.push(node);   // T(n)
+      else if (pos === 1) mid.push(node); // M(n)
+      else bot.push(node);              // B(n)
+    }
+  });
+
+  return {
+    topRow: top.reverse(),
+    midRow: mid.reverse(),
+    botRow: bot.reverse(),
+  };
+}
+
 const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, clusterID }: Props) => {
   const cards = summaryCards.length > 0 ? summaryCards : FALLBACK_CARDS;
-  const displayNodes = nodes.length > 0 ? nodes : MOCK_NODES;
+  const displayNodes = nodes;
   const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [activeSheet, setActiveSheet] = useState<SheetTarget | null>(null);
   const navigate = useNavigate();
+  const clusterRef = useRef<HTMLDivElement>(null);
+
+  const { topRow, midRow, botRow } = distributeNodes(displayNodes);
+
+  // Center the cluster in the viewport on mount / when nodes change.
+  useEffect(() => {
+    const el = clusterRef.current;
+    if (!el) return;
+    const overflow = el.scrollWidth - el.clientWidth;
+    if (overflow > 0) {
+      el.scrollLeft = overflow; // nodes extend left, so scroll right to keep Core visible
+    }
+  }, [nodes.length]);
 
   const handleCardClick = useCallback((card: SummaryCard) => {
     switch (card.actionType) {
@@ -139,52 +151,59 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
         ))}
       </ul>
 
-      <div className={styles.cluster}>
-        {/* Row 0: offset row — up to 2 node hexes */}
-        {(displayNodes[0] || displayNodes[1]) && (
-          <div className={`${styles.hexRow} ${styles.offsetRow}`}>
-            {displayNodes[0] && <NodeHex node={displayNodes[0]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
-            {displayNodes[1] && <NodeHex node={displayNodes[1]} delay="0.12s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
-          </div>
-        )}
-
-        {/* Row 1: base row — node, Core, Add Node */}
-        <div className={styles.hexRow}>
-          {displayNodes[2] && <NodeHex node={displayNodes[2]} delay="0.1s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />}
-          <div
-            className={styles.hexCell}
-            style={{ "--delay": "0s" } as React.CSSProperties}
-          >
-            <svg viewBox="0 0 468 540" className={styles.hexBg}>
-              <path d={HEX_PATH} fill="#F9C000" />
-            </svg>
-            <div className={styles.hexContent}>
-              <span className={styles.coreName}>Core</span>
+      <div className={styles.cluster} ref={clusterRef}>
+        <div className={styles.clusterInner}>
+          {/* Top offset row */}
+          {topRow.length > 0 && (
+            <div className={`${styles.hexRow} ${styles.offsetRow}`}>
+              {topRow.map((node, i) => (
+                <NodeHex key={node.id} node={node} delay={`${0.06 + i * 0.04}s`} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />
+              ))}
             </div>
-          </div>
-          <div
-            onClick={() => setShowCreatePopup(true)}
-            className={`${styles.hexCell} ${styles.addNode}`}
-            style={{ "--delay": "0.14s" } as React.CSSProperties}
-          >
-            <svg viewBox="0 0 468 540" className={styles.hexBg}>
-              <path d={HEX_PATH} fill="#D4D8DC" />
-            </svg>
-            <div className={styles.hexContent}>
-              <svg className={styles.plusIcon} viewBox="0 0 24 24" fill="none">
-                <line x1="12" y1="5" x2="12" y2="19" stroke="#9BA3AB" strokeWidth="2.5" strokeLinecap="round" />
-                <line x1="5" y1="12" x2="19" y2="12" stroke="#9BA3AB" strokeWidth="2.5" strokeLinecap="round" />
+          )}
+
+          {/* Middle row: [...nodes] [Core] [Add Node] */}
+          <div className={styles.hexRow}>
+            {midRow.map((node, i) => (
+              <NodeHex key={node.id} node={node} delay={`${0.06 + i * 0.04}s`} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />
+            ))}
+            <div
+              className={styles.hexCell}
+              style={{ "--delay": "0s" } as React.CSSProperties}
+            >
+              <svg viewBox="0 0 468 540" className={styles.hexBg}>
+                <path d={HEX_PATH} fill="#F9C000" />
               </svg>
+              <div className={styles.hexContent}>
+                <span className={styles.coreName}>Core</span>
+              </div>
+            </div>
+            <div
+              onClick={() => setShowCreatePopup(true)}
+              className={`${styles.hexCell} ${styles.addNode}`}
+              style={{ "--delay": "0.14s" } as React.CSSProperties}
+            >
+              <svg viewBox="0 0 468 540" className={styles.hexBg}>
+                <path d={HEX_PATH} fill="#D4D8DC" />
+              </svg>
+              <div className={styles.hexContent}>
+                <svg className={styles.plusIcon} viewBox="0 0 24 24" fill="none">
+                  <line x1="12" y1="5" x2="12" y2="19" stroke="#9BA3AB" strokeWidth="2.5" strokeLinecap="round" />
+                  <line x1="5" y1="12" x2="19" y2="12" stroke="#9BA3AB" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Row 2: offset row — 1 node hex */}
-        {displayNodes[3] && (
-          <div className={`${styles.hexRow} ${styles.offsetRow}`}>
-            <NodeHex node={displayNodes[3]} delay="0.2s" clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />
-          </div>
-        )}
+          {/* Bottom offset row */}
+          {botRow.length > 0 && (
+            <div className={`${styles.hexRow} ${styles.offsetRow}`}>
+              {botRow.map((node, i) => (
+                <NodeHex key={node.id} node={node} delay={`${0.06 + i * 0.04}s`} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <CreateNodePopup

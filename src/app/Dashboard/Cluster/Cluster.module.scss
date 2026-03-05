@@ -90,17 +90,28 @@ $hex-offset: 112px; // ~(hex-w + hex-gap) / 2
 $hex-overlap: 50px; // vertical overlap for honeycomb rows
 
 .cluster {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 40px auto;
+  max-width: 100%;
+  // Hide scrollbar but keep scrollable
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.clusterInner {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   width: fit-content;
-  margin: 40px auto;
+  margin-inline: auto;
 }
 
 .hexRow {
   display: flex;
   gap: $hex-gap;
   margin-top: -$hex-overlap;
+  justify-content: flex-end;
 
   &:first-child {
     margin-top: 0;
@@ -108,7 +119,8 @@ $hex-overlap: 50px; // vertical overlap for honeycomb rows
 }
 
 .offsetRow {
-  margin-left: $hex-offset;
+  // Shift right by half a hex+gap to create honeycomb interlock.
+  padding-right: $hex-offset;
 }
 
 .hexCell {
@@ -255,7 +267,7 @@ $hex-overlap: 50px; // vertical overlap for honeycomb rows
   }
 
   .offsetRow {
-    margin-left: 80px;
+    padding-right: 80px;
   }
 
   .hexName {
@@ -307,7 +319,7 @@ $hex-overlap: 50px; // vertical overlap for honeycomb rows
   }
 
   .offsetRow {
-    margin-left: 54px;
+    padding-right: 54px;
   }
 
   .hexName {

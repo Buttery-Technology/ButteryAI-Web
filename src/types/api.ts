@@ -58,10 +58,28 @@ export interface ClusterResponse {
   connectionInfo?: NetworkInfo;
 }
 
+// Swift default enum encoding: { "online": { "_0": { ... } } } | { "offline": {} } | { "underConstruction": { "_0": "msg" } }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RawClusterStatus = any;
+
 export type ClusterStatus =
   | { status: "online"; cluster: ClusterResponse }
   | { status: "offline" }
   | { status: "underConstruction"; message: string };
+
+export function parseClusterStatus(raw: RawClusterStatus): ClusterStatus {
+  if (!raw || raw === "offline") return { status: "offline" };
+  if ("online" in raw) {
+    // Swift wraps associated values in "_0"
+    const cluster = raw.online?._0 ?? raw.online;
+    return { status: "online", cluster };
+  }
+  if ("underConstruction" in raw) {
+    const message = raw.underConstruction?._0 ?? raw.underConstruction;
+    return { status: "underConstruction", message };
+  }
+  return { status: "offline" };
+}
 
 export interface DashboardResponse {
   summaryCards: SummaryCard[];
