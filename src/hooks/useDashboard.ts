@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GET_DASHBOARD } from "../api";
-import type { DashboardResponse, SummaryCard, ClusterStatus, NodeResponse } from "../types/api";
+import type { SummaryCard, ClusterStatus, NodeResponse, RawClusterStatus } from "../types/api";
+import { parseClusterStatus } from "../types/api";
 
 export function useDashboard() {
   const [summaryCards, setSummaryCards] = useState<SummaryCard[]>([]);
@@ -20,12 +21,16 @@ export function useDashboard() {
       const response = await fetch(url, options);
       if (!response.ok) throw new Error("Failed to fetch dashboard");
 
-      const data: DashboardResponse = await response.json();
-      setSummaryCards(data.summaryCards.sort((a, b) => a.order - b.order));
-      setClusterStatus(data.clusterStatus);
+      const data = await response.json();
+      setSummaryCards((data.summaryCards ?? []).sort((a: SummaryCard, b: SummaryCard) => a.order - b.order));
 
-      if (data.clusterStatus.status === "online") {
-        setNodes(data.clusterStatus.cluster.nodes);
+      if (data.clusterStatus) {
+        const parsed = parseClusterStatus(data.clusterStatus as RawClusterStatus);
+        setClusterStatus(parsed);
+
+        if (parsed.status === "online") {
+          setNodes(parsed.cluster.nodes);
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load dashboard");
