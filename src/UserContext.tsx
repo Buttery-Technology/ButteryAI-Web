@@ -12,6 +12,8 @@ type ButteryUser = {
   plan?: string;
   needsOnboarding?: boolean;
   profileImageURL?: string;
+  hasCluster?: boolean;
+  clusterID?: string;
 };
 
 type TUserContext = {
