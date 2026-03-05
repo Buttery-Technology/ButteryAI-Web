@@ -6,28 +6,23 @@ import Cluster from "@assets/icons/cluster.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
 // import Metrics from "@assets/icons/metrics.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
-import type { ClusterStatus } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
 type Tabs = "Dashboard" | "Chat" | /* "Training" | */ "Settings";
 
-interface Props {
-  clusterStatus: ClusterStatus | null;
-}
-
-export const Menu = ({ clusterStatus }: Props) => {
+export const Menu = () => {
   const [tabName, setTabName] = useState<Tabs>("Dashboard");
   const { user } = useUserContext();
 
   const isOnline = user?.isOnline ?? false;
-  const clusterName = clusterStatus?.status === "online" ? clusterStatus.cluster.name : null;
+  const firstName = user?.name?.split(" ")[0];
 
   return (
     <header className={styles.root}>
       <Link to="/dashboard" className={styles.link}>
         <img src={butteryaiLogo} alt="ButteryAI" />
       </Link>
-      <h1 className={styles.title}>{clusterName ?? "ButteryAI"}</h1>
+      <h1 className={styles.title}>{firstName ? `Hi, ${firstName}` : "ButteryAI"}</h1>
       <div className={styles.wrapper}>
         <p className={styles.status}>{isOnline ? "Online" : "Offline"}</p>
         <p className={styles.plan}>{user?.plan ?? "Pro"}</p>

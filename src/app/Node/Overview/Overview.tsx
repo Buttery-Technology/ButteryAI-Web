@@ -1,30 +1,22 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { CREATE_CONVERSATION, CREATE_MESSAGE, GET_CONVERSATIONS, GET_MESSAGES } from "../../../api";
-import { useAPIKeys, useClusterConnection } from "@hooks";
+import { useClusterConnection } from "@hooks";
 import { Messages } from "../../Dashboard/Chat/Messages";
 import { type Message } from "../../Dashboard/Chat/Chat";
 import { typewriterEffect } from "../../Dashboard/Chat/utils";
 import Send from "@assets/icons/send.svg?react";
-import type { NodeResponse, NetworkInfo, APIKeyRole } from "../../../types/api";
+import type { NodeResponse } from "../../../types/api";
 import { FinishSetup } from "../FinishSetup";
 import styles from "./Overview.module.scss";
 
 interface Props {
   node: NodeResponse | null;
-  clusterConnectionInfo?: NetworkInfo;
   clusterID?: string;
 }
 
 const ERROR_MESSAGE = "Sorry, I'm having trouble reaching this node.";
 
-const EXPIRATION_OPTIONS = [
-  { label: "30 days", value: 30 },
-  { label: "90 days", value: 90 },
-  { label: "1 year", value: 365 },
-  { label: "Never", value: null },
-] as const;
-
-const Overview = ({ node, clusterConnectionInfo, clusterID }: Props) => {
+const Overview = ({ node, clusterID }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -33,13 +25,6 @@ const Overview = ({ node, clusterConnectionInfo, clusterID }: Props) => {
 
   // Direct cluster connection via ConnectRPC — connects eagerly on mount
   const { sendQuery, isConnected: clusterConnected } = useClusterConnection(clusterID);
-
-  // Quick-generate API key state
-  const { newKey, createKey, clearNewKey } = useAPIKeys();
-  const [showKeyForm, setShowKeyForm] = useState(false);
-  const [keyName, setKeyName] = useState("");
-  const [keyExpiration, setKeyExpiration] = useState<number | null>(90);
-  const [keyCopied, setKeyCopied] = useState(false);
 
   // Load existing conversation on mount
   useEffect(() => {
@@ -170,83 +155,11 @@ const Overview = ({ node, clusterConnectionInfo, clusterID }: Props) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
 
-  const handleGenerateKey = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!keyName.trim() || !clusterID) return;
-    const result = await createKey(keyName.trim(), clusterID, "basic" as APIKeyRole, keyExpiration);
-    if (result) {
-      setKeyName("");
-      setKeyExpiration(90);
-      setShowKeyForm(false);
-    }
-  };
-
-  const handleCopyKey = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    setKeyCopied(true);
-    setTimeout(() => setKeyCopied(false), 2000);
-  };
-
-  const endpoint = clusterConnectionInfo
-    ? `${clusterConnectionInfo.ipAddress}:${clusterConnectionInfo.port}`
-    : null;
-
   const needsSetup = node?.grade?.overallScore?.status === "undefined";
 
   return (
     <section className={styles.root}>
       {needsSetup && node && <FinishSetup nodeId={node.id} />}
-
-      {endpoint && (
-        <p className={styles.endpoint}>
-          Cluster endpoint: <code>{endpoint}</code>
-        </p>
-      )}
-
-      {clusterID && (
-        <div className={styles.apiKeySection}>
-          {newKey ? (
-            <div className={styles.newKeyDisplay}>
-              <p className={styles.keyWarning}>Copy this key now. It will not be shown again.</p>
-              <div className={styles.keyRow}>
-                <code className={styles.keyCode}>{newKey.rawKey}</code>
-                <button className={styles.copyButton} onClick={() => handleCopyKey(newKey.rawKey)}>
-                  {keyCopied ? "Copied" : "Copy"}
-                </button>
-              </div>
-              <button className={styles.dismissKeyButton} onClick={clearNewKey}>Dismiss</button>
-            </div>
-          ) : showKeyForm ? (
-            <form className={styles.keyForm} onSubmit={handleGenerateKey}>
-              <input
-                type="text"
-                placeholder="Key name (e.g. CI Pipeline)"
-                value={keyName}
-                onChange={(e) => setKeyName(e.target.value)}
-                required
-                className={styles.keyInput}
-              />
-              <select
-                value={keyExpiration === null ? "never" : String(keyExpiration)}
-                onChange={(e) => setKeyExpiration(e.target.value === "never" ? null : Number(e.target.value))}
-                className={styles.keySelect}
-              >
-                {EXPIRATION_OPTIONS.map((opt) => (
-                  <option key={opt.label} value={opt.value === null ? "never" : opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <button type="submit" className={styles.generateButton} disabled={!keyName.trim()}>Generate</button>
-              <button type="button" className={styles.cancelButton} onClick={() => setShowKeyForm(false)}>Cancel</button>
-            </form>
-          ) : (
-            <button className={styles.generateApiKeyButton} onClick={() => setShowKeyForm(true)}>
-              Generate API Key
-            </button>
-          )}
-        </div>
-      )}
 
       <div className={styles.chat}>
         <Messages messages={messages} isThinking={isThinking} />

@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Menu clusterStatus={dashboard.clusterStatus} />
+      <Menu />
       <Routes>
         <Route path="/" element={<Cluster summaryCards={dashboard.summaryCards} nodes={dashboard.nodes} isLoading={dashboard.isLoading} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path="chat" element={<Chat />} />
