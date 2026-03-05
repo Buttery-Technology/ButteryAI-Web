@@ -3,8 +3,9 @@ import useForm from "./useForm";
 import useTrainingAPI from "./useTrainingAPI";
 import useTrainingSSE from "./useTrainingSSE";
 import { useAPIKeys } from "./useAPIKeys";
+import { useClusterConnection } from "./useClusterConnection";
 
-export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys };
+export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys, useClusterConnection };
 
 export type {
   TrainingJobStatus,

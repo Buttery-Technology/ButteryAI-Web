@@ -16,74 +16,49 @@
   }
 }
 
-.keys {
+.actions {
+  display: flex;
+  gap: 24px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  border-radius: 99px;
   background-color: #f7f7f7;
-  padding: 32px;
-  border-radius: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #384148;
+  transition: 0.2s ease-out;
 
-  ul {
-    display: flex;
-    gap: 48px;
-
-    strong {
-      display: block;
-    }
-
-    p {
-      color: #272d31;
-      margin-block: 16px;
-    }
+  svg {
+    width: 24px;
+    height: 24px;
   }
 
-  > button {
-    padding: 16px 32px;
-    background-color: #384148;
-    border-radius: 99px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-    transition: 0.2s ease-out;
-
-    &:hover {
-      background-color: #d12a89;
-    }
-  }
-}
-
-.icons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (max-width: 1024px) {
-  .keys {
-    padding: 24px;
-
-    ul {
-      gap: 24px;
-    }
+  &:hover {
+    background-color: #eef0f2;
+    border-color: #288ed2;
   }
 }
 
 @media (max-width: 640px) {
-  .keys {
+  .actions {
     flex-direction: column;
-    padding: 20px;
+    gap: 16px;
+  }
 
-    ul {
-      flex-direction: column;
-      gap: 16px;
-    }
+  .actionButton {
+    font-size: 14px;
+    padding: 12px 24px;
 
-    > button {
-      font-size: 14px;
-      padding: 12px 24px;
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }

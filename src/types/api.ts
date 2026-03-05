@@ -30,6 +30,7 @@ export interface NetworkInfo {
   ipAddress: string;
   port: number;
   macAddress?: string;
+  connectPort?: number;
 }
 
 export interface NodeResponse {
@@ -127,6 +128,14 @@ export interface APIKeyCreationResponse extends APIKeyResponse {
 export interface APIKeyListResponse {
   keys: APIKeyResponse[];
   total: number;
+}
+
+// --- Cluster Invite ---
+
+export interface ClusterInviteRedeemResponse {
+  clusterID: string;
+  clusterName: string;
+  role: string;
 }
 
 // --- Cluster Connect ---

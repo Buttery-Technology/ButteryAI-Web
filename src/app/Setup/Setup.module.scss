@@ -227,3 +227,37 @@
   font-size: 14px;
   margin-top: 12px;
 }
+
+// Step 3: Join with invite code
+
+.inviteInput {
+  text-align: center;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+
+  &::placeholder {
+    letter-spacing: 4px;
+    font-weight: 400;
+  }
+}
+
+.backButton {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: #7a8a95;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    color: #47545d;
+  }
+}

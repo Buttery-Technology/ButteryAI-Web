@@ -1,68 +1,26 @@
-import Copy from "@assets/icons/copy.svg?react";
-import Edit from "@assets/icons/edit.svg?react";
-import Refresh from "@assets/icons/refresh.svg?react";
-import type { NodeResponse } from "../../../types/api";
+import Power from "@assets/icons/power.svg?react";
+import Diagnostics from "@assets/icons/diagnostics.svg?react";
+import Share from "@assets/icons/share.svg?react";
 import styles from "./Settings.module.scss";
 
-interface Props {
-  node: NodeResponse | null;
-}
-
-const Settings = ({ node }: Props) => {
-  const connectionUrl = node?.connectionInfo
-    ? `${node.connectionInfo.ipAddress}:${node.connectionInfo.port}`
-    : "Not configured";
-
+const Settings = () => {
   return (
     <section className={styles.root}>
-      <strong>API</strong>
-      <p>
-        Set specific settings for API interactions with this node. API's that use this node will not have all the features
-        supplied by the Cluster. Please make sure your authorization tokens and secrets are held securely and private -
-        please take this seriously as our system will automatically disable and ban connections that abuse the system
-        (learn more). Unusual behavior will be flagged and any activity not screened may be subject to security actions to
-        protect the system and Cluster. Enterprise versions can disable this feature in the Cluster settings.
-      </p>
-      <div className={styles.keys}>
-        <ul>
-          <li>
-            <strong>URL</strong>
-            <p>{connectionUrl}</p>
-            <div className={styles.icons}>
-              <button>
-                <Copy />
-              </button>
-              <button>
-                <Edit />
-              </button>
-            </div>
-          </li>
-          <li>
-            <strong>Secret</strong>
-            <p>XXXX-XXXX-XXXX</p>
-            <div className={styles.icons}>
-              <button>
-                <Copy />
-              </button>
-              <button>
-                <Refresh />
-              </button>
-            </div>
-          </li>
-          <li>
-            <strong>Token</strong>
-            <p>XXXX-XXXX-XXXX</p>
-            <div className={styles.icons}>
-              <button>
-                <Copy />
-              </button>
-              <button>
-                <Refresh />
-              </button>
-            </div>
-          </li>
-        </ul>
-        <button>Copy</button>
+      <strong>Actions</strong>
+      <p>Manage and control this node.</p>
+      <div className={styles.actions}>
+        <button className={styles.actionButton}>
+          <Power />
+          <span>Power Cycle</span>
+        </button>
+        <button className={styles.actionButton}>
+          <Diagnostics />
+          <span>Diagnostics</span>
+        </button>
+        <button className={styles.actionButton}>
+          <Share />
+          <span>Share</span>
+        </button>
       </div>
     </section>
   );
