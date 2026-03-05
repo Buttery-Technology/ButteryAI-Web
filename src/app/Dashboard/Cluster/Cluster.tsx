@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import type { SummaryCard, NodeResponse, NetworkInfo } from "../../../types/api";
 import CreateNodePopup from "./CreateNodePopup";
 import styles from "./Cluster.module.scss";
@@ -13,10 +13,10 @@ interface Props {
 }
 
 const FALLBACK_CARDS: SummaryCard[] = [
-  { header: "Value", title: "—", description: "Loading...", endpoint: "", order: 1 },
-  { header: "Trust", title: "—", description: "Loading...", endpoint: "", order: 2 },
-  { header: "Bias", title: "—", description: "Loading...", endpoint: "", order: 3 },
-  { header: "Accuracy", title: "—", description: "Loading...", endpoint: "", order: 4 },
+  { type: "health", header: "Cluster Health", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 1 },
+  { type: "activity", header: "Activity", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 2 },
+  { type: "grade", header: "Value", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 3 },
+  { type: "knowledge", header: "Knowledge", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 4 },
 ];
 
 const HEX_PATH =
@@ -98,18 +98,42 @@ function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: Node
   );
 }
 
+type SheetTarget = "createNode" | "createCluster" | "joinCluster" | "addKnowledge";
+
 const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, clusterID }: Props) => {
   const cards = summaryCards.length > 0 ? summaryCards : FALLBACK_CARDS;
   const displayNodes = nodes.length > 0 ? nodes : MOCK_NODES;
   const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const [activeSheet, setActiveSheet] = useState<SheetTarget | null>(null);
+  const navigate = useNavigate();
+
+  const handleCardClick = useCallback((card: SummaryCard) => {
+    switch (card.actionType) {
+      case "navigate":
+        if (card.actionTarget) navigate(card.actionTarget);
+        break;
+      case "sheet":
+        setActiveSheet(card.actionTarget as SheetTarget);
+        break;
+      case "external":
+        if (card.actionTarget) window.open(card.actionTarget, "_blank");
+        break;
+      case "none":
+        break;
+    }
+  }, [navigate]);
 
   return (
     <section className={styles.root}>
       <ul className={styles.cards}>
         {cards.map((card, i) => (
-          <li key={card.header + i}>
+          <li
+            key={card.header + i}
+            className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
+            onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
+          >
             <h2>{card.header}</h2>
-            <h3 className={i === 4 ? styles.gradient : undefined}>{isLoading ? "—" : card.title}</h3>
+            <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
             <p>{card.description}</p>
           </li>
         ))}
@@ -164,9 +188,19 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
       </div>
 
       <CreateNodePopup
-        isOpen={showCreatePopup}
-        onClose={() => setShowCreatePopup(false)}
+        isOpen={showCreatePopup || activeSheet === "createNode"}
+        onClose={() => { setShowCreatePopup(false); setActiveSheet(null); }}
       />
+
+      {activeSheet === "addKnowledge" && (
+        <div className={styles.sheetOverlay} onClick={() => setActiveSheet(null)}>
+          <div className={styles.sheetPlaceholder} onClick={(e) => e.stopPropagation()}>
+            <h2>Add Knowledge</h2>
+            <p>Knowledge creation coming soon.</p>
+            <button onClick={() => setActiveSheet(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

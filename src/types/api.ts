@@ -16,12 +16,22 @@ export interface GradeResponse {
 
 // --- Summary Cards (Dashboard) ---
 
+export type CardType = "health" | "activity" | "grade" | "knowledge" | "onboarding";
+export type CardActionType = "navigate" | "sheet" | "external" | "none";
+export type CardTrend = "up" | "down" | "stable";
+export type CardStatus = "good" | "warning" | "critical";
+
 export interface SummaryCard {
+  type: CardType;
   header: string;
   title: string;
   description: string;
-  endpoint: string;
+  actionType: CardActionType;
+  actionTarget: string;
   order: number;
+  metric?: number;
+  trend?: CardTrend;
+  status?: CardStatus;
 }
 
 // --- Cluster ---
