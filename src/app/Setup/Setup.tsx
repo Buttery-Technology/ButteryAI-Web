@@ -1,18 +1,20 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useUserContext } from "@hooks";
-import { UPDATE_PROFILE } from "../../api";
+import { UPDATE_PROFILE, REDEEM_CLUSTER_INVITE } from "../../api";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import { COUNTRIES } from "./countries";
 import styles from "./Setup.module.scss";
 
-type Step = "profile" | "cluster";
+type Step = "profile" | "cluster" | "join";
 
 const Setup = () => {
   const { user, refreshUser } = useUserContext();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [step, setStep] = useState<Step>("profile");
+  const initialStep = searchParams.get("step") === "cluster" ? "cluster" as Step : "profile" as Step;
+  const [step, setStep] = useState<Step>(initialStep);
   const [name, setName] = useState(user?.name ?? "");
   const [country, setCountry] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
@@ -21,6 +23,11 @@ const Setup = () => {
   const [purpose, setPurpose] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Join step state
+  const [inviteCode, setInviteCode] = useState("");
+  const [joinError, setJoinError] = useState<string | null>(null);
+  const [isJoining, setIsJoining] = useState(false);
 
   const filteredCountries = useMemo(() => {
     if (!countrySearch.trim()) return COUNTRIES;
@@ -52,8 +59,16 @@ const Setup = () => {
         throw new Error(body?.message ?? "Failed to save profile");
       }
 
+      // Capture cluster status before refresh (profile save doesn't change it)
+      const alreadyHasCluster = user?.hasCluster;
       await refreshUser();
-      setStep("cluster");
+
+      // Skip cluster step if user already belongs to a cluster
+      if (alreadyHasCluster) {
+        navigate("/dashboard");
+      } else {
+        setStep("cluster");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -61,8 +76,86 @@ const Setup = () => {
     }
   }
 
-  function handleClusterChoice(_choice: "create" | "join") {
-    navigate("/dashboard");
+  function handleClusterChoice(choice: "create" | "join") {
+    if (choice === "join") {
+      setStep("join");
+    } else {
+      navigate("/dashboard");
+    }
+  }
+
+  async function handleJoinSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (inviteCode.length !== 8 || isJoining) return;
+
+    setIsJoining(true);
+    setJoinError(null);
+
+    try {
+      const { url, options } = REDEEM_CLUSTER_INVITE(inviteCode);
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.message ?? "Invalid or expired invite code");
+      }
+
+      await refreshUser();
+      navigate("/dashboard");
+    } catch (err) {
+      setJoinError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsJoining(false);
+    }
+  }
+
+  if (step === "join") {
+    return (
+      <div className={styles.root}>
+        <div className={styles.container}>
+          <Link to="/" className={styles.logoLink}>
+            <img src={butteryaiLogo} alt="ButteryAI" />
+          </Link>
+          <h1 className={styles.clusterHeading}>Enter your invite code</h1>
+          <p className={styles.clusterSubheading}>
+            Ask your cluster admin for an 8-character invite code.
+          </p>
+          <form onSubmit={handleJoinSubmit}>
+            <input
+              type="text"
+              className={`${styles.input} ${styles.inviteInput}`}
+              placeholder="ABC12345"
+              value={inviteCode}
+              onChange={(e) => {
+                const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+                if (val.length <= 8) setInviteCode(val);
+              }}
+              maxLength={8}
+              autoFocus
+            />
+            {joinError && <p className={styles.error}>{joinError}</p>}
+            <button
+              type="submit"
+              className={styles.continueButton}
+              disabled={inviteCode.length !== 8 || isJoining}
+            >
+              {isJoining ? "Joining..." : "Join"}
+            </button>
+          </form>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={() => {
+              setStep("cluster");
+              setInviteCode("");
+              setJoinError(null);
+            }}
+          >
+            Back
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (step === "cluster") {
