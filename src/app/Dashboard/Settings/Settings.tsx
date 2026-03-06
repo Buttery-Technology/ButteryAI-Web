@@ -45,8 +45,8 @@ const Settings = ({ valueCards, trustCards, isLoading }: Props) => {
 
   return (
   <section className={styles.root}>
-    <strong>Universal Value System</strong>
-    <p>{valueSummary && valueSummary.title !== "—" ? `${valueSummary.title} Value Score` : "Value system metrics"}</p>
+    <strong>Knowledge Engine</strong>
+    <p>{valueSummary?.metric != null ? `${valueSummary.title} Value Score` : "No values, knowledge, or experience learned yet."}</p>
     <ul className={styles.infoCards}>
       {displayValueCards.map((card, i) => (
         <li
@@ -60,8 +60,8 @@ const Settings = ({ valueCards, trustCards, isLoading }: Props) => {
         </li>
       ))}
     </ul>
-    <strong>Trusted Advisor System</strong>
-    <p>{trustSummary && trustSummary.title !== "—" ? `${trustSummary.title} Trust Score` : "Trust system metrics"}</p>
+    <strong>Trust Engine</strong>
+    <p>{trustSummary?.metric != null ? `${trustSummary.title} Trust Score` : "No trust values or scores learned yet."}</p>
     <ul className={styles.infoCards}>
       {displayTrustCards.map((card, i) => (
         <li
