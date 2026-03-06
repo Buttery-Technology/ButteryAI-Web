@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import type { SummaryCard, Extension, ExtensionTemplate } from "../../../types/api";
+import { ExtensionLogo } from "./ExtensionLogo";
 import { SetUpExtension } from "./SetUpExtension";
 import { SetUpExtensionForm } from "./SetUpExtensionForm";
 import styles from "./Settings.module.scss";
@@ -106,6 +107,7 @@ const Settings = ({ valueCards, trustCards, extensions, extensionTemplates, isLo
         <ul className={styles.extensionCards}>
           {extensions.map((ext) => (
             <li key={ext.id} className={styles.extensionCard}>
+              <ExtensionLogo />
               <h2>{ext.name}</h2>
               <h3>{ext.mainFunction ? (extensionFunctionLabel[ext.mainFunction.type] ?? ext.mainFunction.type) : ext.description}</h3>
             </li>
