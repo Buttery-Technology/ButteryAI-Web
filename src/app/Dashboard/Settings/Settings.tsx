@@ -56,7 +56,7 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
   return (
   <section className={styles.root}>
     <div className={styles.section}>
-      <strong>Knowledge Engine</strong>
+      <div className={styles.sectionHeader}><strong>Knowledge Engine</strong></div>
       <p>{valueSummary?.metric != null ? `${valueSummary.title} Value Score` : "No values, knowledge, or experience learned yet."}</p>
       <ul className={styles.infoCards}>
         {displayValueCards.map((card, i) => (
@@ -74,7 +74,7 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
     </div>
 
     <div className={styles.section}>
-      <strong>Trust Engine</strong>
+      <div className={styles.sectionHeader}><strong>Trust Engine</strong></div>
       <p>{trustSummary?.metric != null ? `${trustSummary.title} Trust Score` : "No trust values or scores learned yet."}</p>
       <ul className={styles.infoCards}>
         {displayTrustCards.map((card, i) => (
@@ -112,7 +112,7 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
     </div>
 
     <div className={styles.section}>
-      <strong>Developer</strong>
+      <div className={styles.sectionHeader}><strong>Developer</strong></div>
       <p>Manage API keys for external integrations and scripts.</p>
       <Link to="/dashboard/api-keys" className={styles.apiKeysLink}>
         Manage API Keys &rarr;

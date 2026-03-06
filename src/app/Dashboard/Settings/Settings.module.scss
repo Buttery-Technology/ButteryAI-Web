@@ -6,7 +6,6 @@
 .section {
   margin-bottom: 64px;
 
-  > strong,
   > .sectionHeader {
     display: flex;
     align-items: center;
@@ -15,6 +14,8 @@
 
   > p {
     margin-top: 12px;
+    font-size: 14px;
+    color: #272d31;
   }
 }
 
