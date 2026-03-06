@@ -27,7 +27,7 @@ const Dashboard = () => {
         <Route path="/" element={<Cluster summaryCards={dashboard.summaryCards} nodes={dashboard.nodes} isLoading={dashboard.isLoading} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path="chat" element={<Chat />} />
         {/* <Route path="training" element={<Training />} /> */}
-        <Route path="settings" element={<Settings valueCards={dashboard.valueCards} trustCards={dashboard.trustCards} isLoading={dashboard.isLoading} />} />
+        <Route path="settings" element={<Settings valueCards={dashboard.valueCards} trustCards={dashboard.trustCards} extensions={dashboard.extensions} isLoading={dashboard.isLoading} />} />
         <Route path="api-keys" element={<APIKeys clusterID={clusterID} />} />
       </Routes>
     </>

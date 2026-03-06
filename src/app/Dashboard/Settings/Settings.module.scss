@@ -82,6 +82,105 @@
   }
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addButton {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  &::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  &::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+.extensionCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 210px);
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 64px;
+}
+
+.extensionCard {
+  padding: 30px;
+  background-color: #f7f7f7;
+  border-radius: 30px;
+  height: 170px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  &::after {
+    content: "";
+    width: 17px;
+    height: 18px;
+    background-image: url("../../../assets/icons/up.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: 16px;
+    color: #545b69;
+    margin-top: 8px;
+  }
+
+  h3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #637684;
+    margin-top: 8px;
+    line-height: 1.1;
+  }
+}
+
+.emptyState {
+  color: #637684;
+  font-size: 14px;
+  margin-top: 12px;
+  margin-bottom: 64px;
+}
+
 .apiKeysLink {
   display: inline-block;
   margin-top: 12px;
