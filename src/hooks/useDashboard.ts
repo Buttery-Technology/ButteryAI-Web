@@ -5,6 +5,8 @@ import { parseClusterStatus } from "../types/api";
 
 export function useDashboard() {
   const [summaryCards, setSummaryCards] = useState<SummaryCard[]>([]);
+  const [valueCards, setValueCards] = useState<SummaryCard[]>([]);
+  const [trustCards, setTrustCards] = useState<SummaryCard[]>([]);
   const [clusterStatus, setClusterStatus] = useState<ClusterStatus | null>(null);
   const [nodes, setNodes] = useState<NodeResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +25,8 @@ export function useDashboard() {
 
       const data = await response.json();
       setSummaryCards((data.summaryCards ?? []).sort((a: SummaryCard, b: SummaryCard) => a.order - b.order));
+      setValueCards((data.valueCards ?? []).sort((a: SummaryCard, b: SummaryCard) => a.order - b.order));
+      setTrustCards((data.trustCards ?? []).sort((a: SummaryCard, b: SummaryCard) => a.order - b.order));
 
       if (data.clusterStatus) {
         const parsed = parseClusterStatus(data.clusterStatus as RawClusterStatus);
@@ -39,5 +43,5 @@ export function useDashboard() {
     }
   }
 
-  return { summaryCards, clusterStatus, nodes, isLoading, error, refetch: fetchDashboard };
+  return { summaryCards, valueCards, trustCards, clusterStatus, nodes, isLoading, error, refetch: fetchDashboard };
 }

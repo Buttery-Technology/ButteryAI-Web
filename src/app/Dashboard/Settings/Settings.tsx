@@ -1,68 +1,79 @@
-import { Link } from "react-router-dom";
+import { useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import type { SummaryCard } from "../../../types/api";
 import styles from "./Settings.module.scss";
 
 interface Props {
-  summaryCards: SummaryCard[];
+  valueCards: SummaryCard[];
+  trustCards: SummaryCard[];
+  isLoading: boolean;
 }
 
-const Settings = ({ summaryCards }: Props) => {
-  const { signOut } = useUserContext();
+const fallbackCards: SummaryCard[] = [
+  { type: "value", header: "Summary", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 1 },
+  { type: "value", header: "Value", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 2 },
+  { type: "security", header: "Security", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 3 },
+  { type: "activity", header: "Activity", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 4 },
+];
 
-  // Extract key metrics from summary cards when available
-  const valueCard = summaryCards.find((c) => c.header === "Value");
-  const trustCard = summaryCards.find((c) => c.header === "Trust");
+const Settings = ({ valueCards, trustCards, isLoading }: Props) => {
+  const { signOut } = useUserContext();
+  const navigate = useNavigate();
+
+  const handleCardClick = useCallback((card: SummaryCard) => {
+    switch (card.actionType) {
+      case "navigate":
+        if (card.actionTarget) navigate(card.actionTarget);
+        break;
+      case "sheet":
+        // Sheet handling can be added when needed
+        break;
+      case "external":
+        if (card.actionTarget) window.open(card.actionTarget, "_blank");
+        break;
+      case "none":
+        break;
+    }
+  }, [navigate]);
+
+  const displayValueCards = valueCards.length > 0 ? valueCards : fallbackCards;
+  const displayTrustCards = trustCards.length > 0 ? trustCards : fallbackCards;
+
+  const valueSummary = displayValueCards.find((c) => c.header === "Summary");
+  const trustSummary = displayTrustCards.find((c) => c.header === "Summary");
 
   return (
   <section className={styles.root}>
     <strong>Universal Value System</strong>
-    <p>{valueCard ? `${valueCard.title} Value Score` : "1.3M Values"}</p>
+    <p>{valueSummary && valueSummary.title !== "—" ? `${valueSummary.title} Value Score` : "Value system metrics"}</p>
     <ul className={styles.infoCards}>
-      <li>
-        <h2>Summary</h2>
-        <h3>{valueCard?.title ?? "—"}</h3>
-        <p>{valueCard?.description ?? "Waiting for cluster data..."}</p>
-      </li>
-      <li>
-        <h2>Value</h2>
-        <h3>{valueCard?.title ?? "—"}</h3>
-        <p>This metric is how well these values are consumed in the Cluster.</p>
-      </li>
-      <li>
-        <h2>Security</h2>
-        <h3>Stable</h3>
-        <p>No incidents or intrusions detected.</p>
-      </li>
-      <li>
-        <h2>Activity</h2>
-        <h3>—</h3>
-        <p>User activity data not yet available from the server.</p>
-      </li>
+      {displayValueCards.map((card, i) => (
+        <li
+          key={card.header + i}
+          className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
+          onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
+        >
+          <h2>{card.header}</h2>
+          <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
+          <p>{card.description}</p>
+        </li>
+      ))}
     </ul>
     <strong>Trusted Advisor System</strong>
-    <p>{trustCard ? `${trustCard.title} Trust Score` : "10K Advisors"}</p>
+    <p>{trustSummary && trustSummary.title !== "—" ? `${trustSummary.title} Trust Score` : "Trust system metrics"}</p>
     <ul className={styles.infoCards}>
-      <li>
-        <h2>Summary</h2>
-        <h3>{trustCard?.title ?? "—"}</h3>
-        <p>{trustCard?.description ?? "Waiting for cluster data..."}</p>
-      </li>
-      <li>
-        <h2>Value</h2>
-        <h3>{trustCard?.title ?? "—"}</h3>
-        <p>This metric is how well the advisors perform in the Cluster.</p>
-      </li>
-      <li>
-        <h2>Security</h2>
-        <h3>Stable</h3>
-        <p>No incidents or intrusions detected.</p>
-      </li>
-      <li>
-        <h2>Activity</h2>
-        <h3>—</h3>
-        <p>User activity data not yet available from the server.</p>
-      </li>
+      {displayTrustCards.map((card, i) => (
+        <li
+          key={card.header + i}
+          className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
+          onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
+        >
+          <h2>{card.header}</h2>
+          <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
+          <p>{card.description}</p>
+        </li>
+      ))}
     </ul>
     <strong>Extensions</strong>
     <p>...</p>
