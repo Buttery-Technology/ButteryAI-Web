@@ -13,13 +13,13 @@ type Tabs = "Overview" | "Settings";
 interface Props {
   node: NodeResponse | null;
   isLoading: boolean;
-  nodeId: string | undefined;
+  nodeName: string | undefined;
 }
 
-export const Menu = ({ node, isLoading, nodeId }: Props) => {
+export const Menu = ({ node, isLoading, nodeName }: Props) => {
   const [tabName, setTabName] = useState<Tabs>("Overview");
 
-  const basePath = nodeId ? `/node/${nodeId}` : "/node";
+  const basePath = nodeName ? `/node/${encodeURIComponent(nodeName)}` : "/node";
 
   return (
     <header className={styles.root}>

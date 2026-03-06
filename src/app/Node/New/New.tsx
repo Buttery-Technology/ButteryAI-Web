@@ -39,7 +39,7 @@ const New = () => {
       }
 
       const newNode = await nodeRes.json();
-      navigate(`/node/${newNode.id}/overview`);
+      navigate(`/node/${encodeURIComponent(newNode.name)}/overview`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

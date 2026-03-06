@@ -4,11 +4,13 @@ import Settings from "@assets/icons/settings.svg?react";
 import styles from "./FinishSetup.module.scss";
 
 interface Props {
-  nodeId: string;
+  nodeName: string;
 }
 
-const FinishSetup = ({ nodeId }: Props) => {
+const FinishSetup = ({ nodeName }: Props) => {
   const navigate = useNavigate();
+
+  const settingsPath = `/node/${encodeURIComponent(nodeName)}/settings`;
 
   return (
     <section className={styles.root}>
@@ -16,7 +18,7 @@ const FinishSetup = ({ nodeId }: Props) => {
       <div className={styles.list}>
         <button
           className={styles.row}
-          onClick={() => navigate(`/node/${nodeId}/settings`)}
+          onClick={() => navigate(settingsPath)}
         >
           <span className={styles.icon}>
             <Cluster />
@@ -28,7 +30,7 @@ const FinishSetup = ({ nodeId }: Props) => {
         </button>
         <button
           className={styles.row}
-          onClick={() => navigate(`/node/${nodeId}/settings`)}
+          onClick={() => navigate(settingsPath)}
         >
           <span className={styles.icon}>
             <Settings />

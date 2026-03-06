@@ -10,30 +10,33 @@ import { Settings } from "./Settings";
 const Node = () => {
   const location = useLocation();
   const segments = location.pathname.split("/").filter(Boolean);
-  // segments: ["node", nodeId, "overview"] or ["node", "new"]
+  // segments: ["node", nodeName, "overview"] or ["node", "new"]
   const isNewRoute = segments[1] === "new";
-  const nodeId = !isNewRoute && segments[1] ? segments[1] : undefined;
+  const nodeName = !isNewRoute && segments[1] ? decodeURIComponent(segments[1]) : undefined;
 
   // Use node data passed via router state from the dashboard (avoids re-fetch)
   const routerState = location.state as { node?: NodeResponse; clusterConnectionInfo?: NetworkInfo; clusterID?: string } | null;
   const stateNode = routerState?.node ?? null;
   const clusterConnectionInfo = routerState?.clusterConnectionInfo;
   const clusterID = routerState?.clusterID;
+
+  // useNode needs the real ID for API fetches
+  const nodeId = stateNode?.id;
   const { node, isLoading } = useNode(nodeId, stateNode);
 
   return (
     <>
-      {!isNewRoute && <Menu node={node} isLoading={isLoading} nodeId={nodeId} />}
+      {!isNewRoute && <Menu node={node} isLoading={isLoading} nodeName={nodeName} />}
       <Routes>
-        {/* Legacy route without nodeId — redirect to dashboard */}
+        {/* Legacy route without nodeName — redirect to dashboard */}
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="new" element={<New />} />
-        {/* Routes with nodeId */}
+        {/* Routes with nodeName */}
         <Route path="overview" element={<Overview node={node} clusterID={clusterID} />} />
-        <Route path=":nodeId" element={<Navigate to="overview" replace />} />
-        <Route path=":nodeId/overview" element={<Overview node={node} clusterID={clusterID} />} />
-        <Route path=":nodeId/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
-        {/* <Route path=":nodeId/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
+        <Route path=":nodeName" element={<Navigate to="overview" replace />} />
+        <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} />} />
+        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
+        {/* <Route path=":nodeName/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>
   );
