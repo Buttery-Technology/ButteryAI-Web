@@ -21,6 +21,7 @@ const SetUpExtensionForm = ({ template, onBack, onClose, onFinish }: SetUpExtens
     return initial;
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [shiftHeld, setShiftHeld] = useState(false);
 
   useEffect(() => {
@@ -31,12 +32,17 @@ const SetUpExtensionForm = ({ template, onBack, onClose, onFinish }: SetUpExtens
     return () => { window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); };
   }, []);
 
+  const requiredFieldsFilled = template.fields
+    .filter((f) => f.isRequired)
+    .every((f) => values[f.key]?.trim());
+
   const handleChange = (key: string, value: string) => {
     setValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleFinish = async () => {
     setIsSaving(true);
+    setError(null);
     try {
       const data: Record<string, string> = { provider: template.provider };
       for (const [key, value] of Object.entries(values)) {
@@ -45,10 +51,11 @@ const SetUpExtensionForm = ({ template, onBack, onClose, onFinish }: SetUpExtens
         }
       }
       const { url, options } = SAVE_USER_EXTENSION_CONFIG(data as Parameters<typeof SAVE_USER_EXTENSION_CONFIG>[0]);
-      await fetch(url, options);
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error("Failed to save extension config.");
       onFinish();
     } catch {
-      // Allow retry on failure
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -100,11 +107,12 @@ const SetUpExtensionForm = ({ template, onBack, onClose, onFinish }: SetUpExtens
             ))}
           </div>
 
+          {error && <p className={styles.error}>{error}</p>}
           <div className={styles.finishRow}>
             <button
               className={styles.finishButton}
               onClick={handleFinish}
-              disabled={isSaving}
+              disabled={isSaving || !requiredFieldsFilled}
               type="button"
             >
               {isSaving ? "Saving..." : "Finish"}
