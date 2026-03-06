@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@hooks";
-import type { SummaryCard } from "../../../types/api";
+import type { SummaryCard, Extension } from "../../../types/api";
 import styles from "./Settings.module.scss";
 
 interface Props {
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
+  extensions: Extension[];
   isLoading: boolean;
 }
 
@@ -17,7 +18,16 @@ const fallbackCards: SummaryCard[] = [
   { type: "activity", header: "Activity", title: "—", description: "Loading...", actionType: "none", actionTarget: "", order: 4 },
 ];
 
-const Settings = ({ valueCards, trustCards, isLoading }: Props) => {
+const extensionFunctionLabel: Record<string, string> = {
+  aiModel: "AI Model",
+  all: "All Functions",
+  storage: "Storage",
+  analytics: "Analytics",
+  advancedMetrics: "Advanced Metrics",
+  mcp: "MCP",
+};
+
+const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
   const { signOut } = useUserContext();
   const navigate = useNavigate();
 
@@ -75,8 +85,23 @@ const Settings = ({ valueCards, trustCards, isLoading }: Props) => {
         </li>
       ))}
     </ul>
-    <strong>Extensions</strong>
-    <p>...</p>
+    <div className={styles.sectionHeader}>
+      <strong>Extensions</strong>
+      <button className={styles.addButton} type="button" aria-label="Add extension" />
+    </div>
+    <p>Extensions allow you to extend or continue functionality or workflow through an application, API, or even a node.</p>
+    {extensions.length > 0 ? (
+      <ul className={styles.extensionCards}>
+        {extensions.map((ext) => (
+          <li key={ext.id} className={styles.extensionCard}>
+            <h2>{ext.name}</h2>
+            <h3>{ext.mainFunction ? (extensionFunctionLabel[ext.mainFunction.type] ?? ext.mainFunction.type) : ext.description}</h3>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className={styles.emptyState}>No extensions configured yet.</p>
+    )}
 
     <strong>Developer</strong>
     <p>Manage API keys for external integrations and scripts.</p>

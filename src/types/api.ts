@@ -81,10 +81,34 @@ export function parseClusterStatus(raw: RawClusterStatus): ClusterStatus {
   return { status: "offline" };
 }
 
+// --- Extensions ---
+
+export type ExtensionFunctionType = "aiModel" | "all" | "storage" | "analytics" | "advancedMetrics" | "mcp";
+
+export interface ExtensionFunction {
+  endpoint: string;
+  apiKey: string;
+  type: ExtensionFunctionType;
+  supportedCRUDTypes: string[];
+}
+
+export interface Extension {
+  id: string;
+  name: string;
+  description: string;
+  isFullySetUp: boolean;
+  mainFunction?: ExtensionFunction;
+  supportedFunctions: ExtensionFunction[];
+  verifiedFunctions: ExtensionFunction[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface DashboardResponse {
   summaryCards: SummaryCard[];
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
+  extensions: Extension[];
   clusterStatus: ClusterStatus;
 }
 
