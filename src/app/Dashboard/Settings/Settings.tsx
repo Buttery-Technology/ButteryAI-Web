@@ -55,59 +55,69 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
 
   return (
   <section className={styles.root}>
-    <strong>Knowledge Engine</strong>
-    <p>{valueSummary?.metric != null ? `${valueSummary.title} Value Score` : "No values, knowledge, or experience learned yet."}</p>
-    <ul className={styles.infoCards}>
-      {displayValueCards.map((card, i) => (
-        <li
-          key={card.header + i}
-          className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
-          onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
-        >
-          <h2>{card.header}</h2>
-          <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
-          <p>{card.description}</p>
-        </li>
-      ))}
-    </ul>
-    <strong>Trust Engine</strong>
-    <p>{trustSummary?.metric != null ? `${trustSummary.title} Trust Score` : "No trust values or scores learned yet."}</p>
-    <ul className={styles.infoCards}>
-      {displayTrustCards.map((card, i) => (
-        <li
-          key={card.header + i}
-          className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
-          onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
-        >
-          <h2>{card.header}</h2>
-          <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
-          <p>{card.description}</p>
-        </li>
-      ))}
-    </ul>
-    <div className={styles.sectionHeader}>
-      <strong>Extensions</strong>
-      <button className={styles.addButton} type="button" aria-label="Add extension" />
-    </div>
-    <p>Extensions allow you to extend or continue functionality or workflow through an application, API, or even a node.</p>
-    {extensions.length > 0 ? (
-      <ul className={styles.extensionCards}>
-        {extensions.map((ext) => (
-          <li key={ext.id} className={styles.extensionCard}>
-            <h2>{ext.name}</h2>
-            <h3>{ext.mainFunction ? (extensionFunctionLabel[ext.mainFunction.type] ?? ext.mainFunction.type) : ext.description}</h3>
+    <div className={styles.section}>
+      <strong>Knowledge Engine</strong>
+      <p>{valueSummary?.metric != null ? `${valueSummary.title} Value Score` : "No values, knowledge, or experience learned yet."}</p>
+      <ul className={styles.infoCards}>
+        {displayValueCards.map((card, i) => (
+          <li
+            key={card.header + i}
+            className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
+            onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
+          >
+            <h2>{card.header}</h2>
+            <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
+            <p>{card.description}</p>
           </li>
         ))}
       </ul>
-    ) : (
-      <p className={styles.emptyState}>No extensions configured yet.</p>
-    )}
+    </div>
 
-    <strong>Developer</strong>
-    <p>Manage API keys for external integrations and scripts.</p>
-    <Link to="/dashboard/api-keys" className={styles.apiKeysLink}>
-      Manage API Keys &rarr;
-    </Link>
+    <div className={styles.section}>
+      <strong>Trust Engine</strong>
+      <p>{trustSummary?.metric != null ? `${trustSummary.title} Trust Score` : "No trust values or scores learned yet."}</p>
+      <ul className={styles.infoCards}>
+        {displayTrustCards.map((card, i) => (
+          <li
+            key={card.header + i}
+            className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
+            onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
+          >
+            <h2>{card.header}</h2>
+            <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
+            <p>{card.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <strong>Extensions</strong>
+        <button className={styles.addButton} type="button" aria-label="Add extension" />
+      </div>
+      <p>Extensions allow you to extend or continue functionality or workflow through an application, API, or even a node.</p>
+      {extensions.length > 0 ? (
+        <ul className={styles.extensionCards}>
+          {extensions.map((ext) => (
+            <li key={ext.id} className={styles.extensionCard}>
+              <h2>{ext.name}</h2>
+              <h3>{ext.mainFunction ? (extensionFunctionLabel[ext.mainFunction.type] ?? ext.mainFunction.type) : ext.description}</h3>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.emptyState}>No extensions configured yet.</p>
+      )}
+    </div>
+
+    <div className={styles.section}>
+      <strong>Developer</strong>
+      <p>Manage API keys for external integrations and scripts.</p>
+      <Link to="/dashboard/api-keys" className={styles.apiKeysLink}>
+        Manage API Keys &rarr;
+      </Link>
+    </div>
 
     <button className={styles.logoutButton} onClick={signOut}>
       Log out

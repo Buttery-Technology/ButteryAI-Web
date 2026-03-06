@@ -1,6 +1,17 @@
 .root {
   max-width: 900px;
   margin-inline: auto;
+}
+
+.section {
+  margin-bottom: 64px;
+
+  > strong,
+  > .sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   > p {
     margin-top: 12px;
@@ -12,8 +23,7 @@
   grid-template-columns: repeat(4, 1fr);
   justify-content: center;
   gap: 12px;
-  margin-top: 32px;
-  margin-bottom: 64px;
+  margin-top: 24px;
 
   li {
     padding: 32px;
@@ -82,12 +92,6 @@
   }
 }
 
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .addButton {
   position: relative;
   width: 28px;
@@ -127,8 +131,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, 210px);
   gap: 12px;
-  margin-top: 32px;
-  margin-bottom: 64px;
+  margin-top: 24px;
 }
 
 .extensionCard {
@@ -177,13 +180,12 @@
 .emptyState {
   color: #637684;
   font-size: 14px;
-  margin-top: 12px;
-  margin-bottom: 64px;
+  margin-top: 24px;
 }
 
 .apiKeysLink {
   display: inline-block;
-  margin-top: 12px;
+  margin-top: 24px;
   padding: 10px 24px;
   font-size: 14px;
   font-weight: 600;
