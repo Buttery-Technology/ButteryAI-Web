@@ -13,6 +13,7 @@ interface Props {
   extensions: Extension[];
   extensionTemplates: ExtensionTemplate[];
   isLoading: boolean;
+  onRefresh: () => void;
 }
 
 const fallbackCards: SummaryCard[] = [
@@ -31,7 +32,7 @@ const extensionFunctionLabel: Record<string, string> = {
   mcp: "MCP",
 };
 
-const Settings = ({ valueCards, trustCards, extensions, extensionTemplates, isLoading }: Props) => {
+const Settings = ({ valueCards, trustCards, extensions, extensionTemplates, isLoading, onRefresh }: Props) => {
   const { signOut } = useUserContext();
   const navigate = useNavigate();
   const [showSetupModal, setShowSetupModal] = useState(false);
@@ -149,7 +150,7 @@ const Settings = ({ valueCards, trustCards, extensions, extensionTemplates, isLo
           setShowSetupModal(true);
         }}
         onClose={() => setSelectedTemplate(null)}
-        onFinish={() => setSelectedTemplate(null)}
+        onFinish={() => { setSelectedTemplate(null); onRefresh(); }}
       />
     )}
   </section>
