@@ -16,7 +16,7 @@ export interface GradeResponse {
 
 // --- Summary Cards (Dashboard) ---
 
-export type CardType = "health" | "activity" | "grade" | "knowledge" | "onboarding";
+export type CardType = "health" | "activity" | "grade" | "knowledge" | "onboarding" | "value" | "trust" | "security";
 export type CardActionType = "navigate" | "sheet" | "external" | "none";
 export type CardTrend = "up" | "down" | "stable";
 export type CardStatus = "good" | "warning" | "critical";
@@ -83,6 +83,8 @@ export function parseClusterStatus(raw: RawClusterStatus): ClusterStatus {
 
 export interface DashboardResponse {
   summaryCards: SummaryCard[];
+  valueCards: SummaryCard[];
+  trustCards: SummaryCard[];
   clusterStatus: ClusterStatus;
 }
 
