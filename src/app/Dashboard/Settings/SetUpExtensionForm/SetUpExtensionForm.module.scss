@@ -1,0 +1,156 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: white;
+  overflow-y: auto;
+}
+
+.container {
+  border-radius: 100px;
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 500;
+  color: #272d31;
+  text-align: center;
+  margin-top: 40px;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.closeIcon {
+  font-size: 42px;
+  color: #637684;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #272d31;
+  text-align: center;
+  max-width: 543px;
+  margin: 16px auto 48px;
+  line-height: 1.5;
+}
+
+.formContent {
+  max-width: 816px;
+  margin: 0 auto;
+}
+
+.providerInfo {
+  margin-bottom: 40px;
+}
+
+.providerName {
+  font-weight: 700;
+  font-size: 16px;
+  color: #545b69;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 400;
+  color: #272d31;
+}
+
+.labelRequired {
+  font-size: 16px;
+  font-weight: 700;
+  color: #272d31;
+}
+
+.requiredStar {
+  color: #d12a2a;
+}
+
+.fieldDescription {
+  font-size: 14px;
+  color: #272d31;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.encryptionNote {
+  display: block;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.input {
+  background: #ededed;
+  border: 1px solid #f7f7f7;
+  border-radius: 30px;
+  height: 56px;
+  padding: 0 24px;
+  font-size: 18px;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #288ed2;
+  }
+}
+
+.finishRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+.finishButton {
+  width: 300px;
+  height: 50px;
+  background: #288ed2;
+  color: white;
+  border: none;
+  border-radius: 830px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #2280be;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 780px) {
+  .title {
+    font-size: 32px;
+  }
+}

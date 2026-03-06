@@ -1,0 +1,126 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: white;
+  overflow-y: auto;
+}
+
+.container {
+  border-radius: 100px;
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 500;
+  color: #272d31;
+  text-align: center;
+  margin-top: 40px;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.closeIcon {
+  font-size: 42px;
+  color: #637684;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #272d31;
+  text-align: center;
+  max-width: 543px;
+  margin: 16px auto 48px;
+  line-height: 1.5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 360px);
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  background: #f7f7f7;
+  border-radius: 30px;
+  padding: 30px;
+  height: 362px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+}
+
+.provider {
+  font-weight: 700;
+  font-size: 16px;
+  color: #545b69;
+}
+
+.tagline {
+  font-weight: 700;
+  font-size: 26px;
+  color: #637684;
+  margin-top: 8px;
+}
+
+.description {
+  font-size: 14px;
+  color: #384148;
+  line-height: normal;
+  margin-top: 12px;
+  flex: 1;
+}
+
+.continueButton {
+  width: 100%;
+  height: 50px;
+  background: #ccc;
+  color: white;
+  border: none;
+  border-radius: 830px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #288ed2;
+  }
+}
+
+@media (max-width: 1160px) {
+  .grid {
+    grid-template-columns: repeat(2, 360px);
+  }
+}
+
+@media (max-width: 780px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}

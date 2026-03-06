@@ -1,13 +1,16 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@hooks";
-import type { SummaryCard, Extension } from "../../../types/api";
+import type { SummaryCard, Extension, ExtensionTemplate } from "../../../types/api";
+import { SetUpExtension } from "./SetUpExtension";
+import { SetUpExtensionForm } from "./SetUpExtensionForm";
 import styles from "./Settings.module.scss";
 
 interface Props {
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
   extensions: Extension[];
+  extensionTemplates: ExtensionTemplate[];
   isLoading: boolean;
 }
 
@@ -27,9 +30,11 @@ const extensionFunctionLabel: Record<string, string> = {
   mcp: "MCP",
 };
 
-const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
+const Settings = ({ valueCards, trustCards, extensions, extensionTemplates, isLoading }: Props) => {
   const { signOut } = useUserContext();
   const navigate = useNavigate();
+  const [showSetupModal, setShowSetupModal] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<ExtensionTemplate | null>(null);
 
   const handleCardClick = useCallback((card: SummaryCard) => {
     switch (card.actionType) {
@@ -94,7 +99,7 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
     <div className={styles.section}>
       <div className={styles.sectionHeader}>
         <strong>Extensions</strong>
-        <button className={styles.addButton} type="button" aria-label="Add extension" />
+        <button className={styles.addButton} type="button" aria-label="Add extension" onClick={() => setShowSetupModal(true)} />
       </div>
       <p>Extensions allow you to extend or continue functionality or workflow through an application, API, or even a node.</p>
       {extensions.length > 0 ? (
@@ -122,6 +127,29 @@ const Settings = ({ valueCards, trustCards, extensions, isLoading }: Props) => {
     <button className={styles.logoutButton} onClick={signOut}>
       Log out
     </button>
+
+    {showSetupModal && (
+      <SetUpExtension
+        templates={extensionTemplates}
+        onSelect={(template) => {
+          setShowSetupModal(false);
+          setSelectedTemplate(template);
+        }}
+        onClose={() => setShowSetupModal(false)}
+      />
+    )}
+
+    {selectedTemplate && (
+      <SetUpExtensionForm
+        template={selectedTemplate}
+        onBack={() => {
+          setSelectedTemplate(null);
+          setShowSetupModal(true);
+        }}
+        onClose={() => setSelectedTemplate(null)}
+        onFinish={() => setSelectedTemplate(null)}
+      />
+    )}
   </section>
   );
 };

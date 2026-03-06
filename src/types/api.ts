@@ -104,11 +104,30 @@ export interface Extension {
   updatedAt?: string;
 }
 
+export interface ExtensionTemplateField {
+  key: string;
+  label: string;
+  description: string;
+  isRequired: boolean;
+  placeholder: string;
+}
+
+export interface ExtensionTemplate {
+  id: string;
+  provider: string;
+  name: string;
+  tagline: string;
+  description: string;
+  logoUrl?: string;
+  fields: ExtensionTemplateField[];
+}
+
 export interface DashboardResponse {
   summaryCards: SummaryCard[];
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
   extensions: Extension[];
+  extensionTemplates: ExtensionTemplate[];
   clusterStatus: ClusterStatus;
 }
 
