@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ExtensionTemplate } from "../../../../types/api";
+import { ExtensionLogo } from "../ExtensionLogo";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import styles from "./SetUpExtension.module.scss";
 
@@ -41,6 +42,7 @@ const SetUpExtension = ({ templates, onSelect, onClose }: SetUpExtensionProps) =
         <div className={styles.grid}>
           {templates.map((template) => (
             <div key={template.id} className={styles.card}>
+              <ExtensionLogo logoUrl={template.logoUrl} size={36} />
               <span className={styles.provider}>{template.name}</span>
               <h2 className={styles.tagline}>{template.tagline}</h2>
               <p className={styles.description}>{template.description}</p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ExtensionTemplate } from "../../../../types/api";
 import { SAVE_USER_EXTENSION_CONFIG } from "../../../../api";
+import { ExtensionLogo } from "../ExtensionLogo";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import styles from "./SetUpExtensionForm.module.scss";
 
@@ -73,6 +74,7 @@ const SetUpExtensionForm = ({ template, onBack, onClose, onFinish }: SetUpExtens
 
         <div className={styles.formContent}>
           <div className={styles.providerInfo}>
+            <ExtensionLogo logoUrl={template.logoUrl} />
             <span className={styles.providerName}>{template.name}</span>
           </div>
 
