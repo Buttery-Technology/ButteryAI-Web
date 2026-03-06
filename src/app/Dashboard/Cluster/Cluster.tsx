@@ -26,7 +26,7 @@ const HEX_PATH =
 function NodeHex({ node, delay, clusterConnectionInfo, clusterID }: { node: NodeResponse; delay: string; clusterConnectionInfo?: NetworkInfo; clusterID?: string }) {
   return (
     <Link
-      to={`/node/${node.id}/overview`}
+      to={`/node/${encodeURIComponent(node.name)}/overview`}
       state={{ node, clusterConnectionInfo, clusterID }}
       className={styles.hexCell}
       style={{ "--delay": delay } as React.CSSProperties}

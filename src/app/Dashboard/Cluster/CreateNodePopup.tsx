@@ -179,7 +179,7 @@ const CreateNodePopup = ({ isOpen, onClose }: Props) => {
       }
       const newNode = await nodeRes.json();
       onClose();
-      navigate(`/node/${newNode.id}/overview`);
+      navigate(`/node/${encodeURIComponent(newNode.name)}/overview`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

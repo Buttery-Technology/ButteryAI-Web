@@ -159,7 +159,7 @@ const Overview = ({ node, clusterID }: Props) => {
 
   return (
     <section className={styles.root}>
-      {needsSetup && node && <FinishSetup nodeId={node.id} />}
+      {needsSetup && node && <FinishSetup nodeName={node.name} />}
 
       <div className={styles.chat}>
         <Messages messages={messages} isThinking={isThinking} />
