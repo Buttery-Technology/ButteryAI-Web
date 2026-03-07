@@ -57,6 +57,42 @@ export interface StreamChunk {
 }
 
 /**
+ * Extract the display text from a decoded QueryOutput JSON payload.
+ *
+ * Each streamed chunk is a full QueryOutput object (not a delta).
+ * The message text lives inside `content[]` which can be either a plain
+ * string or an object with nested `content[].text` fields.
+ *
+ * This mirrors the Swift `QueryOutputWrapper.append()` logic in the
+ * native client.
+ */
+function extractTextFromQueryOutput(parsed: Record<string, unknown>): string | null {
+  const content = parsed.content as Array<Record<string, unknown>> | undefined;
+  if (!content) return null;
+
+  for (const item of content) {
+    // Object message: { content: [{ text, type }], entity, status }
+    if (Array.isArray(item.content)) {
+      const parts = item.content as Array<Record<string, unknown>>;
+      const texts: string[] = [];
+      for (const part of parts) {
+        if (typeof part.text === "string" && part.text) {
+          texts.push(part.text);
+        } else if (typeof part.refusal === "string" && part.refusal) {
+          texts.push(part.refusal);
+        }
+      }
+      if (texts.length > 0) return texts.join("");
+    }
+    // String message: the item itself is a string (encoded via singleValueContainer)
+    if (typeof item === "string" && item) {
+      return item;
+    }
+  }
+  return null;
+}
+
+/**
  * Send a query directly to the DAIS cluster via ConnectRPC.
  *
  * POSTs to `https://<endpoint>/dais.CoreSystem/Handle` with a Bearer JWT,
@@ -105,7 +141,7 @@ export async function queryCluster(
 
   const decoder = new TextDecoder();
   let buffer = "";
-  let fullText = "";
+  let latestText = "";
 
   while (true) {
     const { done, value } = await reader.read();
@@ -132,7 +168,7 @@ export async function queryCluster(
 
         if (parsed.done) {
           // Stream complete
-          return fullText;
+          return latestText;
         }
 
         if (parsed.error) {
@@ -140,10 +176,24 @@ export async function queryCluster(
         }
 
         if (parsed.payload) {
-          // Decode base64 payload
+          // Decode base64 payload → JSON QueryOutput
+          // Each chunk contains the full accumulated text (not a delta),
+          // so we replace rather than append — matching the native client.
           const decoded = atob(parsed.payload);
-          fullText += decoded;
-          onChunk?.(fullText);
+          try {
+            const queryOutput = JSON.parse(decoded);
+            const extracted = extractTextFromQueryOutput(queryOutput);
+            if (extracted !== null) {
+              latestText = extracted;
+              onChunk?.(latestText);
+            }
+          } catch {
+            // If payload isn't valid JSON, treat as raw text (replace)
+            if (decoded) {
+              latestText = decoded;
+              onChunk?.(latestText);
+            }
+          }
         }
       } catch (e) {
         if (e instanceof SyntaxError) {
@@ -155,5 +205,5 @@ export async function queryCluster(
     }
   }
 
-  return fullText;
+  return latestText;
 }
