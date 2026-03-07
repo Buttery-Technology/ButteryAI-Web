@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import Cluster from "@assets/icons/cluster.svg?react";
@@ -8,11 +7,16 @@ import Chat from "@assets/icons/chat.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Dashboard" | "Chat" | /* "Training" | */ "Settings";
+function useActiveTab(): string {
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/dashboard/chat")) return "Chat";
+  if (pathname.startsWith("/dashboard/settings") || pathname.startsWith("/dashboard/api-keys")) return "Settings";
+  return "Dashboard";
+}
 
 export const Menu = () => {
-  const [tabName, setTabName] = useState<Tabs>("Dashboard");
   const { user } = useUserContext();
+  const tabName = useActiveTab();
 
   const isOnline = user?.isOnline ?? false;
   const firstName = user?.name?.split(" ")[0];
@@ -31,8 +35,8 @@ export const Menu = () => {
         <li>
           <NavLink
             to="/dashboard"
-            onClick={() => setTabName("Dashboard")}
-            className={tabName === "Dashboard" ? styles.active : ""}
+            end
+            className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <Cluster />
           </NavLink>
@@ -40,8 +44,7 @@ export const Menu = () => {
         <li>
           <NavLink
             to="/dashboard/chat"
-            onClick={() => setTabName("Chat")}
-            className={tabName === "Chat" ? styles.active : ""}
+            className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <Chat />
           </NavLink>
@@ -49,8 +52,7 @@ export const Menu = () => {
         {/* <li>
           <NavLink
             to="/dashboard/training"
-            onClick={() => setTabName("Training")}
-            className={tabName === "Training" ? styles.active : ""}
+            className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <Metrics />
           </NavLink>
@@ -58,7 +60,6 @@ export const Menu = () => {
         <li>
           <NavLink
             to="/dashboard/settings"
-            onClick={() => setTabName("Settings")}
             className={tabName === "Settings" ? styles.active : ""}
           >
             <Settings />
