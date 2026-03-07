@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import Cluster from "@assets/icons/cluster.svg?react";
@@ -8,7 +7,11 @@ import Settings from "@assets/icons/settings.svg?react";
 import type { NodeResponse } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
-type Tabs = "Overview" | "Settings";
+function useActiveTab(): string {
+  const { pathname } = useLocation();
+  if (pathname.endsWith("/settings")) return "Settings";
+  return "Overview";
+}
 
 interface Props {
   node: NodeResponse | null;
@@ -17,7 +20,7 @@ interface Props {
 }
 
 export const Menu = ({ node, isLoading, nodeName }: Props) => {
-  const [tabName, setTabName] = useState<Tabs>("Overview");
+  const tabName = useActiveTab();
 
   const basePath = nodeName ? `/node/${encodeURIComponent(nodeName)}` : "/node";
 
@@ -40,8 +43,7 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
         <li>
           <NavLink
             to={`${basePath}/overview`}
-            onClick={() => setTabName("Overview")}
-            className={tabName === "Overview" ? styles.active : ""}
+            className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <Cluster />
           </NavLink>
@@ -49,8 +51,7 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
         <li>
           <NavLink
             to={`${basePath}/settings`}
-            onClick={() => setTabName("Settings")}
-            className={tabName === "Settings" ? styles.active : ""}
+            className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <Settings />
           </NavLink>
