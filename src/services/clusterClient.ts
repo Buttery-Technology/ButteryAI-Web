@@ -179,7 +179,7 @@ export async function queryCluster(
           // Decode base64 payload → JSON QueryOutput
           // Each chunk contains the full accumulated text (not a delta),
           // so we replace rather than append — matching the native client.
-          const decoded = atob(parsed.payload);
+          const decoded = new TextDecoder().decode(Uint8Array.from(atob(parsed.payload), (c) => c.charCodeAt(0)));
           try {
             const queryOutput = JSON.parse(decoded);
             const extracted = extractTextFromQueryOutput(queryOutput);
