@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
+import Markdown from "react-markdown";
 import { type Message } from "../Chat";
 import { ButterAnimation } from "../ButterAnimation";
 import styles from "./Messages.module.scss";
@@ -18,14 +19,18 @@ const Messages = ({ messages, isThinking }: MessagesProps) => {
       top: el.scrollHeight,
       behavior: "smooth",
     });
-  }, [isThinking]);
+  }, [isThinking, messages]);
 
   return (
     <div className={styles.root} ref={messagesRef}>
       {messages.map((msg, i) => (
-        <p key={i} className={`${styles.message} ${msg.sender === "user" ? styles.userMessage : styles.aiMessage}`}>
-          {msg.text}
-        </p>
+        <div key={i} className={`${styles.message} ${msg.sender === "user" ? styles.userMessage : styles.aiMessage}`}>
+          {msg.sender === "ai" ? (
+            <Markdown>{msg.text}</Markdown>
+          ) : (
+            msg.text
+          )}
+        </div>
       ))}
       {isThinking && (
         <p className={`${styles.message} ${styles.aiMessage}`}>
