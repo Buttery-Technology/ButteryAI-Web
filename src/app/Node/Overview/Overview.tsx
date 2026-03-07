@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { CREATE_CONVERSATION, CREATE_MESSAGE, GET_CONVERSATIONS, GET_MESSAGES } from "../../../api";
 import { useClusterConnection } from "@hooks";
 import { Messages } from "../../Dashboard/Chat/Messages";
@@ -26,11 +26,42 @@ const Overview = ({ node, clusterID }: Props) => {
   // Direct cluster connection via ConnectRPC — connects eagerly on mount
   const { sendQuery, isConnected: clusterConnected } = useClusterConnection(clusterID);
 
-  // Load existing conversation on mount
+  /** Ensure a conversation exists for this node, creating one if needed. */
+  const ensureConversation = useCallback(async (): Promise<string | null> => {
+    if (conversationId) return conversationId;
+    if (!node) return null;
+
+    try {
+      const createReq = CREATE_CONVERSATION(`Node: ${node.name}`, { nodeID: node.id, type: "node" });
+      const createRes = await fetch(createReq.url, createReq.options);
+      if (createRes.ok) {
+        const conv = await createRes.json();
+        setConversationId(conv.id);
+        return conv.id;
+      }
+    } catch {
+      // Non-blocking
+    }
+    return null;
+  }, [conversationId, node]);
+
+  /** Persist a message to the conversation API (fire-and-forget). */
+  const saveMessage = useCallback(async (convId: string, content: string, authorType?: string) => {
+    try {
+      const req = CREATE_MESSAGE(convId, content, authorType);
+      await fetch(req.url, req.options);
+    } catch {
+      // Non-blocking — don't interrupt the UX if saving fails
+    }
+  }, []);
+
+  // Load existing conversation for this node on mount
   useEffect(() => {
+    if (!node) return;
+
     (async () => {
       try {
-        const { url, options } = GET_CONVERSATIONS();
+        const { url, options } = GET_CONVERSATIONS(node.id);
         const res = await fetch(url, options);
         if (!res.ok) return;
 
@@ -57,7 +88,7 @@ const Overview = ({ node, clusterID }: Props) => {
         // Non-blocking
       }
     })();
-  }, []);
+  }, [node]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,9 +105,6 @@ const Overview = ({ node, clusterID }: Props) => {
     let usedDirectConnection = false;
 
     // Try direct cluster connection first (ConnectRPC).
-    // sendQuery re-establishes the connection if the token expired, so we
-    // attempt this path whenever a clusterID is available — not only when
-    // clusterConnected is true (it may have been eagerly established on mount).
     if (clusterID || clusterConnected) {
       try {
         // Add empty AI message for real-time streaming
@@ -93,7 +121,14 @@ const Overview = ({ node, clusterID }: Props) => {
 
         if (result !== null) {
           usedDirectConnection = true;
-          // Streaming already updated the messages in real-time
+
+          // Persist both messages to the conversation API in the background
+          const convId = await ensureConversation();
+          if (convId) {
+            saveMessage(convId, userText, "user");
+            saveMessage(convId, result, "node");
+          }
+
           inputRef.current?.focus();
           return;
         }
@@ -107,20 +142,14 @@ const Overview = ({ node, clusterID }: Props) => {
     // Fallback: conversation API (via ButteryAI-Server)
     if (!usedDirectConnection) {
       try {
-        let activeConvId = conversationId;
+        const convId = await ensureConversation();
 
-        if (!activeConvId) {
-          const createReq = CREATE_CONVERSATION(`Node: ${node.name}`);
-          const createRes = await fetch(createReq.url, createReq.options);
-          if (createRes.ok) {
-            const conv = await createRes.json();
-            activeConvId = conv.id;
-            setConversationId(conv.id);
-          }
-        }
+        if (convId) {
+          // Save user message
+          await saveMessage(convId, userText, "user");
 
-        if (activeConvId) {
-          const msgReq = CREATE_MESSAGE(activeConvId, userText, node.id);
+          // Try to get AI response via the message API
+          const msgReq = CREATE_MESSAGE(convId, userText);
           const msgRes = await fetch(msgReq.url, msgReq.options);
           if (msgRes.ok) {
             const data = await msgRes.json();
