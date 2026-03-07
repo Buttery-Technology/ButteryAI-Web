@@ -177,18 +177,28 @@ export async function queryCluster(
 
         if (parsed.payload) {
           // Decode base64 payload → JSON QueryOutput
-          // Each chunk contains the full accumulated text (not a delta),
-          // so we replace rather than append — matching the native client.
           const decoded = new TextDecoder().decode(Uint8Array.from(atob(parsed.payload), (c) => c.charCodeAt(0)));
           try {
             const queryOutput = JSON.parse(decoded);
-            const extracted = extractTextFromQueryOutput(queryOutput);
-            if (extracted !== null) {
-              latestText = extracted;
-              onChunk?.(latestText);
+
+            // In intelligent (multi-node) mode, the stream contains:
+            // 1. Progress updates (status: "inProgress", no content) — skip
+            // 2. Intermediate per-node results (content from individual nodes) — skip
+            // 3. Final aggregated response (status: "completed") — display this
+            //
+            // Only update display text from the final aggregated response to avoid
+            // flickering between different nodes' intermediate outputs.
+            const status = queryOutput.status as string | undefined;
+
+            if (status === "completed" || status === undefined) {
+              const extracted = extractTextFromQueryOutput(queryOutput);
+              if (extracted !== null) {
+                latestText = extracted;
+                onChunk?.(latestText);
+              }
             }
           } catch {
-            // If payload isn't valid JSON, treat as raw text (replace)
+            // If payload isn't valid JSON, treat as raw text
             if (decoded) {
               latestText = decoded;
               onChunk?.(latestText);
