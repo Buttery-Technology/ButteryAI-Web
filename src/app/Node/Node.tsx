@@ -5,6 +5,7 @@ import { Menu } from "./Menu";
 import { New } from "./New";
 import { Overview } from "./Overview";
 import { Settings } from "./Settings";
+import { Customize } from "./Customize";
 // import { Metrics } from "./Metrics";
 
 const Node = () => {
@@ -35,6 +36,7 @@ const Node = () => {
         <Route path="overview" element={<Overview node={node} clusterID={clusterID} />} />
         <Route path=":nodeName" element={<Navigate to="overview" replace />} />
         <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} />} />
+        <Route path=":nodeName/customize" element={<Customize node={node} />} />
         <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         {/* <Route path=":nodeName/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
