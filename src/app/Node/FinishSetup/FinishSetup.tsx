@@ -11,7 +11,7 @@ interface Props {
 const FinishSetup = ({ nodeName, hasExtension }: Props) => {
   const navigate = useNavigate();
 
-  const settingsPath = `/node/${encodeURIComponent(nodeName)}/settings`;
+  const basePath = `/node/${encodeURIComponent(nodeName)}`;
 
   return (
     <section className={styles.root}>
@@ -19,7 +19,7 @@ const FinishSetup = ({ nodeName, hasExtension }: Props) => {
       <div className={styles.list}>
         <button
           className={styles.row}
-          onClick={() => navigate(settingsPath)}
+          onClick={() => navigate(`${basePath}/customize`)}
         >
           <span className={styles.icon}>
             <Cluster />
@@ -32,7 +32,7 @@ const FinishSetup = ({ nodeName, hasExtension }: Props) => {
         {!hasExtension && (
           <button
             className={styles.row}
-            onClick={() => navigate(settingsPath)}
+            onClick={() => navigate(`${basePath}/settings`)}
           >
             <span className={styles.icon}>
               <Settings />

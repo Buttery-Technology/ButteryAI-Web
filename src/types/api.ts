@@ -166,6 +166,21 @@ export interface CreateNodeRequest {
   access?: GeneralSecurityAccess;
 }
 
+// --- Node Knowledge ---
+
+export type UnderlyingDataType = "audio" | "document" | "file" | "image" | "link" | "video";
+
+export interface NodeKnowledge {
+  knowledgeID: string;
+  name: string;
+  description: string;
+  underlyingDataType: UnderlyingDataType;
+  categories: string[];
+  tags: string[];
+  hasUnderlyingData: boolean;
+  associatedAt?: string;
+}
+
 // --- Conversations & Messages ---
 
 export type ConversationType = "node" | "cluster";

@@ -1,0 +1,241 @@
+.root {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-block: 48px;
+}
+
+.section {
+  margin-bottom: 48px;
+
+  > strong {
+    display: block;
+  }
+
+  > p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #272d31;
+    margin-top: 16px;
+    margin-bottom: 32px;
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  > div > strong {
+    display: block;
+  }
+
+  > div > p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #272d31;
+    margin-top: 16px;
+    margin-bottom: 32px;
+  }
+}
+
+.muted {
+  font-size: 14px;
+  color: #637684;
+}
+
+.error {
+  font-size: 13px;
+  color: #d94040;
+  margin-bottom: 16px;
+}
+
+// AI Model grid
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.modelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 24px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s ease-out;
+
+  &:hover {
+    background-color: #eef0f2;
+    border-color: #288ed2;
+  }
+}
+
+.modelName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.modelDescription {
+  font-size: 12px;
+  color: #637684;
+  line-height: 1.4;
+}
+
+// Knowledge
+.addButton {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #288ed2;
+  background-color: #eef5fb;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: #ddeaf5;
+  }
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.fileInput {
+  font-size: 13px;
+  color: #272d31;
+}
+
+.textInput {
+  padding: 10px 16px;
+  border: 1px solid #e2e5e9;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #272d31;
+  background-color: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: #288ed2;
+  }
+
+  &::placeholder {
+    color: #637684;
+  }
+}
+
+.uploadButton {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #288ed2;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #2078b5;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.knowledgeList {
+  display: flex;
+  flex-direction: column;
+}
+
+.knowledgeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:first-child {
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+.knowledgeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.knowledgeName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.knowledgeMeta {
+  font-size: 12px;
+  color: #637684;
+}
+
+.removeButton {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d94040;
+  background-color: transparent;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #fef2f2;
+  }
+}
+
+// Training coming soon
+.comingSoon {
+  padding: 24px 32px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  text-align: center;
+
+  > span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #288ed2;
+  }
+
+  > p {
+    font-size: 13px;
+    color: #637684;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sectionHeader {
+    flex-direction: column;
+  }
+
+  .modelGrid {
+    grid-template-columns: 1fr;
+  }
+}

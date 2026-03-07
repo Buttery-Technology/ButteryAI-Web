@@ -133,6 +133,41 @@ export const GET_NODE_HISTORY = (nodeId: string) => ({
   },
 });
 
+// Node Knowledge
+export const GET_NODE_KNOWLEDGE = (nodeId: string) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/knowledge`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
+export const CREATE_NODE_KNOWLEDGE = (nodeId: string, data: {
+  name: string;
+  description: string;
+  underlyingDataType: string;
+  underlyingData?: string;
+  underlyingDataURL?: string;
+  categories?: string[];
+  tags?: string[];
+}) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/knowledge`,
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const UNLINK_NODE_KNOWLEDGE = (nodeId: string, knowledgeId: string) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/knowledge/${knowledgeId}`,
+  options: {
+    method: "DELETE",
+    ...cookieOptions,
+  },
+});
+
 // Conversations
 export const GET_CONVERSATIONS = (nodeID?: string) => ({
   url: BUTTERY_API_URL + "/conversations" + (nodeID ? `?nodeID=${nodeID}` : ""),
