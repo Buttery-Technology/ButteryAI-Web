@@ -5,9 +5,10 @@ import styles from "./FinishSetup.module.scss";
 
 interface Props {
   nodeName: string;
+  hasExtension?: boolean;
 }
 
-const FinishSetup = ({ nodeName }: Props) => {
+const FinishSetup = ({ nodeName, hasExtension }: Props) => {
   const navigate = useNavigate();
 
   const settingsPath = `/node/${encodeURIComponent(nodeName)}/settings`;
@@ -28,16 +29,18 @@ const FinishSetup = ({ nodeName }: Props) => {
           </span>
           <span className={styles.arrow}>›</span>
         </button>
-        <button
-          className={styles.row}
-          onClick={() => navigate(settingsPath)}
-        >
-          <span className={styles.icon}>
-            <Settings />
-          </span>
-          <span className={styles.label}>Customize the hosting</span>
-          <span className={styles.arrow}>›</span>
-        </button>
+        {!hasExtension && (
+          <button
+            className={styles.row}
+            onClick={() => navigate(settingsPath)}
+          >
+            <span className={styles.icon}>
+              <Settings />
+            </span>
+            <span className={styles.label}>Customize the hosting</span>
+            <span className={styles.arrow}>›</span>
+          </button>
+        )}
       </div>
     </section>
   );

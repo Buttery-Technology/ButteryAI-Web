@@ -49,6 +49,7 @@ export interface NodeResponse {
   isOnline: boolean;
   grade: GradeResponse;
   connectionInfo?: NetworkInfo;
+  extensionID?: string;
 }
 
 export interface ClusterResponse {
