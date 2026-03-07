@@ -26,6 +26,11 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
+
+  svg {
+    width: 29px;
+    height: 24px;
+  }
 }
 
 .wrapper {
