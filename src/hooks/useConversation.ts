@@ -53,7 +53,7 @@ export function useConversation() {
 
       // Create conversation if none exists
       if (!activeConvId) {
-        const createReq = CREATE_CONVERSATION("Chat");
+        const createReq = CREATE_CONVERSATION("Chat", { type: "cluster" });
         const createRes = await fetch(createReq.url, createReq.options);
         if (!createRes.ok) throw new Error("Failed to create conversation");
 

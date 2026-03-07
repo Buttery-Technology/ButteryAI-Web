@@ -134,20 +134,20 @@ export const GET_NODE_HISTORY = (nodeId: string) => ({
 });
 
 // Conversations
-export const GET_CONVERSATIONS = () => ({
-  url: BUTTERY_API_URL + "/conversations",
+export const GET_CONVERSATIONS = (nodeID?: string) => ({
+  url: BUTTERY_API_URL + "/conversations" + (nodeID ? `?nodeID=${nodeID}` : ""),
   options: {
     method: "GET",
     ...cookieOptions,
   },
 });
 
-export const CREATE_CONVERSATION = (title: string) => ({
+export const CREATE_CONVERSATION = (title: string, opts?: { nodeID?: string; type?: "node" | "cluster" }) => ({
   url: BUTTERY_API_URL + "/conversations",
   options: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, ...opts }),
     ...cookieOptions,
   },
 });
@@ -160,12 +160,12 @@ export const GET_MESSAGES = (conversationId: string) => ({
   },
 });
 
-export const CREATE_MESSAGE = (conversationId: string, content: string, nodeId?: string) => ({
+export const CREATE_MESSAGE = (conversationId: string, content: string, authorType?: string) => ({
   url: BUTTERY_API_URL + `/conversations/${conversationId}/messages`,
   options: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, ...(nodeId ? { nodeId } : {}) }),
+    body: JSON.stringify({ content, ...(authorType ? { authorType } : {}) }),
     ...cookieOptions,
   },
 });
