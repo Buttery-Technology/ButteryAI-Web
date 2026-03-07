@@ -112,6 +112,8 @@ export interface ExtensionTemplateField {
   placeholder: string;
 }
 
+export type ExtensionTemplateCategory = "aiModel" | "cloudProvider" | "storage" | "analytics" | "mcp" | "other";
+
 export interface ExtensionTemplate {
   id: string;
   provider: string;
@@ -119,7 +121,13 @@ export interface ExtensionTemplate {
   tagline: string;
   description: string;
   logoUrl?: string;
+  category: ExtensionTemplateCategory;
   fields: ExtensionTemplateField[];
+  isActive: boolean;
+  isComingSoon: boolean;
+  sortOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DashboardResponse {
