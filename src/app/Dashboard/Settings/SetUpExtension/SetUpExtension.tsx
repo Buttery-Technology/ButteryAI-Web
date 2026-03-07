@@ -41,18 +41,22 @@ const SetUpExtension = ({ templates, onSelect, onClose }: SetUpExtensionProps) =
 
         <div className={styles.grid}>
           {templates.map((template) => (
-            <div key={template.id} className={styles.card}>
+            <div key={template.id} className={`${styles.card} ${template.isComingSoon ? styles.comingSoon : ""}`}>
               <ExtensionLogo logoUrl={template.logoUrl} size={36} />
               <span className={styles.provider}>{template.name}</span>
               <h2 className={styles.tagline}>{template.tagline}</h2>
               <p className={styles.description}>{template.description}</p>
-              <button
-                className={styles.continueButton}
-                onClick={() => onSelect(template)}
-                type="button"
-              >
-                Continue
-              </button>
+              {template.isComingSoon ? (
+                <span className={styles.comingSoonLabel}>Coming Soon</span>
+              ) : (
+                <button
+                  className={styles.continueButton}
+                  onClick={() => onSelect(template)}
+                  type="button"
+                >
+                  Continue
+                </button>
+              )}
             </div>
           ))}
         </div>
