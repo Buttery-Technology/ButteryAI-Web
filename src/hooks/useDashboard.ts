@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET_DASHBOARD } from "../api";
-import type { SummaryCard, ClusterStatus, NodeResponse, RawClusterStatus, Extension, ExtensionTemplate } from "../types/api";
+import type { SummaryCard, ClusterStatus, NodeResponse, RawClusterStatus, Extension, ExtensionTemplate, DashboardTab } from "../types/api";
 import { parseClusterStatus } from "../types/api";
 
 export function useDashboard() {
@@ -9,6 +9,7 @@ export function useDashboard() {
   const [trustCards, setTrustCards] = useState<SummaryCard[]>([]);
   const [extensions, setExtensions] = useState<Extension[]>([]);
   const [extensionTemplates, setExtensionTemplates] = useState<ExtensionTemplate[]>([]);
+  const [tabs, setTabs] = useState<DashboardTab[]>([]);
   const [clusterStatus, setClusterStatus] = useState<ClusterStatus | null>(null);
   const [nodes, setNodes] = useState<NodeResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +32,7 @@ export function useDashboard() {
       setTrustCards((data.trustCards ?? []).sort((a: SummaryCard, b: SummaryCard) => a.order - b.order));
       setExtensions(data.extensions ?? []);
       setExtensionTemplates(data.extensionTemplates ?? []);
+      setTabs((data.tabs ?? []).sort((a: DashboardTab, b: DashboardTab) => a.order - b.order));
 
       if (data.clusterStatus) {
         const parsed = parseClusterStatus(data.clusterStatus as RawClusterStatus);
@@ -47,5 +49,5 @@ export function useDashboard() {
     }
   }
 
-  return { summaryCards, valueCards, trustCards, extensions, extensionTemplates, clusterStatus, nodes, isLoading, error, refetch: fetchDashboard };
+  return { summaryCards, valueCards, trustCards, extensions, extensionTemplates, tabs, clusterStatus, nodes, isLoading, error, refetch: fetchDashboard };
 }

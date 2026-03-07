@@ -131,6 +131,14 @@ export interface ExtensionTemplate {
   updatedAt?: string;
 }
 
+export interface DashboardTab {
+  id: string;
+  label: string;
+  icon: string;
+  route: string;
+  order: number;
+}
+
 export interface DashboardResponse {
   summaryCards: SummaryCard[];
   valueCards: SummaryCard[];
@@ -138,6 +146,7 @@ export interface DashboardResponse {
   extensions: Extension[];
   extensionTemplates: ExtensionTemplate[];
   clusterStatus: ClusterStatus;
+  tabs: DashboardTab[];
 }
 
 // --- Node List ---
