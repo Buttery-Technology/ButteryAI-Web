@@ -57,7 +57,7 @@ export const Menu = ({ tabs }: Props) => {
       <h1 className={styles.title}>{firstName ? `Hi, ${firstName}` : "ButteryAI"}</h1>
       <div className={styles.wrapper}>
         <p className={styles.status}>{isOnline ? "Online" : "Offline"}</p>
-        <p className={styles.plan}>{user?.plan ?? "Pro"}</p>
+        <p className={styles.plan}>{user?.plan ?? "\u2014"}</p>
       </div>
       <ul className={styles.tabList}>
         {activeTabs.map((tab) => {

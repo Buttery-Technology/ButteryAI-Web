@@ -39,7 +39,7 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
       </h1>
       <div className={styles.wrapper}>
         <p className={node?.isOnline ? styles.statusOnline : styles.statusOffline}>{node?.isOnline ? "Online" : "Offline"}</p>
-        <p className={styles.plan}>{user?.plan ?? "Pro"}</p>
+        <p className={styles.plan}>{user?.plan ?? "\u2014"}</p>
       </div>
       <ul className={styles.tabList}>
         <li>
