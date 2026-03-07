@@ -90,11 +90,14 @@ const Overview = ({ node, clusterID }: Props) => {
     })();
   }, [node]);
 
+  const [isSending, setIsSending] = useState(false);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userText = inputValue.trim();
-    if (!userText || !node) return;
+    if (!userText || !node || isSending) return;
 
+    setIsSending(true);
     setMessages((prev) => [...prev, { sender: "user", text: userText }]);
     setInputValue("");
 
@@ -107,14 +110,19 @@ const Overview = ({ node, clusterID }: Props) => {
     // Try direct cluster connection first (ConnectRPC).
     if (clusterID || clusterConnected) {
       try {
-        // Add empty AI message for real-time streaming
-        setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
+        // Add empty AI message and capture its index for safe updates
+        let aiMessageIndex = -1;
+        setMessages((prev) => {
+          aiMessageIndex = prev.length;
+          return [...prev, { sender: "ai", text: "" }];
+        });
         setIsThinking(false);
 
         const result = await sendQuery(userText, node.id, (partialText) => {
           setMessages((prev) => {
+            if (aiMessageIndex < 0 || aiMessageIndex >= prev.length) return prev;
             const updated = [...prev];
-            updated[updated.length - 1] = { sender: "ai", text: partialText };
+            updated[aiMessageIndex] = { sender: "ai", text: partialText };
             return updated;
           });
         });
@@ -129,6 +137,7 @@ const Overview = ({ node, clusterID }: Props) => {
             saveMessage(convId, result, "node");
           }
 
+          setIsSending(false);
           inputRef.current?.focus();
           return;
         }
@@ -165,13 +174,18 @@ const Overview = ({ node, clusterID }: Props) => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsThinking(false);
 
-      setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
+      let fallbackAiIndex = -1;
+      setMessages((prev) => {
+        fallbackAiIndex = prev.length;
+        return [...prev, { sender: "ai", text: "" }];
+      });
 
       await new Promise<void>((resolve) => {
         typewriterEffect(aiResponseText, (partialText) => {
           setMessages((prev) => {
+            if (fallbackAiIndex < 0 || fallbackAiIndex >= prev.length) return prev;
             const updated = [...prev];
-            updated[updated.length - 1] = { sender: "ai", text: partialText };
+            updated[fallbackAiIndex] = { sender: "ai", text: partialText };
             return updated;
           });
           if (partialText === aiResponseText) resolve();
@@ -179,6 +193,7 @@ const Overview = ({ node, clusterID }: Props) => {
       });
     }
 
+    setIsSending(false);
     inputRef.current?.focus();
   };
 
@@ -201,10 +216,10 @@ const Overview = ({ node, clusterID }: Props) => {
             value={inputValue}
             onChange={handleChange}
             required
-            disabled={!node?.isOnline}
+            disabled={!node?.isOnline || isSending}
             className={styles.input}
           />
-          <button type="submit" className={styles.submitButton} disabled={!inputValue || !node?.isOnline}>
+          <button type="submit" className={styles.submitButton} disabled={!inputValue || !node?.isOnline || isSending}>
             <Send />
           </button>
         </form>

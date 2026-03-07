@@ -24,6 +24,7 @@ const Chat = ({ clusterID }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -99,6 +100,7 @@ const Chat = ({ clusterID }: Props) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSending) return;
 
     const userText = inputValue.trim();
 
@@ -114,6 +116,9 @@ const Chat = ({ clusterID }: Props) => {
       return;
     }
 
+    // Lock form to prevent concurrent submissions
+    setIsSending(true);
+
     // Add user's message to chat and reset value
     setMessages((prev) => [...prev, { sender: "user", text: userText }]);
     setInputValue("");
@@ -124,14 +129,19 @@ const Chat = ({ clusterID }: Props) => {
     // Try direct cluster connection first (ConnectRPC streaming, no nodeId = intelligent routing)
     if (clusterID || clusterConnected) {
       try {
-        // Add empty AI message for real-time streaming
-        setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
+        // Add empty AI message and capture its index for safe updates
+        let aiMessageIndex = -1;
+        setMessages((prev) => {
+          aiMessageIndex = prev.length;
+          return [...prev, { sender: "ai", text: "" }];
+        });
         setIsThinking(false);
 
         const result = await sendQuery(userText, undefined, (partialText) => {
           setMessages((prev) => {
+            if (aiMessageIndex < 0 || aiMessageIndex >= prev.length) return prev;
             const updated = [...prev];
-            updated[updated.length - 1] = { sender: "ai", text: partialText };
+            updated[aiMessageIndex] = { sender: "ai", text: partialText };
             return updated;
           });
         });
@@ -144,6 +154,7 @@ const Chat = ({ clusterID }: Props) => {
             saveMessage(convId, result, "cluster");
           }
 
+          setIsSending(false);
           inputRef.current?.focus();
           return;
         }
@@ -168,13 +179,18 @@ const Chat = ({ clusterID }: Props) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsThinking(false);
 
-    setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
+    let fallbackAiIndex = -1;
+    setMessages((prev) => {
+      fallbackAiIndex = prev.length;
+      return [...prev, { sender: "ai", text: "" }];
+    });
 
     await new Promise<void>((resolve) => {
       typewriterEffect(aiResponseText, (partialText) => {
         setMessages((prev) => {
+          if (fallbackAiIndex < 0 || fallbackAiIndex >= prev.length) return prev;
           const updated = [...prev];
-          updated[updated.length - 1] = { sender: "ai", text: partialText };
+          updated[fallbackAiIndex] = { sender: "ai", text: partialText };
           return updated;
         });
         if (partialText === aiResponseText) resolve();
@@ -186,6 +202,7 @@ const Chat = ({ clusterID }: Props) => {
       saveMessage(conversationId, aiResponseText, "cluster");
     }
 
+    setIsSending(false);
     inputRef.current?.focus();
   };
 
@@ -195,6 +212,7 @@ const Chat = ({ clusterID }: Props) => {
     setMessages([]);
     setInputValue("");
     setIsThinking(false);
+    setIsSending(false);
     setChatEnded(false);
     setConversationId(null);
   };
@@ -209,7 +227,7 @@ const Chat = ({ clusterID }: Props) => {
       ) : (
         <>
           <Messages messages={messages} isThinking={isThinking} />
-          <Form inputValue={inputValue} handleSubmit={handleSubmit} handleChange={handleChange} inputRef={inputRef} />
+          <Form inputValue={inputValue} handleSubmit={handleSubmit} handleChange={handleChange} inputRef={inputRef} disabled={isSending} />
         </>
       )}
     </section>

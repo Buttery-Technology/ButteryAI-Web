@@ -7,25 +7,27 @@ type FormProps = {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   inputRef: MutableRefObject<HTMLInputElement | null>;
+  disabled?: boolean;
 };
 
-const Form = ({ inputValue, handleSubmit, handleChange, inputRef }: FormProps) => (
+const Form = ({ inputValue, handleSubmit, handleChange, inputRef, disabled }: FormProps) => (
   <>
     <p className={styles.tip}>
-      “Give treatment suggestions for…“ or “Why is node “Symptom Summarizer” not communicating with “Diagnosis
-      Analyzer”?”
+      &quot;Give treatment suggestions for&hellip;&quot; or &quot;Why is node &quot;Symptom Summarizer&quot; not
+      communicating with &quot;Diagnosis Analyzer&quot;?&quot;
     </p>
     <form className={styles.form} onSubmit={handleSubmit}>
       <input
         ref={inputRef}
         type="text"
-        placeholder="Start typing anything…"
+        placeholder="Start typing anything..."
         value={inputValue}
         onChange={handleChange}
         required
+        disabled={disabled}
         className={styles.input}
       />
-      <button type="submit" className={styles.submitButton} disabled={!inputValue}>
+      <button type="submit" className={styles.submitButton} disabled={!inputValue || disabled}>
         <Send />
       </button>
     </form>
