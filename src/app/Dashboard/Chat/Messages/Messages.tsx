@@ -1,12 +1,23 @@
-import { useLayoutEffect, useRef } from "react";
-import Markdown from "react-markdown";
+import { useLayoutEffect, useMemo, useRef } from "react";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import { type Message } from "../Chat";
 import { ButterAnimation } from "../ButterAnimation";
 import styles from "./Messages.module.scss";
 
+marked.setOptions({ breaks: true, gfm: true });
+
 type MessagesProps = {
   messages: Message[];
   isThinking: boolean;
+};
+
+const MarkdownMessage = ({ text }: { text: string }) => {
+  const html = useMemo(
+    () => DOMPurify.sanitize(marked.parse(text) as string),
+    [text],
+  );
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
 const Messages = ({ messages, isThinking }: MessagesProps) => {
@@ -26,7 +37,7 @@ const Messages = ({ messages, isThinking }: MessagesProps) => {
       {messages.map((msg, i) => (
         <div key={i} className={`${styles.message} ${msg.sender === "user" ? styles.userMessage : styles.aiMessage}`}>
           {msg.sender === "ai" ? (
-            <Markdown>{msg.text}</Markdown>
+            <MarkdownMessage text={msg.text} />
           ) : (
             msg.text
           )}
