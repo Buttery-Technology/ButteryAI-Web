@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { useUserContext } from "@hooks";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import Cluster from "@assets/icons/cluster.svg?react";
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const Menu = ({ node, isLoading, nodeName }: Props) => {
+  const { user } = useUserContext();
   const tabName = useActiveTab();
 
   const basePath = nodeName ? `/node/${encodeURIComponent(nodeName)}` : "/node";
@@ -37,7 +39,7 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
       </h1>
       <div className={styles.wrapper}>
         <p className={node?.isOnline ? styles.statusOnline : styles.statusOffline}>{node?.isOnline ? "Online" : "Offline"}</p>
-        <p className={styles.plan}>Pro</p>
+        <p className={styles.plan}>{user?.plan ?? "Pro"}</p>
       </div>
       <ul className={styles.tabList}>
         <li>
