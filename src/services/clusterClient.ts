@@ -2,6 +2,7 @@ import { CONNECT_TO_CLUSTER } from "../api";
 import type { ConnectResponse } from "../types/api";
 
 // Cached token state
+let cachedClusterID: string | null = null;
 let cachedToken: string | null = null;
 let cachedEndpoint: string | null = null;
 let tokenExpiresAt: number = 0;
@@ -15,9 +16,9 @@ let tokenExpiresAt: number = 0;
 export async function getClusterToken(
   clusterID: string,
 ): Promise<{ token: string; endpoint: string; expiresAt: number }> {
-  // Return cached token if still valid (refresh 30s before expiry)
+  // Return cached token if still valid and for the same cluster (refresh 30s before expiry)
   const now = Date.now();
-  if (cachedToken && cachedEndpoint && tokenExpiresAt - now > 30_000) {
+  if (cachedToken && cachedEndpoint && cachedClusterID === clusterID && tokenExpiresAt - now > 30_000) {
     return { token: cachedToken, endpoint: cachedEndpoint, expiresAt: tokenExpiresAt };
   }
 
@@ -34,6 +35,7 @@ export async function getClusterToken(
   const expiresAt = new Date(data.expiresAt).getTime();
 
   // Cache the token
+  cachedClusterID = clusterID;
   cachedToken = data.token;
   cachedEndpoint = endpoint;
   tokenExpiresAt = expiresAt;
@@ -43,6 +45,7 @@ export async function getClusterToken(
 
 /** Clear the cached token (e.g., on logout or connection failure). */
 export function clearClusterToken(): void {
+  cachedClusterID = null;
   cachedToken = null;
   cachedEndpoint = null;
   tokenExpiresAt = 0;
