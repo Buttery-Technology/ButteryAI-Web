@@ -208,21 +208,23 @@ const Overview = ({ node, clusterID }: Props) => {
       <div className={styles.chat}>
         <Messages messages={messages} isThinking={isThinking} />
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder={node ? `Query ${node.name}...` : "Select a node..."}
-            value={inputValue}
-            onChange={handleChange}
-            required
-            disabled={!node?.isOnline || isSending}
-            className={styles.input}
-          />
-          <button type="submit" className={styles.submitButton} disabled={!inputValue || !node?.isOnline || isSending}>
-            <Send />
-          </button>
-        </form>
+        <div className={styles.formWrapper}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={node ? `Query ${node.name}...` : "Select a node..."}
+              value={inputValue}
+              onChange={handleChange}
+              required
+              disabled={!node?.isOnline || isSending}
+              className={styles.input}
+            />
+            <button type="submit" className={styles.submitButton} disabled={!inputValue || !node?.isOnline || isSending}>
+              <Send />
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );

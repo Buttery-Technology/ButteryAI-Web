@@ -227,7 +227,9 @@ const Chat = ({ clusterID }: Props) => {
       ) : (
         <>
           <Messages messages={messages} isThinking={isThinking} />
-          <Form inputValue={inputValue} handleSubmit={handleSubmit} handleChange={handleChange} inputRef={inputRef} disabled={isSending} />
+          <div className={styles.formWrapper}>
+            <Form inputValue={inputValue} handleSubmit={handleSubmit} handleChange={handleChange} inputRef={inputRef} disabled={isSending} />
+          </div>
         </>
       )}
     </section>
