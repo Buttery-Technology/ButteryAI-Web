@@ -159,9 +159,13 @@ export interface CreateNodeRequest {
 
 // --- Conversations & Messages ---
 
+export type ConversationType = "node" | "cluster";
+
 export interface ConversationSummary {
   id: string;
   title: string;
+  type: ConversationType;
+  nodeID?: string;
   createdAt?: string;
   updatedAt?: string;
   messageCount: number;
