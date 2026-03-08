@@ -133,6 +133,14 @@ export const GET_NODE_HISTORY = (nodeId: string) => ({
   },
 });
 
+export const GET_NODE_DETAIL = (nodeId: string) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/detail`,
+  options: {
+    method: "GET",
+    ...cookieOptions,
+  },
+});
+
 // Node Knowledge
 export const GET_NODE_KNOWLEDGE = (nodeId: string) => ({
   url: BUTTERY_API_URL + `/nodes/${nodeId}/knowledge`,

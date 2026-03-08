@@ -1,5 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { SummaryCards } from "@common";
 import type { SummaryCard, NodeResponse, NetworkInfo } from "../../../types/api";
 import CreateNodePopup from "./CreateNodePopup";
 import styles from "./Cluster.module.scss";
@@ -104,7 +105,6 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
   const displayNodes = nodes;
   const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [activeSheet, setActiveSheet] = useState<SheetTarget | null>(null);
-  const navigate = useNavigate();
   const clusterRef = useRef<HTMLDivElement>(null);
 
   const { topRow, midRow, botRow } = distributeNodes(displayNodes);
@@ -119,37 +119,9 @@ const Cluster = ({ summaryCards, nodes, isLoading, clusterConnectionInfo, cluste
     }
   }, [nodes.length]);
 
-  const handleCardClick = useCallback((card: SummaryCard) => {
-    switch (card.actionType) {
-      case "navigate":
-        if (card.actionTarget) navigate(card.actionTarget);
-        break;
-      case "sheet":
-        setActiveSheet(card.actionTarget as SheetTarget);
-        break;
-      case "external":
-        if (card.actionTarget) window.open(card.actionTarget, "_blank");
-        break;
-      case "none":
-        break;
-    }
-  }, [navigate]);
-
   return (
     <section className={styles.root}>
-      <ul className={styles.cards}>
-        {cards.map((card, i) => (
-          <li
-            key={card.header + i}
-            className={`${card.status ? styles[card.status] : ""} ${card.actionType !== "none" ? styles.clickable : styles.noAction}`}
-            onClick={card.actionType !== "none" ? () => handleCardClick(card) : undefined}
-          >
-            <h2>{card.header}</h2>
-            <h3>{isLoading ? "—" : card.title}{card.trend === "up" ? " ↑" : card.trend === "down" ? " ↓" : ""}</h3>
-            <p>{card.description}</p>
-          </li>
-        ))}
-      </ul>
+      <SummaryCards cards={cards} isLoading={isLoading} />
 
       <div className={styles.cluster} ref={clusterRef}>
         <div className={styles.clusterInner}>

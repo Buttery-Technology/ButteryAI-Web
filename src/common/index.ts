@@ -1,3 +1,4 @@
 import { HexIcon } from "./icons";
+import { SummaryCards } from "./SummaryCards";
 
-export { HexIcon };
+export { HexIcon, SummaryCards };
