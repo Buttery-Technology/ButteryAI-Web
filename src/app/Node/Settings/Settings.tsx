@@ -1,17 +1,26 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAPIKeys } from "@hooks";
 import { SummaryCards } from "@common";
-import type { NetworkInfo, APIKeyRole, SummaryCard } from "../../../types/api";
+import { BUTTERY_API_URL } from "../../../api";
+import type { NetworkInfo, APIKeyRole, SummaryCard, NodeAction } from "../../../types/api";
 import Power from "@assets/icons/power.svg?react";
 import Diagnostics from "@assets/icons/diagnostics.svg?react";
 import Share from "@assets/icons/share.svg?react";
 import styles from "./Settings.module.scss";
+
+const actionIconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
+  power: Power,
+  diagnostics: Diagnostics,
+  share: Share,
+};
 
 interface Props {
   clusterConnectionInfo?: NetworkInfo;
   clusterID?: string;
   valueCards?: SummaryCard[];
   trustCards?: SummaryCard[];
+  actions?: NodeAction[];
   isLoadingDetail?: boolean;
 }
 
@@ -22,8 +31,52 @@ const EXPIRATION_OPTIONS = [
   { label: "Never", value: null },
 ] as const;
 
-const Settings = ({ clusterConnectionInfo, clusterID, valueCards = [], trustCards = [], isLoadingDetail }: Props) => {
+const Settings = ({ clusterConnectionInfo, clusterID, valueCards = [], trustCards = [], actions = [], isLoadingDetail }: Props) => {
+  const navigate = useNavigate();
   const { keys, newKey, fetchKeys, createKey, clearNewKey } = useAPIKeys();
+  const [activeSheet, setActiveSheet] = useState<string | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<NodeAction | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const executeApiAction = useCallback(async (target: string) => {
+    setActionLoading(true);
+    try {
+      await fetch(BUTTERY_API_URL + target, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      // TODO: surface error to user
+    } finally {
+      setActionLoading(false);
+    }
+  }, []);
+
+  const handleAction = useCallback((action: NodeAction) => {
+    switch (action.actionType) {
+      case "api":
+        executeApiAction(action.actionTarget);
+        break;
+      case "navigate":
+        navigate(action.actionTarget);
+        break;
+      case "sheet":
+        setActiveSheet(action.actionTarget);
+        break;
+      case "external":
+        window.open(action.actionTarget, "_blank");
+        break;
+      case "confirm":
+        setPendingConfirm(action);
+        break;
+    }
+  }, [navigate, executeApiAction]);
+
+  const handleConfirm = useCallback(() => {
+    if (!pendingConfirm) return;
+    executeApiAction(pendingConfirm.actionTarget);
+    setPendingConfirm(null);
+  }, [pendingConfirm, executeApiAction]);
   const [showKeyForm, setShowKeyForm] = useState(false);
   const [keyName, setKeyName] = useState("");
   const [keyExpiration, setKeyExpiration] = useState<number | null>(90);
@@ -126,6 +179,7 @@ const Settings = ({ clusterConnectionInfo, clusterID, valueCards = [], trustCard
       {valueCards.length > 0 && (
         <div className={styles.section}>
           <strong>Knowledge engine</strong>
+          <p>How this node processes and delivers value from its knowledge base.</p>
           <SummaryCards cards={valueCards} isLoading={isLoadingDetail} />
         </div>
       )}
@@ -134,29 +188,65 @@ const Settings = ({ clusterConnectionInfo, clusterID, valueCards = [], trustCard
       {trustCards.length > 0 && (
         <div className={styles.section}>
           <strong>Trust engine</strong>
+          <p>Trust, accuracy, and security metrics for this node.</p>
           <SummaryCards cards={trustCards} isLoading={isLoadingDetail} />
         </div>
       )}
 
       {/* Actions section */}
-      <div className={styles.section}>
-        <strong>Actions</strong>
-        <p>Manage and control this node.</p>
-        <div className={styles.actions}>
-          <button className={styles.actionButton}>
-            <Power />
-            <span>Power Cycle</span>
-          </button>
-          <button className={styles.actionButton}>
-            <Diagnostics />
-            <span>Diagnostics</span>
-          </button>
-          <button className={styles.actionButton}>
-            <Share />
-            <span>Share</span>
-          </button>
+      {actions.length > 0 && (
+        <div className={styles.section}>
+          <strong>Actions</strong>
+          <p>Manage and control this node.</p>
+          <div className={styles.actions}>
+            {[...actions].sort((a, b) => a.order - b.order).map((action) => {
+              const Icon = actionIconMap[action.icon];
+              return (
+                <button
+                  key={action.id}
+                  className={`${styles.actionButton} ${action.isDestructive ? styles.destructive : ""}`}
+                  onClick={() => handleAction(action)}
+                  disabled={actionLoading}
+                >
+                  {Icon && <Icon />}
+                  <span>{action.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Confirmation dialog */}
+      {pendingConfirm && (
+        <div className={styles.overlay} onClick={() => setPendingConfirm(null)}>
+          <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
+            <h2>{pendingConfirm.label}</h2>
+            <p>{pendingConfirm.confirmMessage}</p>
+            <div className={styles.dialogActions}>
+              <button className={styles.cancelButton} onClick={() => setPendingConfirm(null)}>Cancel</button>
+              <button
+                className={`${styles.confirmButton} ${pendingConfirm.isDestructive ? styles.destructive : ""}`}
+                onClick={handleConfirm}
+                disabled={actionLoading}
+              >
+                {actionLoading ? "Processing..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sheet overlay */}
+      {activeSheet && (
+        <div className={styles.overlay} onClick={() => setActiveSheet(null)}>
+          <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
+            <h2>{activeSheet === "shareNode" ? "Share Node" : activeSheet}</h2>
+            <p>Coming soon.</p>
+            <button className={styles.cancelButton} onClick={() => setActiveSheet(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

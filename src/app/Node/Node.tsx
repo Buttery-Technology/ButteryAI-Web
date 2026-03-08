@@ -23,7 +23,7 @@ const Node = () => {
 
   // useNodeDetail fetches the full detail endpoint (node + server-driven cards)
   const nodeId = stateNode?.id;
-  const { node, overviewCards, valueCards, trustCards, isLoading } = useNodeDetail(nodeId, stateNode);
+  const { node, overviewCards, valueCards, trustCards, actions, isLoading } = useNodeDetail(nodeId, stateNode);
 
   return (
     <>
@@ -37,7 +37,7 @@ const Node = () => {
         <Route path=":nodeName" element={<Navigate to="overview" replace />} />
         <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} isLoadingDetail={isLoading} />} />
         <Route path=":nodeName/customize" element={<Customize node={node} />} />
-        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} valueCards={valueCards} trustCards={trustCards} isLoadingDetail={isLoading} />} />
+        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} valueCards={valueCards} trustCards={trustCards} actions={actions} isLoadingDetail={isLoading} />} />
         {/* <Route path=":nodeName/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>
