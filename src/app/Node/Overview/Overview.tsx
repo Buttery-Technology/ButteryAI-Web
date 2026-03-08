@@ -4,19 +4,24 @@ import { useClusterConnection } from "@hooks";
 import { Messages } from "../../Dashboard/Chat/Messages";
 import { type Message } from "../../Dashboard/Chat/Chat";
 import { typewriterEffect } from "../../Dashboard/Chat/utils";
+import { SummaryCards } from "@common";
 import Send from "@assets/icons/send.svg?react";
-import type { NodeResponse } from "../../../types/api";
+import type { NodeResponse, SummaryCard } from "../../../types/api";
 import { FinishSetup } from "../FinishSetup";
 import styles from "./Overview.module.scss";
 
 interface Props {
   node: NodeResponse | null;
   clusterID?: string;
+  overviewCards?: SummaryCard[];
+  valueCards?: SummaryCard[];
+  trustCards?: SummaryCard[];
+  isLoadingDetail?: boolean;
 }
 
 const ERROR_MESSAGE = "Sorry, I'm having trouble reaching this node.";
 
-const Overview = ({ node, clusterID }: Props) => {
+const Overview = ({ node, clusterID, overviewCards = [], valueCards = [], trustCards = [], isLoadingDetail }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -204,6 +209,27 @@ const Overview = ({ node, clusterID }: Props) => {
   return (
     <section className={styles.root}>
       {needsSetup && node && <FinishSetup nodeName={node.name} hasExtension={!!node.extensionID} />}
+
+      {overviewCards.length > 0 && (
+        <div className={styles.cardSection}>
+          <h2 className={styles.sectionHeading}>Overview</h2>
+          <SummaryCards cards={overviewCards} isLoading={isLoadingDetail} />
+        </div>
+      )}
+
+      {valueCards.length > 0 && (
+        <div className={styles.cardSection}>
+          <h2 className={styles.sectionHeading}>Value Engine</h2>
+          <SummaryCards cards={valueCards} isLoading={isLoadingDetail} />
+        </div>
+      )}
+
+      {trustCards.length > 0 && (
+        <div className={styles.cardSection}>
+          <h2 className={styles.sectionHeading}>Trust Engine</h2>
+          <SummaryCards cards={trustCards} isLoading={isLoadingDetail} />
+        </div>
+      )}
 
       <div className={styles.chat}>
         <Messages messages={messages} isThinking={isThinking} />

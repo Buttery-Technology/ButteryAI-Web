@@ -149,6 +149,15 @@ export interface DashboardResponse {
   tabs: DashboardTab[];
 }
 
+// --- Node Detail (server-driven) ---
+
+export interface NodeDetailResponse {
+  node: NodeResponse;
+  overviewCards: SummaryCard[];
+  valueCards: SummaryCard[];
+  trustCards: SummaryCard[];
+}
+
 // --- Node List ---
 
 export interface NodeListResponse {
