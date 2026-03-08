@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useAPIKeys } from "@hooks";
-import type { NetworkInfo, APIKeyRole } from "../../../types/api";
+import { SummaryCards } from "@common";
+import type { NetworkInfo, APIKeyRole, SummaryCard } from "../../../types/api";
 import Power from "@assets/icons/power.svg?react";
 import Diagnostics from "@assets/icons/diagnostics.svg?react";
 import Share from "@assets/icons/share.svg?react";
@@ -9,6 +10,9 @@ import styles from "./Settings.module.scss";
 interface Props {
   clusterConnectionInfo?: NetworkInfo;
   clusterID?: string;
+  valueCards?: SummaryCard[];
+  trustCards?: SummaryCard[];
+  isLoadingDetail?: boolean;
 }
 
 const EXPIRATION_OPTIONS = [
@@ -18,7 +22,7 @@ const EXPIRATION_OPTIONS = [
   { label: "Never", value: null },
 ] as const;
 
-const Settings = ({ clusterConnectionInfo, clusterID }: Props) => {
+const Settings = ({ clusterConnectionInfo, clusterID, valueCards = [], trustCards = [], isLoadingDetail }: Props) => {
   const { keys, newKey, fetchKeys, createKey, clearNewKey } = useAPIKeys();
   const [showKeyForm, setShowKeyForm] = useState(false);
   const [keyName, setKeyName] = useState("");
@@ -115,6 +119,22 @@ const Settings = ({ clusterConnectionInfo, clusterID }: Props) => {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Knowledge engine */}
+      {valueCards.length > 0 && (
+        <div className={styles.section}>
+          <strong>Knowledge engine</strong>
+          <SummaryCards cards={valueCards} isLoading={isLoadingDetail} />
+        </div>
+      )}
+
+      {/* Trust engine */}
+      {trustCards.length > 0 && (
+        <div className={styles.section}>
+          <strong>Trust engine</strong>
+          <SummaryCards cards={trustCards} isLoading={isLoadingDetail} />
         </div>
       )}
 

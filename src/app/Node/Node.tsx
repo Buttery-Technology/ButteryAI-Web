@@ -33,11 +33,11 @@ const Node = () => {
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="new" element={<New />} />
         {/* Routes with nodeName */}
-        <Route path="overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} valueCards={valueCards} trustCards={trustCards} isLoadingDetail={isLoading} />} />
+        <Route path="overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} isLoadingDetail={isLoading} />} />
         <Route path=":nodeName" element={<Navigate to="overview" replace />} />
-        <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} valueCards={valueCards} trustCards={trustCards} isLoadingDetail={isLoading} />} />
+        <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} isLoadingDetail={isLoading} />} />
         <Route path=":nodeName/customize" element={<Customize node={node} />} />
-        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
+        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} valueCards={valueCards} trustCards={trustCards} isLoadingDetail={isLoading} />} />
         {/* <Route path=":nodeName/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>

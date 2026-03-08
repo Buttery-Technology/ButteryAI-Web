@@ -14,14 +14,12 @@ interface Props {
   node: NodeResponse | null;
   clusterID?: string;
   overviewCards?: SummaryCard[];
-  valueCards?: SummaryCard[];
-  trustCards?: SummaryCard[];
   isLoadingDetail?: boolean;
 }
 
 const ERROR_MESSAGE = "Sorry, I'm having trouble reaching this node.";
 
-const Overview = ({ node, clusterID, overviewCards = [], valueCards = [], trustCards = [], isLoadingDetail }: Props) => {
+const Overview = ({ node, clusterID, overviewCards = [], isLoadingDetail }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -214,20 +212,6 @@ const Overview = ({ node, clusterID, overviewCards = [], valueCards = [], trustC
         <div className={styles.cardSection}>
           <h2 className={styles.sectionHeading}>Overview</h2>
           <SummaryCards cards={overviewCards} isLoading={isLoadingDetail} />
-        </div>
-      )}
-
-      {valueCards.length > 0 && (
-        <div className={styles.cardSection}>
-          <h2 className={styles.sectionHeading}>Value Engine</h2>
-          <SummaryCards cards={valueCards} isLoading={isLoadingDetail} />
-        </div>
-      )}
-
-      {trustCards.length > 0 && (
-        <div className={styles.cardSection}>
-          <h2 className={styles.sectionHeading}>Trust Engine</h2>
-          <SummaryCards cards={trustCards} isLoading={isLoadingDetail} />
         </div>
       )}
 
