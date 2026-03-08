@@ -166,12 +166,45 @@ export interface NodeAction {
 
 // --- Node Detail (server-driven) ---
 
+export interface NodeAIModel {
+  id: string;
+  name: string;
+  owner: string;
+  family?: string;
+  maxOutputTokens?: number;
+  maxToolCalls?: number;
+  functionMode: "local" | "remote";
+  baseEndpoint?: string;
+  hasHeaders: boolean;
+  headerKeys: string[];
+  querySupport: Record<string, boolean>;
+}
+
+export interface SafeExtensionFunction {
+  endpoint: string;
+  hasApiKey: boolean;
+  type: string;
+  supportedCRUDTypes: string[];
+}
+
+export interface NodeExtension {
+  id: string;
+  name: string;
+  description: string;
+  isFullySetUp: boolean;
+  mainFunction?: SafeExtensionFunction;
+  supportedFunctions: SafeExtensionFunction[];
+  functionCount: number;
+}
+
 export interface NodeDetailResponse {
   node: NodeResponse;
   overviewCards: SummaryCard[];
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
   actions: NodeAction[];
+  aiModel?: NodeAIModel;
+  extension?: NodeExtension;
 }
 
 // --- Node List ---

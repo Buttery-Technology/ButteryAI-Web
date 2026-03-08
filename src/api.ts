@@ -141,6 +141,26 @@ export const GET_NODE_DETAIL = (nodeId: string) => ({
   },
 });
 
+export const UPDATE_NODE_AI_MODEL = (nodeId: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/ai-model`,
+  options: {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const UPDATE_NODE_EXTENSION = (nodeId: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/nodes/${nodeId}/extension`,
+  options: {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
 // Node Knowledge
 export const GET_NODE_KNOWLEDGE = (nodeId: string) => ({
   url: BUTTERY_API_URL + `/nodes/${nodeId}/knowledge`,

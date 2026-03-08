@@ -9,6 +9,8 @@
 
   > strong {
     display: block;
+    font-family: var(--sf-pro-rounded-bold);
+    font-weight: normal;
   }
 
   > p {
@@ -234,30 +236,34 @@
 .modelCard {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 20px 24px;
-  background-color: #f7f7f7;
-  border-radius: 16px;
-  border: 2px solid transparent;
+  padding: 32px;
+  background-color: #f9f9f9;
+  border-radius: 32px;
   cursor: pointer;
-  transition: 0.2s ease-out;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 
   &:hover {
-    background-color: #eef0f2;
-    border-color: #288ed2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
-}
 
-.modelName {
-  font-size: 14px;
-  font-weight: 600;
-  color: #272d31;
-}
+  h2 {
+    font-weight: 700;
+    color: #545b69;
+  }
 
-.modelDescription {
-  font-size: 12px;
-  color: #637684;
-  line-height: 1.4;
+  h3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f9b81;
+    margin-block: 8px;
+  }
+
+  p {
+    font-size: 11px;
+    line-height: 2;
+    color: #637684;
+  }
 }
 
 // Knowledge
@@ -376,8 +382,9 @@
 }
 
 .knowledgeName {
+  font-family: var(--sf-pro-rounded-bold);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: normal;
   color: #272d31;
 }
 
@@ -410,8 +417,9 @@
   text-align: center;
 
   > span {
+    font-family: var(--sf-pro-rounded-bold);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: normal;
     color: #272d31;
   }
 
@@ -431,8 +439,9 @@
   text-align: center;
 
   > span {
+    font-family: var(--sf-pro-rounded-bold);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: normal;
     color: #288ed2;
   }
 
@@ -459,8 +468,9 @@
   background-color: #f7f7f7;
   border: 2px solid transparent;
   cursor: pointer;
+  font-family: var(--sf-pro-rounded-bold);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: normal;
   color: #384148;
   transition: 0.2s ease-out;
 
@@ -533,8 +543,9 @@
   text-align: center;
 
   h2 {
+    font-family: var(--sf-pro-rounded-bold);
     font-size: 22px;
-    font-weight: 700;
+    font-weight: normal;
     margin-bottom: 8px;
   }
 
@@ -575,5 +586,236 @@
     &:hover:not(:disabled) {
       background: #c03030;
     }
+  }
+}
+
+// Sheet dialog (wider than confirm dialog)
+.sheetDialog {
+  position: relative;
+  background: #fff;
+  border-radius: 30px;
+  padding: 40px;
+  min-width: 400px;
+  max-width: 600px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+
+  h2 {
+    font-family: var(--sf-pro-rounded-bold);
+    font-size: 22px;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.sheetClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.sheetTitle {
+  flex: 1;
+  text-align: center;
+  // Offset for the close button width so the title is visually centered
+  margin-right: 32px;
+}
+
+.sheetSubtitle {
+  font-size: 14px;
+  color: #637684;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.sheetForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sheetRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sheetField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sheetLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #545b69;
+}
+
+.sheetHint {
+  font-size: 12px;
+  color: #8a9aa8;
+  line-height: 1.4;
+}
+
+.sheetInput {
+  background-color: #f7f7f7;
+  border: none;
+  border-radius: 99px;
+  height: 56px;
+  padding: 0 32px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #272d31;
+  outline: none;
+  transition: 0.2s;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: inherit;
+    color: #637684;
+  }
+}
+
+.sheetActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.saveButton {
+  width: 100%;
+  height: 50px;
+  background: #288ed2;
+  color: white;
+  border: none;
+  border-radius: 830px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #2280be;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Badges
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #545b69;
+}
+
+.badgeBlue {
+  background-color: #eef5fb;
+  color: #288ed2;
+}
+
+.badgeGreen {
+  background-color: #eef8ee;
+  color: #1a7a1a;
+}
+
+.checkmarkStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a7a1a;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.badgeYellow {
+  background-color: #fef8e7;
+  color: #a67c00;
+}
+
+.badgeMuted {
+  background-color: #f3f4f6;
+  color: #8a9aa8;
+}
+
+.badgeGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+// Header row for model sheet
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+
+  .sheetInput {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.headerKey {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  color: #272d31;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+// Function row for extension sheet
+.functionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
   }
 }
