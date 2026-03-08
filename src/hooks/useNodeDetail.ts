@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { GET_NODE_DETAIL } from "../api";
-import type { NodeDetailResponse, SummaryCard, NodeResponse } from "../types/api";
+import type { NodeDetailResponse, SummaryCard, NodeResponse, NodeAction } from "../types/api";
 
 export function useNodeDetail(nodeId: string | undefined, initialNode?: NodeResponse | null) {
   const [node, setNode] = useState<NodeResponse | null>(initialNode ?? null);
   const [overviewCards, setOverviewCards] = useState<SummaryCard[]>([]);
   const [valueCards, setValueCards] = useState<SummaryCard[]>([]);
   const [trustCards, setTrustCards] = useState<SummaryCard[]>([]);
+  const [actions, setActions] = useState<NodeAction[]>([]);
   const [isLoading, setIsLoading] = useState(!initialNode);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +27,7 @@ export function useNodeDetail(nodeId: string | undefined, initialNode?: NodeResp
       setOverviewCards(data.overviewCards);
       setValueCards(data.valueCards);
       setTrustCards(data.trustCards);
+      setActions(data.actions ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load node detail");
     } finally {
@@ -33,5 +35,5 @@ export function useNodeDetail(nodeId: string | undefined, initialNode?: NodeResp
     }
   }
 
-  return { node, overviewCards, valueCards, trustCards, isLoading, error };
+  return { node, overviewCards, valueCards, trustCards, actions, isLoading, error };
 }

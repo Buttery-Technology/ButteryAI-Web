@@ -149,6 +149,21 @@ export interface DashboardResponse {
   tabs: DashboardTab[];
 }
 
+// --- Node Actions ---
+
+export type NodeActionType = "api" | "navigate" | "sheet" | "external" | "confirm";
+
+export interface NodeAction {
+  id: string;
+  label: string;
+  icon: string;
+  order: number;
+  isDestructive?: boolean;
+  actionType: NodeActionType;
+  actionTarget: string;
+  confirmMessage?: string;
+}
+
 // --- Node Detail (server-driven) ---
 
 export interface NodeDetailResponse {
@@ -156,6 +171,7 @@ export interface NodeDetailResponse {
   overviewCards: SummaryCard[];
   valueCards: SummaryCard[];
   trustCards: SummaryCard[];
+  actions: NodeAction[];
 }
 
 // --- Node List ---
