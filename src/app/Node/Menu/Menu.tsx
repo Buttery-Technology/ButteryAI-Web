@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useUserContext } from "@hooks";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
-import Cluster from "@assets/icons/cluster.svg?react";
+import House from "@assets/icons/house.svg?react";
 import PuzzlePiece from "@assets/icons/puzzle-piece.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 // import Metrics from "@assets/icons/metrics.svg?react";
@@ -49,7 +49,7 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
             to={`${basePath}/overview`}
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
-            <Cluster />
+            <House />
           </NavLink>
         </li>
         <li>
