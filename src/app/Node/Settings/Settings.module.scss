@@ -11,6 +11,10 @@
     display: block;
   }
 
+  > strong + ul {
+    margin-top: 16px;
+  }
+
   > p {
     font-size: 14px;
     line-height: 1.5;
