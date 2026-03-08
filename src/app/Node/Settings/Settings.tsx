@@ -2,9 +2,11 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from
 import { useNavigate } from "react-router-dom";
 import { useAPIKeys } from "@hooks";
 import { SummaryCards } from "@common";
-import { BUTTERY_API_URL, GET_AI_MODELS } from "../../../api";
+import { BUTTERY_API_URL } from "../../../api";
 import { useNodeKnowledge } from "../../../hooks/useNodeKnowledge";
-import type { NetworkInfo, APIKeyRole, SummaryCard, NodeAction, NodeResponse } from "../../../types/api";
+import type { NetworkInfo, APIKeyRole, SummaryCard, NodeAction, NodeResponse, NodeAIModel, NodeExtension } from "../../../types/api";
+import ModelDetailSheet from "./ModelDetailSheet";
+import ExtensionDetailSheet from "./ExtensionDetailSheet";
 import Power from "@assets/icons/power.svg?react";
 import Diagnostics from "@assets/icons/diagnostics.svg?react";
 import Share from "@assets/icons/share.svg?react";
@@ -15,12 +17,6 @@ const actionIconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   diagnostics: Diagnostics,
   share: Share,
 };
-
-interface AIModel {
-  id: string;
-  name: string;
-  description?: string;
-}
 
 const DATA_TYPE_LABELS: Record<string, string> = {
   document: "Document",
@@ -38,7 +34,10 @@ interface Props {
   valueCards?: SummaryCard[];
   trustCards?: SummaryCard[];
   actions?: NodeAction[];
+  aiModel?: NodeAIModel | null;
+  nodeExtension?: NodeExtension | null;
   isLoadingDetail?: boolean;
+  onRefetch?: () => void;
 }
 
 const EXPIRATION_OPTIONS = [
@@ -48,12 +47,14 @@ const EXPIRATION_OPTIONS = [
   { label: "Never", value: null },
 ] as const;
 
-const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], trustCards = [], actions = [], isLoadingDetail }: Props) => {
+const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], trustCards = [], actions = [], aiModel, nodeExtension, isLoadingDetail, onRefetch }: Props) => {
   const navigate = useNavigate();
   const { keys, newKey, fetchKeys, createKey, clearNewKey } = useAPIKeys();
   const [activeSheet, setActiveSheet] = useState<string | null>(null);
   const [pendingConfirm, setPendingConfirm] = useState<NodeAction | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [modelSheetOpen, setModelSheetOpen] = useState(false);
+  const [extensionSheetOpen, setExtensionSheetOpen] = useState(false);
 
   // Action handlers
   const executeApiAction = useCallback(async (target: string) => {
@@ -129,27 +130,6 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
 
   const activeKey = keys.length > 0 ? keys[0] : null;
 
-  // AI Models
-  const [models, setModels] = useState<AIModel[]>([]);
-  const [modelsLoading, setModelsLoading] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      setModelsLoading(true);
-      try {
-        const { url, options } = GET_AI_MODELS();
-        const res = await fetch(url, options);
-        if (res.ok) {
-          const data = await res.json();
-          setModels(data.models ?? []);
-        }
-      } catch {
-        // Non-blocking
-      } finally {
-        setModelsLoading(false);
-      }
-    })();
-  }, []);
 
   // Knowledge
   const nodeId = node?.id;
@@ -227,24 +207,32 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
       {/* AI Model section */}
       <div className={styles.section}>
         <strong>AI Model</strong>
-        <p>Select the AI model this node uses for inference.</p>
-        {modelsLoading ? (
-          <p className={styles.muted}>Loading models...</p>
-        ) : models.length > 0 ? (
-          <div className={styles.modelGrid}>
-            {models.map((model) => (
-              <div key={model.id} className={styles.modelCard}>
-                <span className={styles.modelName}>{model.name}</span>
-                {model.description && <span className={styles.modelDescription}>{model.description}</span>}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className={styles.emptyState}>
-            <span>No models available</span>
-            <p>Set up an AI model extension to get started.</p>
-          </div>
-        )}
+        <p>The AI model and extension this node uses for inference.</p>
+        <div className={styles.modelGrid}>
+          {aiModel ? (
+            <div className={styles.modelCard} onClick={() => setModelSheetOpen(true)}>
+              <h2>{aiModel.owner}</h2>
+              <h3>{aiModel.name}</h3>
+              <p>{aiModel.functionMode === "remote" ? "Remote" : "Local"}</p>
+            </div>
+          ) : isLoadingDetail ? (
+            <div className={styles.modelCard}>
+              <h2>Loading...</h2>
+            </div>
+          ) : (
+            <div className={styles.emptyState}>
+              <span>No model configured</span>
+              <p>Set up an AI model extension to get started.</p>
+            </div>
+          )}
+          {nodeExtension ? (
+            <div className={styles.modelCard} onClick={() => setExtensionSheetOpen(true)}>
+              <h2>Extension</h2>
+              <h3>{nodeExtension.name}</h3>
+              <p>{nodeExtension.description}</p>
+            </div>
+          ) : !isLoadingDetail && !aiModel && null}
+        </div>
       </div>
 
       {/* Training section */}
@@ -460,6 +448,26 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
             <button className={styles.cancelButton} onClick={() => setActiveSheet(null)}>Close</button>
           </div>
         </div>
+      )}
+
+      {/* Model detail sheet */}
+      {modelSheetOpen && aiModel && node?.id && (
+        <ModelDetailSheet
+          model={aiModel}
+          nodeId={node.id}
+          onClose={() => setModelSheetOpen(false)}
+          onSaved={() => onRefetch?.()}
+        />
+      )}
+
+      {/* Extension detail sheet */}
+      {extensionSheetOpen && nodeExtension && node?.id && (
+        <ExtensionDetailSheet
+          extension={nodeExtension}
+          nodeId={node.id}
+          onClose={() => setExtensionSheetOpen(false)}
+          onSaved={() => onRefetch?.()}
+        />
       )}
     </section>
   );
