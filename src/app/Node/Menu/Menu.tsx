@@ -3,7 +3,6 @@ import { useUserContext } from "@hooks";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import ArrowLeft from "@assets/icons/arrow-left.svg?react";
 import House from "@assets/icons/house.svg?react";
-import PuzzlePiece from "@assets/icons/puzzle-piece.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 // import Metrics from "@assets/icons/metrics.svg?react";
 import type { NodeResponse } from "../../../types/api";
@@ -11,7 +10,6 @@ import styles from "./Menu.module.scss";
 
 function useActiveTab(): string {
   const { pathname } = useLocation();
-  if (pathname.endsWith("/customize")) return "Customize";
   if (pathname.endsWith("/settings")) return "Settings";
   return "Overview";
 }
@@ -50,14 +48,6 @@ export const Menu = ({ node, isLoading, nodeName }: Props) => {
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <House />
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to={`${basePath}/customize`}
-            className={({ isActive }) => (isActive ? styles.active : "")}
-          >
-            <PuzzlePiece />
           </NavLink>
         </li>
         <li>

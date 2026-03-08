@@ -19,7 +19,7 @@ const FinishSetup = ({ nodeName, hasExtension }: Props) => {
       <div className={styles.list}>
         <button
           className={styles.row}
-          onClick={() => navigate(`${basePath}/customize`)}
+          onClick={() => navigate(`${basePath}/settings`)}
         >
           <span className={styles.icon}>
             <Cluster />

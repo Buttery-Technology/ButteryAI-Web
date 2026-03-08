@@ -5,7 +5,6 @@ import { Menu } from "./Menu";
 import { New } from "./New";
 import { Overview } from "./Overview";
 import { Settings } from "./Settings";
-import { Customize } from "./Customize";
 // import { Metrics } from "./Metrics";
 
 const Node = () => {
@@ -36,8 +35,8 @@ const Node = () => {
         <Route path="overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} isLoadingDetail={isLoading} />} />
         <Route path=":nodeName" element={<Navigate to="overview" replace />} />
         <Route path=":nodeName/overview" element={<Overview node={node} clusterID={clusterID} overviewCards={overviewCards} isLoadingDetail={isLoading} />} />
-        <Route path=":nodeName/customize" element={<Customize node={node} />} />
-        <Route path=":nodeName/settings" element={<Settings clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} valueCards={valueCards} trustCards={trustCards} actions={actions} isLoadingDetail={isLoading} />} />
+        <Route path=":nodeName/customize" element={<Navigate to="../settings" replace />} />
+        <Route path=":nodeName/settings" element={<Settings node={node} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} valueCards={valueCards} trustCards={trustCards} actions={actions} isLoadingDetail={isLoading} />} />
         {/* <Route path=":nodeName/metrics" element={<Metrics node={node} isLoading={isLoading} />} /> */}
       </Routes>
     </>

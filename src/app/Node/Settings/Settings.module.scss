@@ -193,6 +193,257 @@
   }
 }
 
+// Section header with inline action button (e.g. Knowledge + Add Knowledge)
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  > div > strong {
+    display: block;
+  }
+
+  > div > p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #637684;
+    margin-top: 4px;
+  }
+}
+
+.muted {
+  font-size: 14px;
+  color: #637684;
+}
+
+.error {
+  font-size: 13px;
+  color: #d94040;
+  margin-bottom: 16px;
+}
+
+// AI Model grid
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.modelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 24px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s ease-out;
+
+  &:hover {
+    background-color: #eef0f2;
+    border-color: #288ed2;
+  }
+}
+
+.modelName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.modelDescription {
+  font-size: 12px;
+  color: #637684;
+  line-height: 1.4;
+}
+
+// Knowledge
+.plusButton {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 1px;
+  }
+
+  &::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  &::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.fileInput {
+  font-size: 13px;
+  color: #272d31;
+}
+
+.textInput {
+  padding: 10px 16px;
+  border: 1px solid #e2e5e9;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #272d31;
+  background-color: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: #288ed2;
+  }
+
+  &::placeholder {
+    color: #637684;
+  }
+}
+
+.uploadButton {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #288ed2;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #2078b5;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.knowledgeList {
+  display: flex;
+  flex-direction: column;
+}
+
+.knowledgeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:first-child {
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+.knowledgeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.knowledgeName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.knowledgeMeta {
+  font-size: 12px;
+  color: #637684;
+}
+
+.removeButton {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d94040;
+  background-color: transparent;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #fef2f2;
+  }
+}
+
+// Empty state card
+.emptyState {
+  padding: 24px 32px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  text-align: center;
+
+  > span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #272d31;
+  }
+
+  > p {
+    font-size: 13px;
+    color: #637684;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+}
+
+// Training coming soon
+.comingSoon {
+  padding: 24px 32px;
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  text-align: center;
+
+  > span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #288ed2;
+  }
+
+  > p {
+    font-size: 13px;
+    color: #637684;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+}
+
 // Actions section
 .actions {
   display: flex;
@@ -251,6 +502,14 @@
   .keyForm {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+  }
+
+  .modelGrid {
+    grid-template-columns: 1fr;
   }
 }
 
