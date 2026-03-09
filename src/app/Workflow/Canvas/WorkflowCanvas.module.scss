@@ -1,0 +1,96 @@
+.root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  outline: none;
+
+  .react-flow__node {
+    cursor: pointer;
+  }
+}
+
+.addMenu {
+  position: fixed;
+  z-index: 30;
+  background: #f7f7f7;
+  border-radius: 30px;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.addMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  font-size: 15px;
+  color: #272d31;
+  text-align: left;
+  transition: 0.1s;
+
+  &:hover {
+    background: #ededed;
+  }
+
+  &.promoted {
+    background: rgba(40, 142, 210, 0.06);
+
+    &:hover {
+      background: rgba(40, 142, 210, 0.12);
+    }
+  }
+
+  &.demoted {
+    opacity: 0.45;
+  }
+}
+
+.suggestedBadge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: #288ed2;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(40, 142, 210, 0.1);
+}
+
+.addMenuIcon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.previewAddButton {
+  transition: transform 0.15s;
+
+  &:hover {
+    transform: scale(1.1);
+
+    svg path {
+      fill: #aaa;
+    }
+  }
+}

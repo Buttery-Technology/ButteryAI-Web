@@ -69,13 +69,31 @@
   }
 
   a {
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
     path {
       transition: 0.2s ease-out;
+      fill: #272d31;
+    }
+
+    path[stroke] {
+      stroke: #272d31;
     }
 
     &:hover path,
     &.active path {
       fill: #288ed2;
+    }
+
+    &:hover path[stroke],
+    &.active path[stroke] {
+      stroke: #288ed2;
     }
   }
 }

@@ -1,0 +1,159 @@
+.root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.addButton {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  &::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  &::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+.loading,
+.empty {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 48px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 20px 32px;
+  background: #f7f7f7;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: 0.15s;
+  text-align: left;
+
+  &:hover {
+    background: #efefef;
+  }
+}
+
+.rowIndex {
+  font-size: 16px;
+  font-weight: 700;
+  color: #272d31;
+  min-width: 24px;
+  text-align: center;
+}
+
+.rowSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 100px;
+}
+
+.sectionLabel {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+.sectionValue {
+  font-size: 16px;
+  color: #272d31;
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+}
+
+@media (max-width: 768px) {
+  .row {
+    padding: 16px 20px;
+    border-radius: 24px;
+    gap: 16px;
+  }
+
+  .rowSection {
+    min-width: 70px;
+  }
+
+  .rowActions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .row {
+    flex-wrap: wrap;
+    border-radius: 16px;
+    padding: 14px 16px;
+  }
+
+  .rowIndex {
+    display: none;
+  }
+}

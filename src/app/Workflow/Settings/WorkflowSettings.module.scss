@@ -1,0 +1,106 @@
+.root {
+  padding: 24px 32px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #272d31;
+  margin-bottom: 24px;
+}
+
+.loading {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 48px 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.input,
+.textarea {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #272d31;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.12s;
+
+  &:focus {
+    border-color: #288ed2;
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.toggleField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: #d1d5db;
+  transition: background 0.2s;
+  padding: 2px;
+
+  &.on {
+    background: #288ed2;
+  }
+}
+
+.toggleKnob {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+
+  .on & {
+    transform: translateX(20px);
+  }
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+  color: #475569;
+}
+
+.infoLabel {
+  color: #94a3b8;
+  font-weight: 500;
+}

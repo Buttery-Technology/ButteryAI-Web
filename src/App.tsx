@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./app/Helper/ProtectedRoute";
 import { Dashboard } from "./app/Dashboard";
 import { Node } from "./app/Node";
 import { Setup } from "./app/Setup";
+import { Workflow } from "./app/Workflow";
 
 import "./App.scss";
 
@@ -52,6 +53,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Node />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/workflow/:workflowID/*"
+              element={
+                <ProtectedRoute>
+                  <Workflow />
                 </ProtectedRoute>
               }
             />
