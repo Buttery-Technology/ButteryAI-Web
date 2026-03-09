@@ -1,0 +1,120 @@
+.root {
+  padding: 24px 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #272d31;
+}
+
+.addBtn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #288ed2;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.15s;
+
+  &:hover {
+    background: #1e6faa;
+  }
+}
+
+.loading,
+.empty {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 48px 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8;
+    padding: 8px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #475569;
+    border-bottom: 1px solid #f8fafc;
+    vertical-align: middle;
+  }
+
+  tr:hover td {
+    background: #fafbfc;
+  }
+}
+
+.order {
+  width: 40px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.name {
+  cursor: default;
+  color: #272d31;
+  font-weight: 500;
+}
+
+.editInput {
+  padding: 4px 8px;
+  border: 1px solid #288ed2;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+}
+
+.typeBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.numeric {
+  text-align: center;
+  width: 70px;
+}
+
+.deleteRowBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #94a3b8;
+  transition: 0.12s;
+
+  &:hover {
+    background: #fef2f2;
+    color: #ef4444;
+  }
+}

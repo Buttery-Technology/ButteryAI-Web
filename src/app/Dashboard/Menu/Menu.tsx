@@ -4,6 +4,7 @@ import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import Cluster from "@assets/icons/cluster.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
+import WorkflowIcon from "@assets/icons/workflow.svg?react";
 import type { DashboardTab } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
@@ -11,10 +12,12 @@ const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   cluster: Cluster,
   chat: Chat,
   settings: Settings,
+  workflow: WorkflowIcon,
 };
 
 const defaultTabs: DashboardTab[] = [
   { id: "dashboard", label: "Dashboard", icon: "cluster", route: "/dashboard", order: 1 },
+  { id: "workflows", label: "Workflows", icon: "workflow", route: "/dashboard/workflows", order: 5 },
   { id: "settings", label: "Settings", icon: "settings", route: "/dashboard/settings", order: 10 },
 ];
 
@@ -43,7 +46,11 @@ interface Props {
 
 export const Menu = ({ tabs }: Props) => {
   const { user } = useUserContext();
-  const activeTabs = tabs && tabs.length > 0 ? tabs : defaultTabs;
+  const workflowTab: DashboardTab = { id: "workflows", label: "Workflows", icon: "workflow", route: "/dashboard/workflows", order: 5 };
+  const baseTabs = tabs && tabs.length > 0 ? tabs : defaultTabs;
+  const activeTabs = baseTabs.find((t) => t.id === "workflows")
+    ? baseTabs
+    : [...baseTabs, workflowTab].sort((a, b) => a.order - b.order);
   const tabLabel = useActiveTab(activeTabs);
 
   const isOnline = user?.isOnline ?? false;

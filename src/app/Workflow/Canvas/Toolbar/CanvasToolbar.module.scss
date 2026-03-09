@@ -1,0 +1,83 @@
+.root {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  padding: 0 4px;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: grab;
+  font-size: 13px;
+  color: #475569;
+  transition: 0.12s;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.stepIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.executeBtn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background: #288ed2;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.15s;
+
+  &:hover {
+    background: #1e6faa;
+  }
+}

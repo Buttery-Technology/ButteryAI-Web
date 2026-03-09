@@ -4,8 +4,10 @@ import useTrainingAPI from "./useTrainingAPI";
 import useTrainingSSE from "./useTrainingSSE";
 import { useAPIKeys } from "./useAPIKeys";
 import { useClusterConnection } from "./useClusterConnection";
+import { useWorkflows } from "./useWorkflows";
+import { useWorkflow } from "./useWorkflow";
 
-export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys, useClusterConnection };
+export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys, useClusterConnection, useWorkflows, useWorkflow };
 
 export type {
   TrainingJobStatus,

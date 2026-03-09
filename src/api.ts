@@ -308,6 +308,115 @@ export const GET_AI_MODELS = (search?: string) => ({
   },
 });
 
+// Workflows
+export const GET_WORKFLOWS = (limit?: number, offset?: number) => {
+  const params = new URLSearchParams();
+  if (limit) params.set("limit", String(limit));
+  if (offset) params.set("offset", String(offset));
+  const qs = params.toString();
+  return {
+    url: BUTTERY_API_URL + "/workflows" + (qs ? `?${qs}` : ""),
+    options: { method: "GET" as const, ...cookieOptions },
+  };
+};
+
+export const GET_WORKFLOW = (id: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${id}`,
+  options: { method: "GET" as const, ...cookieOptions },
+});
+
+export const CREATE_WORKFLOW = (data: {
+  name: string;
+  description?: string;
+  version?: string;
+  triggerType?: string;
+  access?: string;
+}) => ({
+  url: BUTTERY_API_URL + "/workflows",
+  options: {
+    method: "POST" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      description: data.description ?? "",
+      version: data.version ?? "1.0",
+      triggerType: data.triggerType ?? "manual",
+      access: data.access ?? "private",
+      name: data.name,
+    }),
+    ...cookieOptions,
+  },
+});
+
+export const UPDATE_WORKFLOW = (id: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/workflows/${id}`,
+  options: {
+    method: "PUT" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const DELETE_WORKFLOW = (id: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${id}`,
+  options: {
+    method: "DELETE" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ permanent: false }),
+    ...cookieOptions,
+  },
+});
+
+// Workflow Steps
+export const GET_WORKFLOW_STEPS = (workflowID: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/steps`,
+  options: { method: "GET" as const, ...cookieOptions },
+});
+
+export const ADD_WORKFLOW_STEP = (workflowID: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/steps`,
+  options: {
+    method: "POST" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      description: "",
+      ...data,
+    }),
+    ...cookieOptions,
+  },
+});
+
+export const UPDATE_WORKFLOW_STEP = (workflowID: string, stepID: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/steps/${stepID}`,
+  options: {
+    method: "PUT" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const DELETE_WORKFLOW_STEP = (workflowID: string, stepID: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/steps/${stepID}`,
+  options: { method: "DELETE" as const, ...cookieOptions },
+});
+
+// Workflow Executions
+export const EXECUTE_WORKFLOW = (workflowID: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/execute`,
+  options: { method: "POST" as const, ...cookieOptions },
+});
+
+export const GET_WORKFLOW_EXECUTIONS = (workflowID: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/executions`,
+  options: { method: "GET" as const, ...cookieOptions },
+});
+
+export const GET_WORKFLOW_EXECUTION = (workflowID: string, executionID: string) => ({
+  url: BUTTERY_API_URL + `/workflows/${workflowID}/executions/${executionID}`,
+  options: { method: "GET" as const, ...cookieOptions },
+});
+
 // User Extension Configs
 export const GET_USER_EXTENSION_CONFIGS = () => ({
   url: BUTTERY_API_URL + "/user-extension-configs",
