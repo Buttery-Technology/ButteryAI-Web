@@ -192,6 +192,7 @@ export interface NodeExtension {
   name: string;
   description: string;
   isFullySetUp: boolean;
+  isEnabled: boolean;
   mainFunction?: SafeExtensionFunction;
   supportedFunctions: SafeExtensionFunction[];
   functionCount: number;
