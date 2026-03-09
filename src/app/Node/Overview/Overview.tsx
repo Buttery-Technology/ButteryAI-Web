@@ -48,6 +48,33 @@ function extractTextFromQueryOutput(parsed: Record<string, unknown>): string | n
   return null;
 }
 
+/**
+ * Split a string that may contain multiple concatenated JSON objects (e.g., `}{`)
+ * into individually parseable JSON strings.
+ */
+function splitConcatenatedJSON(raw: string): Record<string, unknown>[] {
+  const results: Record<string, unknown>[] = [];
+  let depth = 0;
+  let start = -1;
+  for (let i = 0; i < raw.length; i++) {
+    if (raw[i] === "{") {
+      if (depth === 0) start = i;
+      depth++;
+    } else if (raw[i] === "}") {
+      depth--;
+      if (depth === 0 && start >= 0) {
+        try {
+          results.push(JSON.parse(raw.slice(start, i + 1)));
+        } catch {
+          // skip unparseable segment
+        }
+        start = -1;
+      }
+    }
+  }
+  return results;
+}
+
 const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -174,12 +201,20 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
             if (parsed.error) throw new Error(parsed.error);
 
             if (parsed.payload) {
-              // Decode base64 payload → JSON QueryOutput
+              // Decode base64 payload → JSON QueryOutput(s)
               const decoded = new TextDecoder().decode(
                 Uint8Array.from(atob(parsed.payload), (c) => c.charCodeAt(0)),
               );
+
+              // A single chunk may contain one or more concatenated JSON objects
+              let outputs: Record<string, unknown>[];
               try {
-                const queryOutput = JSON.parse(decoded);
+                outputs = [JSON.parse(decoded)];
+              } catch {
+                outputs = splitConcatenatedJSON(decoded);
+              }
+
+              for (const queryOutput of outputs) {
                 const extracted = extractTextFromQueryOutput(queryOutput);
                 if (extracted !== null) {
                   latestText = extracted;
@@ -190,8 +225,6 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
                     return updated;
                   });
                 }
-              } catch {
-                // Skip malformed payloads — valid content arrives in parseable chunks
               }
             }
           } catch (e) {
