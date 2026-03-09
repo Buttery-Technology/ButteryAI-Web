@@ -289,6 +289,16 @@ export const CONNECT_TO_CLUSTER = (clusterID: string) => ({
   },
 });
 
+export const QUERY_NODE = (conversationId: string, query: string, nodeId?: string) => ({
+  url: BUTTERY_API_URL + `/conversations/${conversationId}/query`,
+  options: {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, ...(nodeId ? { nodeId } : {}) }),
+    ...cookieOptions,
+  },
+});
+
 // AI Models
 export const GET_AI_MODELS = (search?: string) => ({
   url: BUTTERY_API_URL + "/ai-models" + (search ? `?search=${encodeURIComponent(search)}` : ""),
