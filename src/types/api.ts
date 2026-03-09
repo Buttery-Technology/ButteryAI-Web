@@ -113,7 +113,7 @@ export interface ExtensionTemplateField {
   placeholder: string;
 }
 
-export type ExtensionTemplateCategory = "aiModel" | "cloudProvider" | "storage" | "analytics" | "mcp" | "other";
+export type ExtensionTemplateCategory = "aiModel" | "cloudProvider" | "storage" | "analytics" | "mcp" | "messaging" | "other";
 
 export interface ExtensionTemplate {
   id: string;
