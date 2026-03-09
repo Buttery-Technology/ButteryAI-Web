@@ -32,6 +32,7 @@ const ExtensionDetailSheet = ({ extension: ext, nodeId, onClose, onSaved }: Prop
   const mainFunc = ext.mainFunction;
   const [endpoint, setEndpoint] = useState(mainFunc?.endpoint ?? "");
   const [apiKey, setApiKey] = useState("");
+  const [isEnabled, setIsEnabled] = useState(ext.isEnabled);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,6 +52,7 @@ const ExtensionDetailSheet = ({ extension: ext, nodeId, onClose, onSaved }: Prop
     const payload: Record<string, unknown> = {};
     if (endpoint !== (mainFunc?.endpoint ?? "")) payload.mainFunctionEndpoint = endpoint;
     if (apiKey.length > 0) payload.mainFunctionApiKey = apiKey;
+    if (isEnabled !== ext.isEnabled) payload.isEnabled = isEnabled;
 
     if (Object.keys(payload).length === 0) {
       onClose();
@@ -83,13 +85,27 @@ const ExtensionDetailSheet = ({ extension: ext, nodeId, onClose, onSaved }: Prop
         <p className={styles.sheetSubtitle}>{ext.description}</p>
 
         <form onSubmit={handleSave} className={styles.sheetForm}>
-          {/* Setup status */}
+          {/* Enabled toggle */}
           <div className={styles.sheetRow}>
-            <span className={styles.sheetLabel}>Status</span>
-            <span className={`${styles.badge} ${ext.isFullySetUp ? styles.badgeGreen : styles.badgeYellow}`}>
-              {ext.isFullySetUp ? "Set up" : "Setup incomplete"}
-            </span>
+            <span className={styles.sheetLabel}>Enabled</span>
+            <button
+              type="button"
+              className={`${styles.toggle} ${isEnabled ? styles.toggleOn : ""}`}
+              onClick={() => setIsEnabled(!isEnabled)}
+              role="switch"
+              aria-checked={isEnabled}
+            >
+              <span className={styles.toggleThumb} />
+            </button>
           </div>
+
+          {/* Setup status */}
+          {!ext.isFullySetUp && (
+            <div className={styles.sheetRow}>
+              <span className={styles.sheetLabel}>Status</span>
+              <span className={`${styles.badge} ${styles.badgeYellow}`}>Setup incomplete</span>
+            </div>
+          )}
 
           {/* Main function info */}
           {mainFunc && (
