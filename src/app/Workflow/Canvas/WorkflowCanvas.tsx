@@ -36,6 +36,7 @@ import NetworkIcon from "@assets/icons/network.svg?react";
 import ClockIcon from "@assets/icons/clock.svg?react";
 import AggregateIcon from "@assets/icons/aggregate.svg?react";
 import HexagonNodeIcon from "@assets/icons/hexagon-node.svg?react";
+import ExtensionActionIcon from "@assets/icons/extension-action.svg?react";
 import styles from "./WorkflowCanvas.module.scss";
 
 registerSvgIcon("promptExecution", PromptIcon);
@@ -47,6 +48,7 @@ registerSvgIcon("apiCall", NetworkIcon);
 registerSvgIcon("delay", ClockIcon);
 registerSvgIcon("aggregation", AggregateIcon);
 registerSvgIcon("nodeSelection", HexagonNodeIcon);
+registerSvgIcon("extensionAction", ExtensionActionIcon);
 
 const nodeTypes: NodeTypes = {
   trigger: TriggerNode,
@@ -154,6 +156,9 @@ function getRankedStepTypes(
   // Prompt and API Call are common next steps — slight boost
   scores["promptExecution"] += 1;
   scores["apiCall"] += 1;
+
+  // Extension actions are common output/action steps
+  scores["extensionAction"] += 1;
 
   const sorted = stepTypes
     .map((type) => ({

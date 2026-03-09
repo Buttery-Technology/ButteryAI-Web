@@ -19,6 +19,7 @@ export const nodeRegistry: Record<WorkflowStepType, NodeMeta> = {
   delay: { label: "Delay", icon: "D", color: "#6b7280" },
   aggregation: { label: "Aggregate", icon: "Σ", color: "#f97316" },
   nodeSelection: { label: "Node", icon: "N", color: "#288ed2" },
+  extensionAction: { label: "Extension", icon: "E", color: "#7c3aed" },
 };
 
 export const stepTypes = Object.keys(nodeRegistry) as WorkflowStepType[];

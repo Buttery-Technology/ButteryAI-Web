@@ -5,6 +5,7 @@ import { ConditionalConfig } from "./configs/ConditionalConfig";
 import { ApiCallConfig } from "./configs/ApiCallConfig";
 import { DelayConfig } from "./configs/DelayConfig";
 import { NodeSelectionConfig } from "./configs/NodeSelectionConfig";
+import { ExtensionActionConfig } from "./configs/ExtensionActionConfig";
 import { GenericConfig } from "./configs/GenericConfig";
 import Xmark from "@assets/icons/xmark.svg?react";
 import styles from "./StepConfigPanel.module.scss";
@@ -84,6 +85,8 @@ export const StepConfigPanel = ({ step, position, onUpdate, onClose, onDelete }:
         return <DelayConfig step={step} onUpdate={onUpdate} />;
       case "nodeSelection":
         return <NodeSelectionConfig step={step} onUpdate={onUpdate} />;
+      case "extensionAction":
+        return <ExtensionActionConfig step={step} onUpdate={onUpdate} />;
       default:
         return <GenericConfig step={step} onUpdate={onUpdate} />;
     }

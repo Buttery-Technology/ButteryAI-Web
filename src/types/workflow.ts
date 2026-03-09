@@ -19,7 +19,8 @@ export type WorkflowStepType =
   | "apiCall"
   | "delay"
   | "aggregation"
-  | "nodeSelection";
+  | "nodeSelection"
+  | "extensionAction";
 
 export type WorkflowExecutionStatus =
   | "pending"
