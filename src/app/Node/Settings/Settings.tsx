@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAPIKeys } from "@hooks";
 import { SummaryCards } from "@common";
@@ -7,6 +7,7 @@ import { useNodeKnowledge } from "../../../hooks/useNodeKnowledge";
 import type { NetworkInfo, APIKeyRole, SummaryCard, NodeAction, NodeResponse, NodeAIModel, NodeExtension } from "../../../types/api";
 import ModelDetailSheet from "./ModelDetailSheet";
 import ExtensionDetailSheet from "./ExtensionDetailSheet";
+import KnowledgeWizard from "./KnowledgeWizard";
 import Power from "@assets/icons/power.svg?react";
 import Diagnostics from "@assets/icons/diagnostics.svg?react";
 import Share from "@assets/icons/share.svg?react";
@@ -135,25 +136,11 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
   const nodeId = node?.id;
   const { items: knowledge, isLoading: knowledgeLoading, error: knowledgeError, fetchKnowledge, addKnowledge, removeKnowledge } = useNodeKnowledge(nodeId);
 
-  const [showUpload, setShowUpload] = useState(false);
-  const [uploadName, setUploadName] = useState("");
-  const [uploadDescription, setUploadDescription] = useState("");
-  const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showKnowledgeWizard, setShowKnowledgeWizard] = useState(false);
 
   useEffect(() => {
     if (nodeId) fetchKnowledge();
   }, [nodeId, fetchKnowledge]);
-
-  const inferDataType = (file: File): string => {
-    const mime = file.type;
-    if (mime.startsWith("image/")) return "image";
-    if (mime.startsWith("audio/")) return "audio";
-    if (mime.startsWith("video/")) return "video";
-    if (mime === "application/pdf" || mime.includes("document") || mime.includes("text")) return "document";
-    return "file";
-  };
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -168,39 +155,22 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
     });
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setUploadFile(file);
-    if (file && !uploadName) {
-      setUploadName(file.name.replace(/\.[^.]+$/, ""));
-    }
-  };
-
-  const handleUploadSubmit = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
-    if (!uploadFile || !uploadName.trim() || isUploading) return;
-
-    setIsUploading(true);
-    try {
-      const base64 = await fileToBase64(uploadFile);
-      const dataType = inferDataType(uploadFile);
+  const handleKnowledgeSubmit = useCallback(async (
+    files: { file: File; name: string; description: string; dataType: string }[],
+  ): Promise<boolean> => {
+    let allSucceeded = true;
+    for (const entry of files) {
+      const base64 = await fileToBase64(entry.file);
       const success = await addKnowledge({
-        name: uploadName.trim(),
-        description: uploadDescription.trim(),
-        underlyingDataType: dataType,
+        name: entry.name,
+        description: entry.description,
+        underlyingDataType: entry.dataType,
         underlyingData: base64,
       });
-      if (success) {
-        setUploadName("");
-        setUploadDescription("");
-        setUploadFile(null);
-        setShowUpload(false);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      }
-    } finally {
-      setIsUploading(false);
+      if (!success) allSucceeded = false;
     }
-  }, [uploadFile, uploadName, uploadDescription, isUploading, addKnowledge]);
+    return allSucceeded;
+  }, [addKnowledge]);
 
   return (
     <section className={styles.root}>
@@ -255,45 +225,12 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
           <button
             className={styles.plusButton}
             type="button"
-            aria-label={showUpload ? "Cancel" : "Add knowledge"}
-            onClick={() => setShowUpload(!showUpload)}
+            aria-label="Add knowledge"
+            onClick={() => setShowKnowledgeWizard(true)}
           />
         </div>
 
         {valueCards.length > 0 && <SummaryCards cards={valueCards} isLoading={isLoadingDetail} />}
-
-        {showUpload && (
-          <form className={styles.uploadForm} onSubmit={handleUploadSubmit}>
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleFileChange}
-              className={styles.fileInput}
-            />
-            <input
-              type="text"
-              placeholder="Name"
-              value={uploadName}
-              onChange={(e) => setUploadName(e.target.value)}
-              required
-              className={styles.textInput}
-            />
-            <input
-              type="text"
-              placeholder="Description (optional)"
-              value={uploadDescription}
-              onChange={(e) => setUploadDescription(e.target.value)}
-              className={styles.textInput}
-            />
-            <button
-              type="submit"
-              className={styles.uploadButton}
-              disabled={!uploadFile || !uploadName.trim() || isUploading}
-            >
-              {isUploading ? "Uploading..." : "Upload"}
-            </button>
-          </form>
-        )}
 
         {knowledgeError && <p className={styles.error}>{knowledgeError}</p>}
 
@@ -467,6 +404,14 @@ const Settings = ({ node, clusterConnectionInfo, clusterID, valueCards = [], tru
           nodeId={node.id}
           onClose={() => setExtensionSheetOpen(false)}
           onSaved={() => onRefetch?.()}
+        />
+      )}
+
+      {/* Knowledge wizard */}
+      {showKnowledgeWizard && (
+        <KnowledgeWizard
+          onClose={() => setShowKnowledgeWizard(false)}
+          onSubmit={handleKnowledgeSubmit}
         />
       )}
     </section>
