@@ -30,8 +30,7 @@ const EvaluationMetrics = () => (
             <h3>Trust</h3>
             <p>
               Reflects the system's confidence in the reliability of the response. It combines source credibility
-              assessment from the Trusted Advisor System (TAS) with content truthfulness evaluation from the
-              Universal Value System (UVS).
+              assessment with content truthfulness evaluation, powered by the Output Assurance System.
             </p>
           </div>
           <div className={styles.metricCard}>
