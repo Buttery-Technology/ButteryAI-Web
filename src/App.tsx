@@ -10,6 +10,7 @@ import { Dashboard } from "./app/Dashboard";
 import { Node } from "./app/Node";
 import { Setup } from "./app/Setup";
 import { Workflow } from "./app/Workflow";
+import { EvaluationMetrics } from "./app/EvaluationMetrics";
 
 import "./App.scss";
 
@@ -64,6 +65,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/evaluation-metrics" element={<EvaluationMetrics />} />
             <Route path="*" element={<p>404</p>} />
           </Routes>
         </Wrapper>
