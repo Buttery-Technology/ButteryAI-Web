@@ -114,15 +114,15 @@
   }
 }
 
-/* ---------- Plan cards ---------- */
+/* ---------- Plan columns (line-separated, à la Linear) ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
   align-items: stretch;
 
   @include mq(1200) {
     grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
   }
 
   @include mq(768) {
@@ -130,39 +130,58 @@
   }
 }
 
-.card {
-  position: relative;
-  background: #fff;
-  border: 1px solid var(--surface-line);
-  border-radius: 24px;
-  padding: 32px 26px;
+.col {
   display: flex;
   flex-direction: column;
+  padding: 16px 28px 28px;
+  border-left: 1px solid var(--surface-line);
+
+  &:first-child {
+    border-left: none;
+  }
+
+  @include mq(1200) {
+    &:nth-child(odd) {
+      border-left: none;
+    }
+  }
+
+  @include mq(768) {
+    border-left: none;
+    border-top: 1px solid var(--surface-line);
+    padding: 32px 6px;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
 }
 
+// Popular plan — a subtle tint, no box
 .popular {
-  border: 2px solid var(--buttery-blue);
-  box-shadow: 0 18px 44px rgba(40, 142, 210, 0.16);
+  background: rgba(40, 142, 210, 0.045);
+  border-radius: 18px;
 }
 
-.badge {
-  position: absolute;
-  top: -13px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--buttery-blue);
-  color: var(--white-light);
+.tagSlot {
+  height: 28px;
+  margin-bottom: 4px;
+}
+
+.popularTag {
+  display: inline-block;
   font-family: var(--sf-pro-rounded-bold);
   font-size: 12px;
-  letter-spacing: 0.5px;
-  padding: 5px 14px;
+  letter-spacing: 0.4px;
+  color: var(--buttery-blue);
+  background: rgba(40, 142, 210, 0.12);
+  padding: 4px 12px;
   border-radius: 20px;
-  white-space: nowrap;
 }
 
 .planName {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 26px;
+  font-size: 30px;
   color: var(--buttery-black);
 }
 
@@ -172,10 +191,10 @@
   margin-top: 4px;
 }
 
-// Fixed-height price block so every CTA lines up across cards
+// Fixed-height price block so the feature lists start on the same line
 .priceArea {
-  min-height: 104px;
-  margin-top: 22px;
+  min-height: 96px;
+  margin-top: 20px;
 }
 
 .priceRow {
@@ -186,7 +205,7 @@
 
 .price {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 40px;
+  font-size: 42px;
   line-height: 1;
   color: var(--buttery-black);
 }
@@ -210,45 +229,16 @@
   margin-top: 8px;
 }
 
-.btnPrimary,
-.btnGhost {
-  height: 50px;
-  border-radius: 30px;
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 16px;
-  width: 100%;
-  transition: 0.2s;
-
-  &:not(:disabled):hover {
-    transform: scale(1.03);
-  }
-}
-
-.btnPrimary {
-  background-color: var(--buttery-blue);
-  color: var(--white-light);
-  box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
-
-  &:hover {
-    background-color: var(--buttery-blue-hover);
-  }
-}
-
-.btnGhost {
-  background-color: var(--card-bg);
-  color: var(--buttery-black);
-  border: 1px solid var(--surface-line);
-
-  &:hover {
-    background-color: #eef2f6;
-  }
+.divider {
+  height: 1px;
+  background: var(--surface-line);
+  margin: 6px 0 20px;
 }
 
 .highlights {
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   list-style: none;
 
   li {
@@ -270,10 +260,50 @@
 }
 
 .check {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex: 0 0 auto;
   margin-top: 1px;
+}
+
+// Pins every CTA to the bottom of its column so they line up
+.ctaWrap {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.btnPrimary,
+.btnGhost {
+  height: 48px;
+  border-radius: 30px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  width: 100%;
+  transition: 0.2s;
+
+  &:not(:disabled):hover {
+    transform: scale(1.02);
+  }
+}
+
+.btnPrimary {
+  background-color: var(--buttery-blue);
+  color: var(--white-light);
+  box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
+
+  &:hover {
+    background-color: var(--buttery-blue-hover);
+  }
+}
+
+.btnGhost {
+  background-color: transparent;
+  color: var(--buttery-black);
+  border: 1px solid #d5dde3;
+
+  &:hover {
+    background-color: var(--card-bg);
+  }
 }
 
 /* ---------- Comparison table ---------- */

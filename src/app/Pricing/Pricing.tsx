@@ -179,11 +179,14 @@ const Pricing = () => {
           🚀 <strong>Founding Member</strong> — sign up in the first 90 days and lock launch pricing for 12 months.
         </div>
 
-        {/* Top: clean plan cards with aligned CTAs */}
+        {/* Top: clean columns split by lines, CTAs pinned to the bottom */}
         <div className={styles.grid}>
           {PLANS.map((plan) => (
-            <article key={plan.tier} className={`${styles.card} ${plan.popular ? styles.popular : ""}`}>
-              {plan.popular && <span className={styles.badge}>Most popular</span>}
+            <article key={plan.tier} className={`${styles.col} ${plan.popular ? styles.popular : ""}`}>
+              <div className={styles.tagSlot}>
+                {plan.popular && <span className={styles.popularTag}>Most popular</span>}
+              </div>
+
               <h2 className={styles.planName}>{plan.name}</h2>
               <p className={styles.tagline}>{plan.tagline}</p>
 
@@ -196,13 +199,7 @@ const Pricing = () => {
                 {plan.founderNote && <p className={styles.founderNote}>{plan.founderNote}</p>}
               </div>
 
-              <button
-                type="button"
-                className={plan.popular ? styles.btnPrimary : styles.btnGhost}
-                onClick={() => handleCta(plan.tier)}
-              >
-                {plan.cta}
-              </button>
+              <div className={styles.divider} />
 
               <ul className={styles.highlights}>
                 {plan.highlights.map((feature) => (
@@ -212,6 +209,16 @@ const Pricing = () => {
                   </li>
                 ))}
               </ul>
+
+              <div className={styles.ctaWrap}>
+                <button
+                  type="button"
+                  className={plan.popular ? styles.btnPrimary : styles.btnGhost}
+                  onClick={() => handleCta(plan.tier)}
+                >
+                  {plan.cta}
+                </button>
+              </div>
             </article>
           ))}
         </div>
