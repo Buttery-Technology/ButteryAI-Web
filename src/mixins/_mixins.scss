@@ -5,6 +5,82 @@
   }
 }
 
+// Shared outer shell for landing sections (matches Figma rhythm)
+@mixin sectionShell {
+  position: relative;
+  max-width: 1543px;
+  margin-inline: auto;
+  padding-block: 160px;
+  padding-inline: 80px;
+
+  @include mq(1200) {
+    padding-block: 120px;
+    padding-inline: 40px;
+  }
+
+  @include mq(768) {
+    padding-block: 80px;
+    padding-inline: 20px;
+  }
+}
+
+// Pill tag used on pillar cards / chips
+@mixin pillTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 13px 31px;
+  border-radius: 30px;
+  background-color: var(--buttery-gray-3);
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--buttery-black);
+  white-space: nowrap;
+}
+
+// Centered section heading (big title with optional blue <span> accent)
+@mixin headerTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 48px;
+  line-height: 1.1;
+  color: var(--buttery-black);
+
+  span {
+    color: var(--buttery-blue);
+  }
+
+  @include mq(1200) {
+    font-size: 36px;
+  }
+
+  @include mq(768) {
+    font-size: 30px;
+  }
+}
+
+@mixin headerSubtitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 32px;
+  line-height: 1.25;
+  color: var(--dark-gray);
+
+  @include mq(1200) {
+    font-size: 24px;
+  }
+
+  @include mq(768) {
+    font-size: 18px;
+  }
+}
+
+@mixin cardBase {
+  background-color: var(--card-bg);
+  border-radius: 30px;
+  padding: 30px;
+}
+
 @mixin scaleAnimation {
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0.2, 1, 0.2, 1.4);
