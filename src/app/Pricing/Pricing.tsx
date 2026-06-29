@@ -146,7 +146,16 @@ const Pricing = () => {
   };
 
   const renderCell = (value: string) =>
-    value === "—" ? <span className={styles.dash}>—</span> : value;
+    value === "—" ? (
+      <span className={styles.cellEmpty} aria-label="Not included">
+        ✕
+      </span>
+    ) : (
+      <span className={styles.cell}>
+        <CheckCircle className={styles.cellCheck} />
+        <span>{value}</span>
+      </span>
+    );
 
   return (
     <>
