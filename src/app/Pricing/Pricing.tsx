@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
@@ -14,7 +15,7 @@ type Plan = {
   founderNote?: string;
   cta: string;
   popular?: boolean;
-  features: string[];
+  highlights: string[];
 };
 
 // Mirrors ButteryAI-Server/Sources/App/Subscriptions/PlanCatalog.swift
@@ -27,13 +28,10 @@ const PLANS: Plan[] = [
     price: "$0",
     unit: "/ forever",
     cta: "Start free",
-    features: [
+    highlights: [
       "Local-first inference (unlimited)",
       "500K platform tokens / month",
       "5 premium-engine queries / day",
-      "Local file knowledge base",
-      "Email + Google + Passkey sign-in",
-      "Manual cluster snapshots",
       "24-hour audit retention",
       "Community support",
     ],
@@ -44,18 +42,15 @@ const PLANS: Plan[] = [
     tagline: "Personal power user",
     price: "$75",
     unit: "/ seat / mo",
-    founderNote: "Founding Member: $50 / seat for your first year",
+    founderNote: "Founding Member: $50 / seat for year one",
     cta: "Start building",
     popular: true,
-    features: [
+    highlights: [
       "Everything in Free, plus:",
       "Hybrid + intelligent routing",
-      "Full KnowledgeIntelligence + TrustIntelligence",
-      "Remote embeddings & vector search",
-      "mTLS between nodes, E2EE for chat",
+      "Full Knowledge + Trust Intelligence",
       "5M platform tokens / month",
-      "30-day audit retention",
-      "Token usage estimation (coming soon)",
+      "mTLS + E2EE for chat",
       "Email support (48h)",
     ],
   },
@@ -66,17 +61,14 @@ const PLANS: Plan[] = [
     price: "$125",
     unit: "/ seat / mo",
     meta: "3-seat minimum",
-    founderNote: "Founding Member: $75 / seat for your first year",
+    founderNote: "Founding Member: $75 / seat for year one",
     cta: "Start a team",
-    features: [
+    highlights: [
       "Everything in Pro, plus:",
-      "Per-org RBAC (owner/admin/member/viewer)",
-      "Multi-cluster routing within org",
-      "Cross-cluster knowledge sync",
-      "30M pooled platform tokens / month",
-      "90-day audit retention",
+      "Per-org RBAC",
+      "30M pooled tokens / month",
       "SOC 2 Type I",
-      "Microsoft + OIDC sign-in",
+      "90-day audit retention",
       "Email support (8h business)",
     ],
   },
@@ -87,15 +79,57 @@ const PLANS: Plan[] = [
     price: "Custom",
     meta: "Starting at $3,000 / mo",
     cta: "Talk to sales",
-    features: [
+    highlights: [
       "Everything in Team, plus:",
-      "SAML SSO + SCIM auto-provision",
+      "SAML SSO + SCIM",
       "BYOK / HSM encryption",
-      "Federated routing + trust across orgs",
-      "Audit log export, compliance reporting",
       "SOC 2 Type II + HIPAA + BAA",
-      "Custom data residency",
       "Dedicated CSM + SLA",
+    ],
+  },
+];
+
+type Row = { label: string; cells: [string, string, string, string] };
+type Group = { category: string; rows: Row[] };
+
+// Mirrors the customer-facing tier table in ButteryAI-Server/PRICING_TIERS.md
+const COMPARISON: Group[] = [
+  {
+    category: "Intelligence",
+    rows: [
+      { label: "Routing engine", cells: ["Local-only", "Hybrid + intelligent", "+ multi-cluster within org", "+ federated cross-org"] },
+      { label: "Management engine", cells: ["Basic — single tool", "Multi-step + verification", "Parallel multi-node + allowlists", "BYO orchestration LLM, on-prem"] },
+      { label: "KnowledgeIntelligence", cells: ["—", "Auto-extract + scoring", "+ custom criteria, multi-source", "+ domain scoring models"] },
+      { label: "TrustIntelligence", cells: ["Self-monitoring only", "Full per-entity scoring", "+ cross-cluster aggregation", "+ federated trust across orgs"] },
+      { label: "Knowledge & RAG", cells: ["Local files + BM25", "+ remote embeddings, vector search", "+ multi-cluster sync", "+ BYO embeddings, federated graph"] },
+    ],
+  },
+  {
+    category: "Security",
+    rows: [
+      { label: "Encryption — transport", cells: ["TLS to server", "+ mTLS between nodes", "+ key rotation controls", "+ customer keys / HSM / BYOK"] },
+      { label: "Encryption — at rest", cells: ["Local SQLite encrypted", "+ E2EE for chat", "+ audit log encryption", "+ customer-managed keys"] },
+      { label: "Permissions & RBAC", cells: ["Self-only", "Per-cluster", "Per-org roles", "+ SAML SSO + SCIM"] },
+      { label: "Governance", cells: ["—", "Basic policy gates", "Per-org custom policies", "+ compliance reporting + export"] },
+      { label: "Compliance posture", cells: ["—", "—", "SOC 2 Type I", "SOC 2 Type II + HIPAA + BAA"] },
+      { label: "Audit retention", cells: ["24 hours", "30 days", "90 days", "Custom (years) + export"] },
+    ],
+  },
+  {
+    category: "Operations",
+    rows: [
+      { label: "Sign-in", cells: ["Email + Google + Passkey", "+ GitHub", "+ Microsoft + OIDC", "+ SAML 2.0"] },
+      { label: "Snapshots", cells: ["Manual", "Manual + 7 retained", "Auto-daily + 30 retained", "Custom + cross-region"] },
+      { label: "Support", cells: ["Community", "Email (48h)", "Email (8h) + onboarding", "Slack + SLA + named CSM"] },
+    ],
+  },
+  {
+    category: "Usage",
+    rows: [
+      { label: "Included platform tokens / mo", cells: ["500K + daily allowance", "5M", "30M pooled / org", "Unlimited / 500M+ committed"] },
+      { label: "Daily premium-engine allowance", cells: ["5 / day", "Unlimited", "Unlimited", "Unlimited"] },
+      { label: "Pre-query token estimate", cells: ["—", "Pre-query estimate", "+ per-member drill-down", "+ budget alerts + forecasting"] },
+      { label: "Overage rate", cells: ["Hard cap", "$0.50 / 1M tokens", "$0.30 / 1M tokens", "Custom committed"] },
     ],
   },
 ];
@@ -110,6 +144,9 @@ const Pricing = () => {
     }
     navigate("/waiting-list");
   };
+
+  const renderCell = (value: string) =>
+    value === "—" ? <span className={styles.dash}>—</span> : value;
 
   return (
     <>
@@ -142,6 +179,7 @@ const Pricing = () => {
           🚀 <strong>Founding Member</strong> — sign up in the first 90 days and lock launch pricing for 12 months.
         </div>
 
+        {/* Top: clean plan cards with aligned CTAs */}
         <div className={styles.grid}>
           {PLANS.map((plan) => (
             <article key={plan.tier} className={`${styles.card} ${plan.popular ? styles.popular : ""}`}>
@@ -149,12 +187,14 @@ const Pricing = () => {
               <h2 className={styles.planName}>{plan.name}</h2>
               <p className={styles.tagline}>{plan.tagline}</p>
 
-              <div className={styles.priceRow}>
-                <span className={styles.price}>{plan.price}</span>
-                {plan.unit && <span className={styles.unit}>{plan.unit}</span>}
+              <div className={styles.priceArea}>
+                <div className={styles.priceRow}>
+                  <span className={styles.price}>{plan.price}</span>
+                  {plan.unit && <span className={styles.unit}>{plan.unit}</span>}
+                </div>
+                {plan.meta && <p className={styles.meta}>{plan.meta}</p>}
+                {plan.founderNote && <p className={styles.founderNote}>{plan.founderNote}</p>}
               </div>
-              {plan.meta && <p className={styles.meta}>{plan.meta}</p>}
-              {plan.founderNote && <p className={styles.founderNote}>{plan.founderNote}</p>}
 
               <button
                 type="button"
@@ -164,9 +204,9 @@ const Pricing = () => {
                 {plan.cta}
               </button>
 
-              <ul className={styles.features}>
-                {plan.features.map((feature) => (
-                  <li key={feature} className={feature.endsWith("plus:") ? styles.featureHead : undefined}>
+              <ul className={styles.highlights}>
+                {plan.highlights.map((feature) => (
+                  <li key={feature} className={feature.endsWith("plus:") ? styles.highlightHead : undefined}>
                     {!feature.endsWith("plus:") && <CheckCircle className={styles.check} />}
                     <span>{feature}</span>
                   </li>
@@ -175,6 +215,48 @@ const Pricing = () => {
             </article>
           ))}
         </div>
+
+        {/* Below: full feature comparison */}
+        <section className={styles.compare}>
+          <h2 className={styles.compareTitle}>Compare every plan</h2>
+          <div className={styles.tableScroll}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.corner} />
+                  {PLANS.map((plan) => (
+                    <th key={plan.tier} className={plan.popular ? styles.colPopular : undefined}>
+                      <span className={styles.colName}>{plan.name}</span>
+                      <span className={styles.colPrice}>
+                        {plan.price}
+                        {plan.unit ? ` ${plan.unit}` : ""}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON.map((group) => (
+                  <Fragment key={group.category}>
+                    <tr className={styles.catRow}>
+                      <th colSpan={5}>{group.category}</th>
+                    </tr>
+                    {group.rows.map((row) => (
+                      <tr key={row.label}>
+                        <th className={styles.rowLabel}>{row.label}</th>
+                        {row.cells.map((cell, i) => (
+                          <td key={i} className={i === 1 ? styles.colPopular : undefined}>
+                            {renderCell(cell)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <p className={styles.footnote}>
           Every plan includes local-first inference, end-to-end encryption, and the full audit trail. Prices in USD.
