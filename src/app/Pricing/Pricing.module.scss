@@ -348,14 +348,22 @@
     line-height: 1.4;
   }
 
-  // Plan column header
+  // Plan column header — sticks to the top while scrolling the matrix
   thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
     border-bottom: 1px solid var(--surface-line);
     width: 21%;
 
     &.corner {
       width: 16%;
       border-bottom: none;
+    }
+
+    &.colPopular {
+      background: #eef6fc;
     }
   }
 }
@@ -394,6 +402,10 @@
   border-bottom: 1px solid #f0f3f6;
 }
 
+.table tbody tr:not(.catRow):hover {
+  background: #fafbfc;
+}
+
 .table tbody td {
   color: var(--text-secondary);
 }
@@ -403,8 +415,23 @@
   background: rgba(40, 142, 210, 0.05);
 }
 
-.dash {
-  color: #c2cbd1;
+// Capability cell: green check + value, like Linear's "✓ Unlimited"
+.cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cellCheck {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.cellEmpty {
+  color: #c4ccd2;
+  font-size: 15px;
 }
 
 .footnote {
