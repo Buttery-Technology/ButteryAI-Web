@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import butteryLogo from "@assets/images/buttery-body.png";
 import styles from "./HomeFooter.module.scss";
 
@@ -87,6 +87,8 @@ const HomeFooter = () => {
 
       <div className={styles.bottomRow}>
         <span>© 2026 Buttery Technology, Inc.</span>
+        <Link to="/pricing">Pricing</Link>
+        <Link to="/about">About</Link>
         <a href="#">Terms of Service</a>
         <a href="#">Privacy Policy</a>
       </div>
