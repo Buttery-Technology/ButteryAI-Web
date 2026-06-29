@@ -6,7 +6,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
+  grid-template-columns: 1.05fr 0.95fr;
   gap: 64px;
   align-items: center;
 
@@ -94,6 +94,53 @@
   padding: 30px;
 }
 
+.panelTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  color: var(--buttery-black);
+  margin-bottom: 18px;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.barRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bn {
+  width: 74px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #566;
+}
+
+.track {
+  flex: 1;
+  height: 9px;
+  border-radius: 20px;
+  background: #e9eef3;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 20px;
+}
+
+.pct {
+  width: 42px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .miniCard {
   background: #fff;
   border: 1px solid var(--surface-line);
@@ -133,12 +180,7 @@
   color: var(--buttery-green);
 }
 
-.appr {
-  background: #fff5e3;
-  color: #c08a00;
-}
-
-.deny {
-  background: #fdeceb;
-  color: #d22839;
+.audit {
+  background: #eaf3fb;
+  color: var(--buttery-blue);
 }

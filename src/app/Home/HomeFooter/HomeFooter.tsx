@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import butteryLogo from "@assets/images/buttery-body.png";
 import styles from "./HomeFooter.module.scss";
 
 const FacebookIcon = () => (
@@ -35,15 +37,26 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const HomeFooter = () => (
-  <footer className={styles.root} data-section="footer">
-    <div className={styles.content}>
-      <h1 className={styles.title}>
-        Get started <span>now</span>!
-      </h1>
+const HomeFooter = () => {
+  const navigate = useNavigate();
+
+  return (
+    <footer className={styles.root} data-section="footer">
+      <h2 className={styles.title}>Build AI you can trust — and own.</h2>
+      <p className={styles.subtitle}>
+        Start building locally in minutes. Bring your team when you&apos;re ready.
+      </p>
+      <div className={styles.actions}>
+        <button type="button" className={styles.btnPrimary} onClick={() => navigate("/waiting-list")}>
+          Start building
+        </button>
+        <button type="button" className={styles.btnSecondary} onClick={() => navigate("/waiting-list")}>
+          Talk to us about enterprise
+        </button>
+      </div>
 
       <div className={styles.connectSection}>
-        <h2 className={styles.connectTitle}>Connect with us</h2>
+        <h3 className={styles.connectTitle}>Connect with us</h3>
         <div className={styles.socialLinks}>
           <button
             type="button"
@@ -68,12 +81,17 @@ const HomeFooter = () => (
           </button>
         </div>
       </div>
-    </div>
 
-    <div className={styles.footerLinks}>
-      <span>© 2026 Buttery Technology, Inc.</span>
-    </div>
-  </footer>
-);
+      <p className={styles.productBy}>Product by</p>
+      <img src={butteryLogo} alt="Buttery" className={styles.butteryLogo} />
+
+      <div className={styles.bottomRow}>
+        <span>© 2026 Buttery Technology, Inc.</span>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </footer>
+  );
+};
 
 export default HomeFooter;

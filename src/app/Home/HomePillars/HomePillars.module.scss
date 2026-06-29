@@ -1,0 +1,87 @@
+@use "@mixins" as *;
+
+.root {
+  @include sectionShell;
+}
+
+.header {
+  text-align: center;
+  max-width: 1184px;
+  margin: 0 auto 50px;
+}
+
+.title {
+  @include headerTitle;
+}
+
+.subtitle {
+  @include headerSubtitle;
+  margin-top: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+
+  @include mq(1200) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mq(768) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  @include cardBase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 367px;
+}
+
+.eyebrow {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 24px;
+  color: var(--buttery-blue);
+}
+
+.cardTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 26px;
+  line-height: 1.15;
+  color: var(--buttery-black);
+  margin-top: 10px;
+}
+
+.cardBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--buttery-black);
+  margin-top: 14px;
+  flex-grow: 1;
+}
+
+.check {
+  width: 40px;
+  height: 40px;
+  align-self: center;
+  margin: 18px 0;
+}
+
+.tag {
+  @include pillTag;
+  align-self: center;
+  width: 100%;
+}
+
+.note {
+  font-family: var(--sf-pro-text);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--buttery-black);
+  text-align: center;
+  max-width: 626px;
+  margin: 48px auto 0;
+}

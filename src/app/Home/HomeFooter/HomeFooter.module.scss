@@ -1,203 +1,158 @@
 @use "@mixins" as *;
 
 .root {
-  background-color: white;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  padding: 80px 20px;
-  overflow: hidden;
-}
-
-.content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  z-index: 10;
+  text-align: center;
+  padding-block: 140px 80px;
+  padding-inline: 80px;
+
+  @include mq(768) {
+    padding-block: 90px 64px;
+    padding-inline: 20px;
+  }
 }
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 75px;
-  line-height: 1;
-  color: #272d31;
-  text-align: center;
-  margin: 0;
+  font-size: 72px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--buttery-black);
+  max-width: 1100px;
 
-  span {
-    background: linear-gradient(90deg, #ffd74d 0%, #0f9b81 23.4%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  @include mq(1200) {
+    font-size: 52px;
+  }
+
+  @include mq(768) {
+    font-size: 34px;
   }
 }
 
-.startButton {
-  background-color: #288ed2;
-  color: #f7fbff;
-  border: none;
+.subtitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 32px;
+  line-height: 1.25;
+  color: var(--dark-gray);
+  max-width: 848px;
+  margin-top: 18px;
+
+  @include mq(1200) {
+    font-size: 24px;
+  }
+
+  @include mq(768) {
+    font-size: 18px;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 44px;
+
+  @include mq(768) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.btnPrimary,
+.btnSecondary {
+  height: 52px;
+  padding: 0 32px;
   border-radius: 30px;
-  padding: 14px 56px;
   font-family: var(--sf-pro-rounded-bold);
   font-size: 18px;
-  cursor: pointer;
-  box-shadow: 0px 6px 16px 0px rgba(5, 17, 34, 0.1);
-  transition: background-color 0.2s ease;
+  color: var(--white-light);
+  box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
+  @include scaleAnimation;
+}
+
+.btnPrimary {
+  background-color: var(--buttery-blue);
 
   &:hover {
-    background-color: #2080c0;
+    background-color: var(--buttery-blue-hover);
+  }
+}
+
+.btnSecondary {
+  background-color: var(--dark-gray);
+
+  &:hover {
+    background-color: #7c7c7c;
   }
 }
 
 .connectSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  // Extra margin to account for the Start button positioned below the title
-  margin-top: 140px;
-  position: relative;
-  z-index: 50;
+  margin-top: 64px;
 }
 
 .connectTitle {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 24px;
-  color: #272d31;
-  margin: 0;
+  color: var(--buttery-black);
 }
 
 .socialLinks {
   display: flex;
-  gap: 20px;
-  align-items: center;
-  position: relative;
-  z-index: 100;
-  pointer-events: auto;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 16px;
 
   button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    pointer-events: auto;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.7;
-    }
-
-    svg {
-      pointer-events: none;
-    }
+    @include scaleAnimation;
   }
 }
 
-.productBySection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 80px;
-}
-
-.productByText {
-  font-family: var(--sf-pro-rounded-regular);
+.productBy {
+  font-family: var(--sf-pro-rounded-bold);
+  font-weight: 400;
   font-size: 24px;
-  color: #272d31;
+  color: var(--buttery-black);
+  margin-top: 56px;
 }
 
 .butteryLogo {
   width: 164px;
-  height: auto;
+  height: 164px;
+  object-fit: contain;
+  // PNG has built-in transparent padding (~25% top); pull up to sit close to the label
+  margin-top: -28px;
+
+  @include mq(768) {
+    width: 120px;
+    height: 120px;
+    margin-top: -20px;
+  }
 }
 
-.footerLinks {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
+.bottomRow {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
-  align-items: center;
-  font-family: var(--sf-pro-rounded-medium);
+  margin-top: 48px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-weight: 500;
   font-size: 16px;
-  color: #272d31;
-  z-index: 10;
+  color: var(--buttery-black);
 
   a {
-    color: #272d31;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+    color: inherit;
+    transition: color 0.2s ease;
 
     &:hover {
-      opacity: 0.7;
+      color: var(--buttery-blue);
     }
-  }
-}
-
-// Tablet
-@include mq(1200) {
-  .title {
-    font-size: 56px;
-  }
-
-  .connectSection {
-    margin-top: 120px;
-  }
-
-  .productBySection {
-    margin-top: 60px;
-  }
-}
-
-// Mobile
-@include mq(768) {
-  .root {
-    padding: 60px 16px;
-  }
-
-  .title {
-    font-size: 36px;
-  }
-
-  .startButton {
-    padding: 12px 40px;
-    font-size: 16px;
-  }
-
-  .connectSection {
-    margin-top: 100px;
-  }
-
-  .connectTitle {
-    font-size: 18px;
-  }
-
-  .productBySection {
-    margin-top: 40px;
-  }
-
-  .productByText {
-    font-size: 18px;
-  }
-
-  .butteryLogo {
-    width: 120px;
-  }
-
-  .footerLinks {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-    font-size: 14px;
-    bottom: 20px;
   }
 }

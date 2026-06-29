@@ -1,0 +1,30 @@
+@use "@mixins" as *;
+
+.root {
+  @include sectionShell;
+  text-align: center;
+}
+
+.title {
+  @include headerTitle;
+}
+
+.body {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 900px;
+  margin: 18px auto 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.chip {
+  @include pillTag;
+}

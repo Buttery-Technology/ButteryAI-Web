@@ -1,414 +1,265 @@
-@use "sass:string";
 @use "@mixins" as *;
 
-$hex-width: 180px;
-$hex-height: 207px;
-$gap: 16px;
-$cols: 14;
-$rows: 3;
-$row-offset: calc($hex-width / 2 + $gap / 2);
-$transition-duration: 0.5s;
-
 .root {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  overflow: visible;
-  padding: 40px 0;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
   position: relative;
-}
+  overflow: hidden;
+  padding-block: 84px 120px;
+  padding-inline: 80px;
 
-// Grid container - starts centered, then splits
-.gridContainer {
-  display: grid;
-  grid-template-columns: repeat($cols, $hex-width);
-  grid-template-rows: repeat($rows, calc($hex-height * 0.75));
-  gap: $gap;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  overflow: visible;
-}
+  @include mq(1200) {
+    padding-inline: 40px;
+  }
 
-.hexagon {
-  width: $hex-width;
-  height: $hex-height;
-  position: relative;
-  grid-row: calc(var(--row) + 1);
-  grid-column: calc(var(--col) + 1);
-  opacity: 0;
-  animation: fadeIn 0.6s ease-out forwards;
-  animation-delay: var(--delay);
-  transition: transform $transition-duration ease-out, opacity $transition-duration ease-out;
-}
-
-.oddRow {
-  margin-left: $row-offset;
-}
-
-.hexSvg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-  transform-origin: center;
-  animation: scaleIn 0.6s ease-out forwards;
-  animation-delay: inherit;
-  transition: filter 0.3s ease;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
-
-.hexagon {
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-drag: none;
-  overflow: visible;
-}
-
-.hexDragWrapper {
-  background: none;
-  transition: transform 0.4s ease-out;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.hexagon:hover .hexSvg {
-  filter: drop-shadow(0 0 8px var(--hex-color));
-}
-
-.hexagon.dragging {
-  z-index: 100;
-}
-
-.hexagon.dragging .hexDragWrapper {
-  transition: none;
-}
-
-.hexagon.dragging .hexSvg {
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
-}
-
-// Logo hexagon
-.logoHex {
-  z-index: 10;
-  will-change: transform;
-
-  .hexSvg {
-    filter: drop-shadow(0 6px 16px rgba(255, 215, 77, 0.4));
+  @include mq(768) {
+    padding-block: 56px 72px;
+    padding-inline: 20px;
   }
 }
 
-// Keep logo in grid during loading/transitioning
-.gridContainer.loading .logoHex,
-.gridContainer.transitioning .logoHex {
-  position: relative;
-}
-
-// Yellow hexagon - stays visible during loading, fades out during transition
-.logoHexSvg {
-  opacity: 1;
-  transition: opacity 0.15s ease-out;
-}
-
-// Logo - hidden during loading, fades in during transition
-.logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: auto;
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 0.15s ease-out, width 0.5s ease-out;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
-
-// Transition states
-// Minimum clearance from center for hexagons (ensures text area)
-$min-hex-clearance: 320px;
-
-.gridContainer.transitioning,
-.gridContainer.complete {
-  .logoHex {
-    // Slide logo up above the text, aligned with top row hexagons
-    // Move up by 1 row height (from middle row to top row)
-    transform: translateY(calc(($hex-height * 0.75 + $gap) * -1));
-
-    // Fade out the yellow hexagon
-    .logoHexSvg {
-      opacity: 0;
-    }
-
-    // Fade in and scale up the logo
-    .logo {
-      opacity: 1;
-      width: 95%;
-    }
-  }
-
-  .rightHex {
-    // Slide right hexagons out - maintain minimum clearance from center
-    transform: translateX(#{string.unquote("max(#{$min-hex-clearance}, calc(50vw - #{$hex-width * 2.5}))")});
-  }
-
-  .leftHex {
-    // Slide left hexagons out - maintain minimum clearance from center
-    transform: translateX(#{string.unquote("min(#{-$min-hex-clearance}, calc(-50vw + #{$hex-width * 2.5}))")});
-  }
-}
-
-// Fixed positioning for hexagons after transition completes
-.gridContainer.complete {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 50;
-  pointer-events: none;
-
-  // Re-enable pointer events on the hexagons themselves
-  .hexagon {
-    pointer-events: auto;
-  }
-}
-
-// Logo scroll animation is handled via inline styles from JS
-// This ensures smooth interpolation based on actual element position
-
-// Start button - stays fixed when scrolling
-.startButton {
-  position: fixed;
-  bottom: 48px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #288ED2;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 16px 48px;
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 18px;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease-out, background-color 0.2s ease, top 0.3s ease-out, bottom 0.3s ease-out;
-  z-index: 100;
-
-  &:hover {
-    background-color: darken(#288ED2, 10%);
-  }
-
-  &.transitioning,
-  &.complete {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  &.inFooter {
-    // Styles applied via JS for positioning under footer title
-  }
-}
-
-// Text section
-.textSection {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, calc($hex-height * -0.25));
+.inner {
+  max-width: 1180px;
+  margin-inline: auto;
   text-align: center;
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease-out;
-  transition-delay: 0.5s;
-  // Text width based on minimum hexagon clearance
-  max-width: calc($min-hex-clearance * 2 - 40px);
-  padding: 0 40px;
-  will-change: transform;
 }
 
-.textSection.transitioning,
-.textSection.complete {
-  opacity: 1;
-  pointer-events: auto;
+.logo {
+  width: 100px;
+  height: auto;
+  margin: 0 auto 26px;
 }
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 72px;
-  line-height: 1.1;
-  color: #272d31;
-  margin: 24px 0 40px 0;
-  white-space: nowrap;
-  // Keep title centered with logo regardless of container width
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  width: max-content;
+  line-height: 1.04;
+  letter-spacing: -1px;
+  color: var(--buttery-black);
+  margin: 0 auto;
+  max-width: 980px;
+
+  span {
+    color: var(--buttery-blue);
+  }
+
+  @include mq(1200) {
+    font-size: 56px;
+  }
+
+  @include mq(768) {
+    font-size: 36px;
+  }
 }
 
 .subtitle {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 32px;
-  line-height: 1.2;
-  color: #272d31;
-  margin: 0 0 12px 0;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--dark-gray);
+  margin: 22px auto 0;
+  max-width: 760px;
+
+  @include mq(1200) {
+    font-size: 22px;
+  }
+
+  @include mq(768) {
+    font-size: 18px;
+  }
 }
 
-.description {
+.lede {
   font-size: 18px;
   line-height: 1.6;
-  color: #576773;
-  margin: 0;
-}
+  color: var(--text-secondary);
+  margin: 20px auto 0;
+  max-width: 640px;
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
+  @include mq(768) {
+    font-size: 15px;
   }
 }
 
-@keyframes scaleIn {
-  0% {
-    transform: scale(0.5);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+.actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 34px;
 
-// Tablet
-@include mq(1200) {
-  $hex-width-tablet: 137px;
-  $hex-height-tablet: 158px;
-  $row-offset-tablet: calc($hex-width-tablet / 2 + $gap / 2);
-  $min-hex-clearance-tablet: 350px;
-
-  .gridContainer {
-    grid-template-columns: repeat($cols, $hex-width-tablet);
-    grid-template-rows: repeat($rows, calc($hex-height-tablet * 0.75));
-  }
-
-  .hexagon {
-    width: $hex-width-tablet;
-    height: $hex-height-tablet;
-  }
-
-  .oddRow {
-    margin-left: $row-offset-tablet;
-  }
-
-  .gridContainer.transitioning,
-  .gridContainer.complete {
-    .logoHex {
-      transform: translateY(calc(($hex-height-tablet * 0.75 + $gap) * -1));
-    }
-
-    .rightHex {
-      transform: translateX(#{string.unquote("max(#{$min-hex-clearance-tablet}, calc(50vw - #{$hex-width-tablet * 1.5}))")});
-    }
-
-    .leftHex {
-      transform: translateX(#{string.unquote("min(#{-$min-hex-clearance-tablet}, calc(-50vw + #{$hex-width-tablet * 1.5}))")});
-    }
-  }
-
-  .gridContainer.complete {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    z-index: 50;
-  }
-
-  .textSection {
-    transform: translate(-50%, calc($hex-height-tablet * -0.15));
-    max-width: calc($min-hex-clearance-tablet * 2 - 40px);
-  }
-
-  .title {
-    font-size: 56px;
-  }
-
-  .subtitle {
-    font-size: 26px;
-  }
-
-  .description {
-    font-size: 16px;
+  @include mq(768) {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
-// Mobile
-@include mq(768) {
-  $hex-width-mobile: 98px;
-  $hex-height-mobile: 113px;
-  $gap-mobile: 10px;
-  $row-offset-mobile: calc($hex-width-mobile / 2 + $gap-mobile / 2);
-  $min-hex-clearance-mobile: 120px;
+.btnPrimary,
+.btnGhost {
+  height: 52px;
+  padding: 0 32px;
+  border-radius: 30px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  @include scaleAnimation;
+}
 
-  .gridContainer {
-    grid-template-columns: repeat($cols, $hex-width-mobile);
-    grid-template-rows: repeat($rows, calc($hex-height-mobile * 0.75));
-    gap: $gap-mobile;
+.btnPrimary {
+  background-color: var(--buttery-blue);
+  color: var(--white-light);
+  box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
+
+  &:hover {
+    background-color: var(--buttery-blue-hover);
+  }
+}
+
+.btnGhost {
+  background-color: rgba(204, 204, 204, 0.35);
+  color: var(--buttery-black);
+
+  &:hover {
+    background-color: rgba(204, 204, 204, 0.55);
+  }
+}
+
+.micro {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+/* Product window */
+.window {
+  max-width: 980px;
+  margin: 54px auto 0;
+  background: #fff;
+  border: 1px solid var(--surface-line);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(5, 17, 34, 0.12);
+  overflow: hidden;
+  text-align: left;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--surface-line);
+  background: #fbfcfe;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+
+  i {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: block;
+  }
+}
+
+.r {
+  background: #ff736a;
+}
+.y {
+  background: #febc2e;
+}
+.g {
+  background: #19c332;
+}
+
+.cluster {
+  margin: 0 auto;
+  font-size: 13px;
+  color: #7a868d;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 11px;
+  background: #eef3f7;
+  border: 1px solid var(--surface-line);
+  border-radius: 20px;
+  padding: 2px 9px;
+  color: #566;
+}
+
+.spacer {
+  width: 54px;
+}
+
+.chat {
+  padding: 26px 30px 8px;
+}
+
+.bubbleUser {
+  margin-left: auto;
+  max-width: 60%;
+  width: fit-content;
+  background: var(--buttery-blue);
+  color: #fff;
+  padding: 9px 15px;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 14.5px;
+}
+
+.bubbleAi {
+  max-width: 82%;
+  color: #2c373d;
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin-top: 18px;
+
+  b {
+    color: var(--buttery-black);
+    font-weight: 700;
+  }
+}
+
+.metrics {
+  display: flex;
+  align-items: flex-end;
+  gap: 26px;
+  border-top: 1px solid var(--surface-line);
+  margin-top: 22px;
+  padding: 14px 30px 18px;
+}
+
+.history {
+  font-size: 12px;
+  color: #9aa4aa;
+  font-weight: 600;
+  margin-right: auto;
+  align-self: center;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  em {
+    font-size: 11px;
+    color: #8b969c;
+    font-weight: 600;
+    font-style: normal;
   }
 
-  .hexagon {
-    width: $hex-width-mobile;
-    height: $hex-height-mobile;
+  b {
+    font-size: 15px;
+    font-weight: 800;
   }
+}
 
-  .oddRow {
-    margin-left: $row-offset-mobile;
-  }
+.good {
+  color: var(--buttery-green);
+}
 
-  .gridContainer.transitioning,
-  .gridContainer.complete {
-    .logoHex {
-      transform: translateY(calc(($hex-height-mobile * 0.75 + $gap-mobile) * -1));
-    }
-
-    .rightHex {
-      transform: translateX(#{string.unquote("max(#{$min-hex-clearance-mobile}, calc(50vw - #{$hex-width-mobile}))")});
-    }
-
-    .leftHex {
-      transform: translateX(#{string.unquote("min(#{-$min-hex-clearance-mobile}, calc(-50vw + #{$hex-width-mobile}))")});
-    }
-  }
-
-  .gridContainer.complete {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    z-index: 50;
-  }
-
-  .textSection {
-    padding: 0 12px;
-    transform: translate(-50%, calc($hex-height-mobile * -0.1));
-    max-width: calc($min-hex-clearance-mobile * 2 - 24px);
-  }
-
-  .title {
-    font-size: 32px;
-    margin: 12px 0 20px 0;
-  }
-
-  .subtitle {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-
-  .description {
-    font-size: 13px;
-  }
+.bl {
+  color: var(--buttery-blue);
 }

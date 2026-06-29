@@ -1,29 +1,23 @@
 import { HomeHero } from "./HomeHero";
-import { HomeEfficiency } from "./HomeEfficiency";
-import { HomeSmart } from "./HomeSmart";
-import { HomeNextGen } from "./HomeNextGen";
-import { HomeExtensions } from "./HomeExtensions";
-import { HomeWorkflows } from "./HomeWorkflows";
+import { HomePillars } from "./HomePillars";
+import { HomeHowItWorks } from "./HomeHowItWorks";
+import { HomeTrust } from "./HomeTrust";
 import { HomeSecurity } from "./HomeSecurity";
 import { HomeGovernance } from "./HomeGovernance";
-import { HomeDesign } from "./HomeDesign";
-import { HomeSwift } from "./HomeSwift";
-import { HomeTeam } from "./HomeTeam";
+import { HomeOwnership } from "./HomeOwnership";
+import { HomeIntelligence } from "./HomeIntelligence";
 import { HomeFooter } from "./HomeFooter";
 
 const Home = () => (
   <>
     <HomeHero />
-    <HomeNextGen />
-    <HomeSmart />
-    <HomeEfficiency />
-    <HomeExtensions />
-    <HomeWorkflows />
+    <HomePillars />
+    <HomeHowItWorks />
+    <HomeTrust />
     <HomeSecurity />
     <HomeGovernance />
-    <HomeDesign />
-    <HomeSwift />
-    <HomeTeam />
+    <HomeOwnership />
+    <HomeIntelligence />
     <HomeFooter />
   </>
 );

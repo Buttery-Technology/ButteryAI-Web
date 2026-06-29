@@ -1,42 +1,66 @@
-import WhiteHouse from "@assets/icons/white-house.svg?react";
+import CheckCircle from "@assets/icons/check-circle.svg?react";
 import styles from "./HomeGovernance.module.scss";
 
 const HomeGovernance = () => (
   <section className={styles.root} data-section="governance">
-    <div className={styles.content}>
-      <div className={styles.hexIcon}>
-        <svg viewBox="0 0 468 540" className={styles.hexSvg}>
-          <path
-            d="M273 22
-               L427 112
-               Q468 135 468 180
-               L468 360
-               Q468 405 427 428
-               L273 518
-               Q234 540 195 518
-               L41 428
-               Q0 405 0 360
-               L0 180
-               Q0 135 41 112
-               L195 22
-               Q234 0 273 22
-               Z"
-            fill="#6A52B1"
-          />
-        </svg>
-        <WhiteHouse className={styles.governanceIcon} />
+    <div className={styles.grid}>
+      <div>
+        <h2 className={styles.title}>
+          Audit-ready, <span>by default.</span>
+        </h2>
+        <p className={styles.kicker}>Full trace through every system.</p>
+        <p className={styles.body}>
+          Oversight isn't a paid add-on. Tamper-evident audit trails and a policy engine are baked in — so every action
+          is accounted for and within bounds.
+        </p>
+        <div className={styles.list}>
+          <div className={styles.item}>
+            <CheckCircle className={styles.check} />
+            <span>
+              <b>Tamper-evident audit trail.</b> Hash-chained logs of every interaction — built for SOC 2 and GDPR
+              reviews.
+            </span>
+          </div>
+          <div className={styles.item}>
+            <CheckCircle className={styles.check} />
+            <span>
+              <b>Policy engine.</b> Allow, deny, or require approval on cost, PII, and data classification —
+              automatically.
+            </span>
+          </div>
+          <div className={styles.item}>
+            <CheckCircle className={styles.check} />
+            <span>
+              <b>Control and oversight, on by default.</b> Set the rules once; the system enforces them everywhere.
+            </span>
+          </div>
+        </div>
       </div>
-      <h1 className={styles.title}>Integrated Governance</h1>
-      <p>
-        ButteryAI gives you deeply integrated governance by default. This gives you control and oversight like never
-        before. Create policies, standards, and other essential governance tools to ensure your AI adheres to company
-        policy.
-      </p>
-      <p>
-        We believe AI should have transparency, be responsible, have privacy, and be ethical. And, we believe it’s the
-        right of every AI startup to have this feature and not have to pay for a suite. This allows AI to develop fairly
-        and openly for all companies and startups.
-      </p>
+
+      <div className={styles.panel}>
+        <p className={styles.panelTitle}>Policy activity</p>
+        <div className={styles.miniCard}>
+          <div>
+            <p className={styles.miniLabel}>Query exceeds $10 cost cap</p>
+            <p className={styles.miniMeta}>policy · cost-control</p>
+          </div>
+          <span className={`${styles.tag} ${styles.deny}`}>Denied</span>
+        </div>
+        <div className={styles.miniCard}>
+          <div>
+            <p className={styles.miniLabel}>Contains PII → external model</p>
+            <p className={styles.miniMeta}>policy · data-classification</p>
+          </div>
+          <span className={`${styles.tag} ${styles.appr}`}>Approval</span>
+        </div>
+        <div className={styles.miniCard}>
+          <div>
+            <p className={styles.miniLabel}>Standard query · in policy</p>
+            <p className={styles.miniMeta}>logged · hash 0x9f3a…</p>
+          </div>
+          <span className={`${styles.tag} ${styles.audit}`}>Logged ✓</span>
+        </div>
+      </div>
     </div>
   </section>
 );
