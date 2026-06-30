@@ -1,7 +1,7 @@
 @use "@mixins" as *;
 
 .hero {
-  max-width: 920px;
+  max-width: 1100px;
   margin: 0 auto;
   text-align: left;
   padding: 104px 40px 0;
@@ -17,6 +17,7 @@
   line-height: 1.04;
   letter-spacing: -1px;
   color: var(--buttery-black);
+  max-width: 820px;
 
   span {
     color: var(--buttery-blue);
@@ -33,7 +34,7 @@
 
 .intro {
   margin: 18px 0 0;
-  max-width: 720px;
+  max-width: 640px;
   font-size: 18px;
   line-height: 1.6;
   color: var(--text-secondary);
@@ -44,7 +45,7 @@
 }
 
 .visual {
-  max-width: 920px;
+  max-width: 1100px;
   margin: 56px auto 0;
   padding: 0 40px;
 
