@@ -43,7 +43,7 @@
 // Centered section heading (big title with optional blue <span> accent)
 @mixin headerTitle {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 48px;
+  font-size: 34px;
   line-height: 1.1;
   color: var(--buttery-black);
 
@@ -52,26 +52,26 @@
   }
 
   @include mq(1200) {
-    font-size: 36px;
+    font-size: 30px;
   }
 
   @include mq(768) {
-    font-size: 30px;
+    font-size: 26px;
   }
 }
 
 @mixin headerSubtitle {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 32px;
-  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3;
   color: var(--dark-gray);
 
   @include mq(1200) {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   @include mq(768) {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 

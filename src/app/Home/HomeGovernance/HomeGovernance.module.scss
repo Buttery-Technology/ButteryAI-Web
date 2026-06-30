@@ -18,7 +18,7 @@
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 48px;
+  font-size: 34px;
   line-height: 1.1;
   color: var(--buttery-black);
 
@@ -27,34 +27,34 @@
   }
 
   @include mq(1200) {
-    font-size: 36px;
+    font-size: 30px;
   }
 
   @include mq(768) {
-    font-size: 30px;
+    font-size: 26px;
   }
 }
 
 .kicker {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 32px;
-  line-height: 1.2;
+  font-size: 19px;
+  line-height: 1.3;
   color: var(--dark-gray);
-  margin-top: 10px;
+  margin-top: 8px;
 
   @include mq(768) {
-    font-size: 22px;
+    font-size: 16px;
   }
 }
 
 .body {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--buttery-black);
-  margin-top: 18px;
+  margin-top: 16px;
 
   @include mq(768) {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
@@ -69,7 +69,7 @@
   display: flex;
   gap: 13px;
   align-items: flex-start;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--text-secondary);
 
