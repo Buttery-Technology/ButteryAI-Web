@@ -3,7 +3,9 @@
 .root {
   position: relative;
   overflow: hidden;
-  padding-block: 84px 120px;
+  // top padding clears the fixed nav (~68px) plus a 26px gap to the logo,
+  // matching the logo-to-title spacing below it
+  padding-block: 94px 120px;
   padding-inline: 80px;
 
   @include mq(1200) {
@@ -11,7 +13,7 @@
   }
 
   @include mq(768) {
-    padding-block: 56px 72px;
+    padding-block: 88px 72px;
     padding-inline: 20px;
   }
 }
