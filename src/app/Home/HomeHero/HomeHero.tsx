@@ -38,11 +38,9 @@ const HomeHero = () => {
             clusterName="Customer Support"
             userMessage="what's our Q3 refund policy?"
             metrics={[
-              { label: "Value", value: "100%", tone: "blue" },
-              { label: "Trust", value: "92%" },
-              { label: "Accuracy", value: "96%" },
-              { label: "Audit", value: "✓" },
-              { label: "Trail", value: "⧉", tone: "blue" },
+              { label: "tokens", value: "12.4k", tone: "blue" },
+              { label: "time", value: "2.1s", tone: "muted" },
+              { label: "accuracy", value: "100%", tone: "good" },
             ]}
           >
             Refunds are issued within <b>30 days</b> of purchase for unused plans, processed back to the original payment

@@ -27,11 +27,9 @@ const About = () => {
           clusterName="Sales Assistant"
           userMessage="Does our Enterprise plan include SAML SSO?"
           metrics={[
-            { label: "Value", value: "100%", tone: "blue" },
-            { label: "Trust", value: "94%" },
-            { label: "Accuracy", value: "98%" },
-            { label: "Audit", value: "✓" },
-            { label: "Trail", value: "⧉", tone: "blue" },
+            { label: "tokens", value: "9.1k", tone: "blue" },
+            { label: "time", value: "1.8s", tone: "muted" },
+            { label: "accuracy", value: "100%", tone: "good" },
           ]}
         >
           Yes — <b>SAML SSO</b> and SCIM provisioning are included on Enterprise, alongside BYOK encryption and SOC 2
