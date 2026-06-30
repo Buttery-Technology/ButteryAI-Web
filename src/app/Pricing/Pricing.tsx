@@ -164,6 +164,7 @@ const Pricing = () => {
 
       <main className={styles.root}>
         <header className={styles.header}>
+          <h1 className={styles.title}>Pricing</h1>
           <p className={styles.subtitle}>
             Own your AI. Pay only for what scales — local-first inference is always free and unlimited.
           </p>
