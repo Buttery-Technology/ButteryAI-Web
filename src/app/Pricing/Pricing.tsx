@@ -42,7 +42,7 @@ const PLANS: Plan[] = [
     tagline: "Personal power user",
     price: "$75",
     unit: "/ seat / mo",
-    founderNote: "Founding Member: $50 / seat for year one",
+    founderNote: "Founding: $50 / seat · year one",
     cta: "Start building",
     popular: true,
     highlights: [
@@ -61,7 +61,7 @@ const PLANS: Plan[] = [
     price: "$125",
     unit: "/ seat / mo",
     meta: "3-seat minimum",
-    founderNote: "Founding Member: $75 / seat for year one",
+    founderNote: "Founding: $75 / seat · year one",
     cta: "Start a team",
     highlights: [
       "Everything in Pro, plus:",
@@ -174,28 +174,20 @@ const Pricing = () => {
 
       <main className={styles.root}>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>Pricing</p>
-          <h1 className={styles.title}>
-            Own your AI. Pay only for what <span>scales</span>.
-          </h1>
+          <h1 className={styles.title}>Pricing</h1>
           <p className={styles.subtitle}>
-            Local-first inference is always free and unlimited — you only pay for the platform that orchestrates,
-            scores, secures, and audits it.
+            Own your AI. Pay only for what scales — local-first inference is always free and unlimited.
+          </p>
+          <p className={styles.founderLine}>
+            <span className={styles.founderBadge}>Founding Member</span>
+            Sign up in the first 90 days to lock launch pricing for 12 months.
           </p>
         </header>
-
-        <div className={styles.founderBanner}>
-          🚀 <strong>Founding Member</strong> — sign up in the first 90 days and lock launch pricing for 12 months.
-        </div>
 
         {/* Top: clean columns split by lines, CTAs pinned to the bottom */}
         <div className={styles.grid}>
           {PLANS.map((plan) => (
-            <article key={plan.tier} className={`${styles.col} ${plan.popular ? styles.popular : ""}`}>
-              <div className={styles.tagSlot}>
-                {plan.popular && <span className={styles.popularTag}>Most popular</span>}
-              </div>
-
+            <article key={plan.tier} className={styles.col}>
               <h2 className={styles.planName}>{plan.name}</h2>
               <p className={styles.tagline}>{plan.tagline}</p>
 
@@ -205,7 +197,7 @@ const Pricing = () => {
                   {plan.unit && <span className={styles.unit}>{plan.unit}</span>}
                 </div>
                 {plan.meta && <p className={styles.meta}>{plan.meta}</p>}
-                {plan.founderNote && <p className={styles.founderNote}>{plan.founderNote}</p>}
+                {plan.founderNote && <span className={styles.founderChip}>{plan.founderNote}</span>}
               </div>
 
               <div className={styles.divider} />
@@ -220,11 +212,7 @@ const Pricing = () => {
               </ul>
 
               <div className={styles.ctaWrap}>
-                <button
-                  type="button"
-                  className={plan.popular ? styles.btnPrimary : styles.btnGhost}
-                  onClick={() => handleCta(plan.tier)}
-                >
+                <button type="button" className={styles.btnGhost} onClick={() => handleCta(plan.tier)}>
                   {plan.cta}
                 </button>
               </div>
@@ -241,7 +229,7 @@ const Pricing = () => {
                 <tr>
                   <th className={styles.corner} />
                   {PLANS.map((plan) => (
-                    <th key={plan.tier} className={plan.popular ? styles.colPopular : undefined}>
+                    <th key={plan.tier}>
                       <span className={styles.colName}>{plan.name}</span>
                       <span className={styles.colPrice}>
                         {plan.price}
@@ -261,9 +249,7 @@ const Pricing = () => {
                       <tr key={row.label}>
                         <th className={styles.rowLabel}>{row.label}</th>
                         {row.cells.map((cell, i) => (
-                          <td key={i} className={i === 1 ? styles.colPopular : undefined}>
-                            {renderCell(cell)}
-                          </td>
+                          <td key={i}>{renderCell(cell)}</td>
                         ))}
                       </tr>
                     ))}
