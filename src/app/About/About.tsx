@@ -25,6 +25,7 @@ const About = () => {
       <div className={styles.visual}>
         <ProductWindow
           clusterName="Sales Assistant"
+          conversationTitle="Enterprise Plan Inquiry"
           userMessage="Does our Enterprise plan include SAML SSO?"
           metrics={[
             { label: "tokens", value: "9.1k", tone: "blue" },

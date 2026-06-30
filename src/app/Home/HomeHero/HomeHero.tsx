@@ -36,6 +36,7 @@ const HomeHero = () => {
         <div className={styles.windowWrap}>
           <ProductWindow
             clusterName="Customer Support"
+            conversationTitle="Q3 Refund Policy Inquiry"
             userMessage="what's our Q3 refund policy?"
             metrics={[
               { label: "tokens", value: "12.4k", tone: "blue" },

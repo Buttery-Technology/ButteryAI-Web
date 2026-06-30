@@ -5,6 +5,7 @@ export type ProductMetric = { label: string; value: string; tone?: "good" | "blu
 
 type Props = {
   clusterName: string;
+  conversationTitle: string;
   userMessage: string;
   metrics: ProductMetric[];
   children: ReactNode;
@@ -26,12 +27,26 @@ const InfoDot = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const ProductWindow = ({ clusterName, userMessage, metrics, children }: Props) => (
+const ProductWindow = ({ clusterName, conversationTitle, userMessage, metrics, children }: Props) => (
   <div className={styles.window} aria-hidden="true">
-    <div className={styles.header}>
+    {/* App window chrome — cluster selector */}
+    <div className={styles.titlebar}>
+      <span className={styles.dots}>
+        <i className={styles.r} />
+        <i className={styles.y} />
+        <i className={styles.g} />
+      </span>
+      <span className={styles.cluster}>
+        {clusterName} <span className={styles.tag}>Local ▾</span>
+      </span>
+      <span className={styles.spacer} />
+    </div>
+
+    {/* Conversation section divider */}
+    <div className={styles.section}>
       <span className={styles.line} />
-      <span className={styles.headTitle}>
-        {clusterName} <InfoDot className={styles.infoDot} />
+      <span className={styles.sectionTitle}>
+        {conversationTitle} <InfoDot className={styles.infoDot} />
       </span>
       <span className={styles.line} />
     </div>
