@@ -1,8 +1,8 @@
 import { useDocumentTitle } from "@hooks";
-import daisHive from "@assets/images/dais-hive.png";
 import { HomeTeam } from "../Home/HomeTeam";
 import { HomeFooter } from "../Home/HomeFooter";
 import { NavBar } from "../NavBar";
+import { ProductWindow } from "../ProductWindow";
 import styles from "./About.module.scss";
 
 const About = () => {
@@ -23,7 +23,20 @@ const About = () => {
       </header>
 
       <div className={styles.visual}>
-        <img src={daisHive} alt="A ButteryAI distributed system: a core surrounded by connected nodes" />
+        <ProductWindow
+          clusterName="Sales Assistant"
+          userMessage="Does our Enterprise plan include SAML SSO?"
+          metrics={[
+            { label: "Value", value: "100%", tone: "blue" },
+            { label: "Trust", value: "94%" },
+            { label: "Accuracy", value: "98%" },
+            { label: "Audit", value: "✓" },
+            { label: "Trail", value: "⧉", tone: "blue" },
+          ]}
+        >
+          Yes — <b>SAML SSO</b> and SCIM provisioning are included on Enterprise, alongside BYOK encryption and SOC 2
+          Type II. Grounded in your <b>Plans Knowledge Base</b> (source: plan-catalog v3).
+        </ProductWindow>
       </div>
 
       <section className={styles.info}>
