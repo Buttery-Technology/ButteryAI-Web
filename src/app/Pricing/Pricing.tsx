@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDocumentTitle } from "@hooks";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 import { NavBar } from "../NavBar";
 import { HomeFooter } from "../Home/HomeFooter";
@@ -135,6 +136,7 @@ const COMPARISON: Group[] = [
 
 const Pricing = () => {
   const navigate = useNavigate();
+  useDocumentTitle("Pricing – ButteryAI");
 
   const handleCta = (tier: string) => {
     if (tier === "enterprise") {
@@ -162,7 +164,6 @@ const Pricing = () => {
 
       <main className={styles.root}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Pricing</h1>
           <p className={styles.subtitle}>
             Own your AI. Pay only for what scales — local-first inference is always free and unlimited.
           </p>
