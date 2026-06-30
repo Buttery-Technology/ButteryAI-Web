@@ -10,9 +10,9 @@ const HouseIcon = () => (
 );
 
 const DollarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" x2="12" y1="2.5" y2="21.5" />
-    <path d="M17 5.5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" x2="12" y1="2" y2="22" />
+    <path d="M16 7.3c0-2-1.8-3.1-4-3.1S8 5.4 8 7.3c0 2 2 2.8 4 3.4s4 1.4 4 3.4-1.8 3.1-4 3.1-4-1.1-4-3" />
   </svg>
 );
 
