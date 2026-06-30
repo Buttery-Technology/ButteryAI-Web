@@ -1,71 +1,13 @@
 @use "@mixins" as *;
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1400px;
-  margin-inline: auto;
-  padding: 22px 40px;
-
-  @include mq(768) {
-    padding: 16px 20px;
-  }
-
-  img {
-    height: 40px;
-    width: auto;
-  }
-}
-
-.navLinks {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 15px;
-
-  a {
-    color: var(--text-secondary);
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: var(--buttery-black);
-    }
-  }
-
-  @include mq(768) {
-    gap: 16px;
-
-    a {
-      display: none;
-    }
-  }
-}
-
-.navCta {
-  height: 42px;
-  padding: 0 20px;
-  border-radius: 30px;
-  background-color: var(--buttery-blue);
-  color: var(--white-light);
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 15px;
-  @include scaleAnimation;
-
-  &:hover {
-    background-color: var(--buttery-blue-hover);
-  }
-}
-
 .hero {
   max-width: 920px;
-  margin-inline: auto;
-  text-align: center;
-  padding: 64px 40px 0;
+  margin: 0 auto;
+  text-align: left;
+  padding: 104px 40px 0;
 
   @include mq(768) {
-    padding: 40px 20px 0;
+    padding: 84px 20px 0;
   }
 }
 
@@ -79,24 +21,39 @@
 }
 
 .title {
-  @include headerTitle;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 40px;
+  line-height: 1.04;
+  letter-spacing: -1px;
+  color: var(--buttery-black);
+
+  span {
+    color: var(--buttery-blue);
+  }
+
+  @include mq(1200) {
+    font-size: 34px;
+  }
+
+  @include mq(768) {
+    font-size: 28px;
+  }
 }
 
 .lede {
-  margin-top: 24px;
+  margin: 18px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   max-width: 720px;
-  margin-inline: auto;
 
   p {
-    font-size: 19px;
+    font-size: 17px;
     line-height: 1.6;
     color: var(--text-secondary);
 
     @include mq(768) {
-      font-size: 16px;
+      font-size: 15px;
     }
   }
 }
