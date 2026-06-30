@@ -77,7 +77,6 @@ const PLANS: Plan[] = [
     name: "Enterprise",
     tagline: "For regulated production",
     price: "Custom",
-    meta: "Starting at $3,000 / mo",
     cta: "Talk to sales",
     highlights: [
       "Everything in Team, plus:",
@@ -197,7 +196,6 @@ const Pricing = () => {
                   {plan.unit && <span className={styles.unit}>{plan.unit}</span>}
                 </div>
                 {plan.meta && <p className={styles.meta}>{plan.meta}</p>}
-                {plan.founderNote && <span className={styles.founderChip}>{plan.founderNote}</span>}
               </div>
 
               <div className={styles.divider} />
@@ -212,7 +210,11 @@ const Pricing = () => {
               </ul>
 
               <div className={styles.ctaWrap}>
-                <button type="button" className={styles.btnGhost} onClick={() => handleCta(plan.tier)}>
+                <button
+                  type="button"
+                  className={plan.popular ? styles.btnPrimary : styles.btnGhost}
+                  onClick={() => handleCta(plan.tier)}
+                >
                   {plan.cta}
                 </button>
               </div>

@@ -76,29 +76,29 @@
 
 .title {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 64px;
-  line-height: 1.02;
-  letter-spacing: -1.5px;
+  font-size: 40px;
+  line-height: 1.04;
+  letter-spacing: -1px;
   color: var(--buttery-black);
 
   @include mq(1200) {
-    font-size: 48px;
+    font-size: 34px;
   }
 
   @include mq(768) {
-    font-size: 38px;
+    font-size: 28px;
   }
 }
 
 .subtitle {
-  font-size: 20px;
+  font-size: 17px;
   line-height: 1.55;
   color: var(--text-secondary);
-  margin-top: 16px;
-  max-width: 720px;
+  margin-top: 14px;
+  max-width: 680px;
 
   @include mq(768) {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
@@ -184,8 +184,8 @@
 
 // Fixed-height price block so the feature lists start on the same line
 .priceArea {
-  min-height: 104px;
-  margin-top: 20px;
+  min-height: 52px;
+  margin-top: 18px;
 }
 
 .priceRow {
@@ -196,13 +196,13 @@
 
 .price {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 34px;
-  line-height: 1;
+  font-size: 20px;
+  line-height: 1.1;
   color: var(--buttery-black);
 }
 
 .unit {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -211,17 +211,6 @@
   font-size: 13px;
   color: var(--dark-gray);
   margin-top: 8px;
-}
-
-.founderChip {
-  display: inline-block;
-  margin-top: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #8a6400;
-  background: rgba(202, 150, 0, 0.1);
-  border-radius: 20px;
-  padding: 5px 11px;
 }
 
 .divider {
