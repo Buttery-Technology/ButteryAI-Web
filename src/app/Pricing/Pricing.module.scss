@@ -69,49 +69,62 @@
 }
 
 .header {
-  text-align: center;
-  max-width: 820px;
-  margin: 0 auto 32px;
-}
-
-.eyebrow {
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--buttery-blue);
-  margin-bottom: 14px;
+  text-align: left;
+  max-width: 920px;
+  margin: 12px 0 56px;
 }
 
 .title {
-  @include headerTitle;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 64px;
+  line-height: 1.02;
+  letter-spacing: -1.5px;
+  color: var(--buttery-black);
+
+  @include mq(1200) {
+    font-size: 48px;
+  }
+
+  @include mq(768) {
+    font-size: 38px;
+  }
 }
 
 .subtitle {
-  font-size: 19px;
-  line-height: 1.6;
+  font-size: 20px;
+  line-height: 1.55;
   color: var(--text-secondary);
-  margin-top: 18px;
+  margin-top: 16px;
+  max-width: 720px;
 
   @include mq(768) {
     font-size: 16px;
   }
 }
 
-.founderBanner {
-  max-width: 760px;
-  margin: 0 auto 48px;
-  text-align: center;
-  background: linear-gradient(135deg, #fff7e3, #fdeecb);
-  border: 1px solid #f3dca0;
-  border-radius: 16px;
-  padding: 14px 22px;
-  font-size: 15px;
-  color: #8a6400;
+.founderLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  font-size: 14px;
+  color: var(--text-secondary);
 
-  strong {
-    font-weight: 700;
+  @include mq(768) {
+    flex-wrap: wrap;
+    gap: 8px;
   }
+}
+
+.founderBadge {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: #8a6400;
+  background: rgba(202, 150, 0, 0.12);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
 /* ---------- Plan columns (line-separated, à la Linear) ---------- */
@@ -157,28 +170,6 @@
   }
 }
 
-// Popular plan — a subtle tint, no box
-.popular {
-  background: rgba(40, 142, 210, 0.045);
-  border-radius: 18px;
-}
-
-.tagSlot {
-  height: 28px;
-  margin-bottom: 4px;
-}
-
-.popularTag {
-  display: inline-block;
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  color: var(--buttery-blue);
-  background: rgba(40, 142, 210, 0.12);
-  padding: 4px 12px;
-  border-radius: 20px;
-}
-
 .planName {
   font-family: var(--sf-pro-rounded-bold);
   font-size: 30px;
@@ -193,7 +184,7 @@
 
 // Fixed-height price block so the feature lists start on the same line
 .priceArea {
-  min-height: 96px;
+  min-height: 104px;
   margin-top: 20px;
 }
 
@@ -205,7 +196,7 @@
 
 .price {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 42px;
+  font-size: 34px;
   line-height: 1;
   color: var(--buttery-black);
 }
@@ -222,11 +213,15 @@
   margin-top: 8px;
 }
 
-.founderNote {
-  font-size: 13px;
+.founderChip {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
   font-weight: 600;
-  color: #b07d00;
-  margin-top: 8px;
+  color: #8a6400;
+  background: rgba(202, 150, 0, 0.1);
+  border-radius: 20px;
+  padding: 5px 11px;
 }
 
 .divider {
@@ -361,10 +356,6 @@
       width: 16%;
       border-bottom: none;
     }
-
-    &.colPopular {
-      background: #eef6fc;
-    }
   }
 }
 
@@ -408,11 +399,6 @@
 
 .table tbody td {
   color: var(--text-secondary);
-}
-
-// Subtle highlight down the popular (Pro) column
-.colPopular {
-  background: rgba(40, 142, 210, 0.05);
 }
 
 // Capability cell: green check + value, like Linear's "✓ Unlimited"
