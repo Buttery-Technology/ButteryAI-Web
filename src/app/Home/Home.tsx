@@ -1,3 +1,4 @@
+import { NavBar } from "../NavBar";
 import { HomeHero } from "./HomeHero";
 import { HomePillars } from "./HomePillars";
 import { HomeHowItWorks } from "./HomeHowItWorks";
@@ -10,6 +11,7 @@ import { HomeFooter } from "./HomeFooter";
 
 const Home = () => (
   <>
+    <NavBar />
     <HomeHero />
     <HomePillars />
     <HomeHowItWorks />

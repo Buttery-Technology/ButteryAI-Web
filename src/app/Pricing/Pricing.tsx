@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
+import { useNavigate } from "react-router-dom";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
+import { NavBar } from "../NavBar";
 import { HomeFooter } from "../Home/HomeFooter";
 import styles from "./Pricing.module.scss";
 
@@ -158,18 +158,7 @@ const Pricing = () => {
 
   return (
     <>
-      <nav className={styles.topbar}>
-        <Link to="/" className={styles.brand}>
-          <img src={butteryaiLogo} alt="ButteryAI" />
-        </Link>
-        <div className={styles.navLinks}>
-          <Link to="/about">About</Link>
-          <Link to="/login">Log in</Link>
-          <button type="button" className={styles.navCta} onClick={() => navigate("/waiting-list")}>
-            Start building
-          </button>
-        </div>
-      </nav>
+      <NavBar />
 
       <main className={styles.root}>
         <header className={styles.header}>

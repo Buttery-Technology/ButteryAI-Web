@@ -1,0 +1,58 @@
+@use "@mixins" as *;
+
+.nav {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 8px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--surface-line);
+  border-radius: 30px;
+  box-shadow: 0 8px 24px rgba(5, 17, 34, 0.08);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  width: 1px;
+  height: 18px;
+  background: #d8dde1;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 50px;
+  color: var(--buttery-black);
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    color: var(--buttery-blue);
+    transform: translateY(-1px);
+  }
+
+  @include mq(768) {
+    width: 40px;
+  }
+}
+
+.active {
+  color: var(--buttery-blue);
+}
