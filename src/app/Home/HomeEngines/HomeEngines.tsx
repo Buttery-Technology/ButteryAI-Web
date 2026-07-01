@@ -64,8 +64,8 @@ type Step = {
 const STEPS: Step[] = [
   {
     key: "sec",
-    name: "Screen the request",
-    desc: "Checks for threats and anomalies and decides whether it's safe to continue.",
+    name: "Screen & govern",
+    desc: "Checks for threats and enforces your policies — allow, deny, or require approval — before anything runs.",
     color: "#d1495b",
     Icon: ShieldIcon,
   },
@@ -113,8 +113,12 @@ const ADVANTAGES = [
   "No token loss",
   "End-to-end encryption",
   "Tamper-evident audit trail",
+  "Governance & policy engine",
   "Fast & efficient — pure Swift",
   "Runs local, cloud, or on-prem",
+  "Model agnostic",
+  "Custom evaluations",
+  "Auto-learning",
 ];
 
 const HomeEngines = () => (
