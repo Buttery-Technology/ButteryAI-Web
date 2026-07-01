@@ -74,8 +74,9 @@ const STEPS: Step[] = [
     key: "route",
     name: "Understand the request",
     desc: "Works out what you're asking, decides which nodes should handle it, and pulls in any relevant knowledge and context.",
-    color: "#288ed2",
+    color: "#f9c000",
     Icon: LightbulbIcon,
+    darkIcon: true,
   },
   {
     key: "mgmt",
@@ -88,9 +89,8 @@ const STEPS: Step[] = [
     key: "node",
     name: "Run across nodes",
     desc: "Dispatches to one — or many — specialized nodes at once.",
-    color: "#f9c000",
+    color: "#288ed2",
     Icon: RouteIcon,
-    darkIcon: true,
     node: {
       head: "Nodes run in parallel",
       parallel: ["Node 1", "Node 2", "Node n"],
