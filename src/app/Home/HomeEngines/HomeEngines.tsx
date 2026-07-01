@@ -28,10 +28,11 @@ const LayersIcon = () => (
   </svg>
 );
 
-const CpuIcon = () => (
+const LightbulbIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="6.5" y="6.5" width="11" height="11" rx="2" />
-    <path d="M9.5 2.5v3M14.5 2.5v3M9.5 18.5v3M14.5 18.5v3M2.5 9.5h3M2.5 14.5h3M18.5 9.5h3M18.5 14.5h3" />
+    <path d="M9.5 18h5" />
+    <path d="M10 21h4" />
+    <path d="M12 2.5a6.5 6.5 0 0 0-4 11.6c.7.6 1.1 1.4 1.2 2.4l.05.5h5.5l.05-.5c.1-1 .5-1.8 1.2-2.4A6.5 6.5 0 0 0 12 2.5z" />
   </svg>
 );
 
@@ -56,7 +57,7 @@ type Step = {
   desc: string;
   color: string;
   Icon: FC;
-  hex?: boolean;
+  darkIcon?: boolean;
   chips?: string[];
   node?: { head: string; parallel: string[]; bits: { label: string | null; text: string }[] };
 };
@@ -71,10 +72,10 @@ const STEPS: Step[] = [
   },
   {
     key: "route",
-    name: "Understand & route",
+    name: "Understand the request",
     desc: "Works out what you're asking, decides which nodes should handle it, and pulls in any relevant knowledge and context.",
     color: "#288ed2",
-    Icon: RouteIcon,
+    Icon: LightbulbIcon,
   },
   {
     key: "mgmt",
@@ -88,8 +89,8 @@ const STEPS: Step[] = [
     name: "Run across nodes",
     desc: "Dispatches to one — or many — specialized nodes at once.",
     color: "#f9c000",
-    Icon: CpuIcon,
-    hex: true,
+    Icon: RouteIcon,
+    darkIcon: true,
     node: {
       head: "Nodes run in parallel",
       parallel: ["Node 1", "Node 2", "Node n"],
@@ -167,7 +168,7 @@ const HomeEngines = () => (
             {STEPS.map((step, i) => (
               <div className={styles.item} key={step.key}>
                 <span
-                  className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
+                  className={`${styles.badge} ${step.darkIcon ? styles.badgeDark : ""}`}
                   style={{ backgroundColor: step.color }}
                 >
                   <step.Icon />
