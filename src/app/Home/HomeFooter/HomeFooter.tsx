@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import butteryLogo from "@assets/images/buttery-body.png";
+import { openEnterpriseEmail } from "@common/contact";
 import styles from "./HomeFooter.module.scss";
 
 const FacebookIcon = () => (
@@ -50,7 +51,7 @@ const HomeFooter = () => {
         <button type="button" className={styles.btnPrimary} onClick={() => navigate("/waiting-list")}>
           Start building
         </button>
-        <button type="button" className={styles.btnSecondary} onClick={() => navigate("/waiting-list")}>
+        <button type="button" className={styles.btnSecondary} onClick={openEnterpriseEmail}>
           Talk to us about enterprise
         </button>
       </div>

@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDocumentTitle } from "@hooks";
+import { openEnterpriseEmail } from "@common/contact";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 import { NavBar } from "../NavBar";
 import { HomeFooter } from "../Home/HomeFooter";
@@ -140,7 +141,7 @@ const Pricing = () => {
 
   const handleCta = (tier: string) => {
     if (tier === "enterprise") {
-      window.open("mailto:sales@buttery.technology?subject=ButteryAI%20Enterprise");
+      openEnterpriseEmail();
       return;
     }
     navigate("/waiting-list");
