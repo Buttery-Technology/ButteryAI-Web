@@ -43,7 +43,7 @@ const LockIcon = () => (
 
 const FLOW = [
   { key: "sec", name: "Security & Trust", desc: "Screens the request before anything runs", color: "#d1495b", Icon: ShieldIcon },
-  { key: "route", name: "Routing Engine", desc: "On-device, cloud, or split", color: "#288ed2", Icon: RouteIcon },
+  { key: "route", name: "Routing Engine", desc: "Sends it on-device, to the cloud, or split", color: "#288ed2", Icon: RouteIcon },
   { key: "mgmt", name: "Management Engine", desc: "Plans, calls tools, runs your nodes", color: "#755cba", Icon: LayersIcon },
   {
     key: "eval",
@@ -53,7 +53,7 @@ const FLOW = [
     Icon: GaugeIcon,
     chips: ["KnowledgeIntelligence", "TrustIntelligence", "Epistemic"],
   },
-  { key: "enc", name: "Encrypt & audit", desc: "Signs, encrypts, logs the answer", color: "#0f9b81", Icon: LockIcon },
+  { key: "enc", name: "Encrypt & audit", desc: "Signs, encrypts, and logs the answer", color: "#0f9b81", Icon: LockIcon },
 ];
 
 const HomeEngines = () => (
@@ -68,62 +68,57 @@ const HomeEngines = () => (
       </p>
     </div>
 
-    {/* Product layer */}
-    <div className={styles.product}>
-      <img src={butteryaiLogo} alt="" className={styles.productLogo} />
-      <div className={styles.productText}>
-        <div className={styles.productName}>ButteryAI</div>
-        <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
-      </div>
-      <div className={styles.productChips}>
-        {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
-          <span key={c} className={styles.productChip}>
-            {c}
-          </span>
-        ))}
-      </div>
-    </div>
+    <div className={styles.diagram}>
+      <div className={styles.endTop}>Request</div>
+      <span className={styles.vArrow} />
 
-    <div className={styles.bridge}>
-      <span className={styles.bridgeLabel}>powered by DAIS</span>
-      <span className={styles.bridgeArrow} />
-    </div>
+      {/* ButteryAI wraps DAIS wraps the engines */}
+      <div className={styles.product}>
+        <div className={styles.productHead}>
+          <img src={butteryaiLogo} alt="" className={styles.productLogo} />
+          <div className={styles.productText}>
+            <div className={styles.productName}>ButteryAI</div>
+            <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
+          </div>
+          <div className={styles.productChips}>
+            {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
+              <span key={c} className={styles.productChip}>
+                {c}
+              </span>
+            ))}
+          </div>
+        </div>
 
-    {/* Engine layer */}
-    <div className={styles.dais}>
-      <span className={styles.daisTag}>DAIS · Distributed AI System</span>
-      <div className={styles.scroll}>
-        <div className={styles.pipeline}>
-          <span className={styles.packet} />
-          <div className={styles.endLabel}>Request</div>
-          <span className={styles.link} />
-
-          {FLOW.map((node, i) => (
-            <div className={styles.step} key={node.key}>
-              <div className={styles.stage}>
+        <div className={styles.dais}>
+          <span className={styles.daisTag}>DAIS · Distributed AI System</span>
+          <div className={styles.timeline}>
+            <span className={styles.packet} />
+            {FLOW.map((node) => (
+              <div className={styles.item} key={node.key}>
                 <span className={styles.badge} style={{ backgroundColor: node.color }}>
                   <node.Icon />
                 </span>
-                <span className={styles.name}>{node.name}</span>
-                <span className={styles.desc}>{node.desc}</span>
-                {node.chips && (
-                  <span className={styles.chips}>
-                    {node.chips.map((chip) => (
-                      <span key={chip} className={styles.chip}>
-                        {chip}
-                      </span>
-                    ))}
-                  </span>
-                )}
+                <div className={styles.itemText}>
+                  <span className={styles.name}>{node.name}</span>
+                  <span className={styles.desc}>{node.desc}</span>
+                  {node.chips && (
+                    <div className={styles.chips}>
+                      {node.chips.map((chip) => (
+                        <span key={chip} className={styles.chip}>
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-              {i < FLOW.length - 1 && <span className={styles.link} />}
-            </div>
-          ))}
-
-          <span className={styles.link} />
-          <div className={`${styles.endLabel} ${styles.endGreen}`}>Trusted answer ✓</div>
+            ))}
+          </div>
         </div>
       </div>
+
+      <span className={styles.vArrow} />
+      <div className={`${styles.endBottom}`}>Trusted output ✓</div>
     </div>
 
     <p className={styles.loop}>
