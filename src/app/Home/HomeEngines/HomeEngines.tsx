@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import butteryaiLogo from "@assets/logos/ButteryAI-Logo-no-melting.svg";
+import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 import styles from "./HomeEngines.module.scss";
 
