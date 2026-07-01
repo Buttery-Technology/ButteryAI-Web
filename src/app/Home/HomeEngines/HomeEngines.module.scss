@@ -5,7 +5,7 @@
 }
 
 .header {
-  text-align: left;
+  text-align: center;
   margin: 0 0 32px;
 }
 
@@ -15,7 +15,7 @@
 
 .subtitle {
   @include headerSubtitle;
-  margin-top: 14px;
+  margin: 14px auto 0;
   max-width: 760px;
 }
 
@@ -180,12 +180,8 @@
   }
 }
 
-.badgeHex {
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  border-radius: 0;
+.badgeDark {
   color: var(--buttery-black);
-  box-shadow: none;
-  filter: drop-shadow(0 5px 10px rgba(5, 17, 34, 0.18));
 }
 
 .stepNum {
