@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
+import { openEnterpriseEmail } from "@common/contact";
 import { ProductWindow } from "../../ProductWindow";
 import styles from "./HomeHero.module.scss";
 
@@ -26,7 +27,7 @@ const HomeHero = () => {
           <button type="button" className={styles.btnPrimary} onClick={() => navigate("/waiting-list")}>
             Start building
           </button>
-          <button type="button" className={styles.btnGhost} onClick={() => navigate("/waiting-list")}>
+          <button type="button" className={styles.btnGhost} onClick={openEnterpriseEmail}>
             For Enterprise
           </button>
         </div>
