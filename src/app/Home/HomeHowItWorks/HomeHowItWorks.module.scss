@@ -6,7 +6,7 @@
 
 .header {
   text-align: left;
-  margin: 0 0 44px;
+  margin: 0 0 32px;
 }
 
 .title {
@@ -15,17 +15,17 @@
 
 .subtitle {
   @include headerSubtitle;
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 .note {
   font-family: var(--sf-pro-text);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-secondary);
   text-align: left;
   max-width: 700px;
-  margin: 16px 0 0;
+  margin: 6px 0 0;
 }
 
 .grid {
