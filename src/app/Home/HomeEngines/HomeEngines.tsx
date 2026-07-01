@@ -165,7 +165,7 @@ const HomeEngines = () => (
 
           <div className={styles.timeline}>
             <span className={styles.packet} />
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
               <div className={styles.item} key={step.key}>
                 <span
                   className={`${styles.badge} ${step.darkIcon ? styles.badgeDark : ""}`}
@@ -173,7 +173,6 @@ const HomeEngines = () => (
                 >
                   <step.Icon />
                 </span>
-                <span className={styles.stepNum}>{i + 1}</span>
                 <div className={styles.itemText}>
                   <span className={styles.name}>{step.name}</span>
                   <span className={styles.desc}>{step.desc}</span>
