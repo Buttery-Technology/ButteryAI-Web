@@ -1,0 +1,72 @@
+@use "@mixins" as *;
+
+.root {
+  @include sectionShell;
+}
+
+.header {
+  text-align: left;
+  margin: 0 0 40px;
+}
+
+.title {
+  @include headerTitle;
+}
+
+.subtitle {
+  @include headerSubtitle;
+  margin-top: 14px;
+}
+
+.list {
+  border-top: 1px solid var(--surface-line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 48px;
+  align-items: baseline;
+  padding: 26px 4px;
+  border-bottom: 1px solid var(--surface-line);
+
+  @include mq(1200) {
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+  }
+
+  @include mq(768) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 22px 0;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 20px;
+  color: var(--buttery-black);
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--buttery-blue);
+  background: rgba(40, 142, 210, 0.1);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
