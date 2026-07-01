@@ -51,6 +51,20 @@ const LockIcon = () => (
   </svg>
 );
 
+const ChipIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="7" y="7" width="10" height="10" rx="2" />
+    <path d="M10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3" />
+  </svg>
+);
+
+const SparkIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3.5l1.7 4.3 4.3 1.7-4.3 1.7L12 15.5l-1.7-4.3L6 9.5l4.3-1.7z" />
+    <path d="M18.5 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
+  </svg>
+);
+
 type Step = {
   key: string;
   name: string;
@@ -59,7 +73,12 @@ type Step = {
   Icon: FC;
   darkIcon?: boolean;
   chips?: string[];
-  node?: { head: string; parallel: string[]; bits: { label: string | null; text: string }[] };
+  node?: {
+    head: string;
+    parallel: string[];
+    innerHead: string;
+    layers: { Icon: FC; tone: "intel" | "model"; name: string; sub: string }[];
+  };
 };
 
 const STEPS: Step[] = [
@@ -94,9 +113,15 @@ const STEPS: Step[] = [
     node: {
       head: "Nodes run in parallel",
       parallel: ["Node 1", "Node 2", "Node n"],
-      bits: [
-        { label: null, text: "Each node adds its own intelligence, knowledge & context" },
-        { label: "LLM", text: "and runs a model — local (GGUF) or remote (OpenAI, Anthropic, Gemini, etc)" },
+      innerHead: "Inside each node",
+      layers: [
+        { Icon: ChipIcon, tone: "intel", name: "Its own intelligence", sub: "Engines, knowledge & context" },
+        {
+          Icon: SparkIcon,
+          tone: "model",
+          name: "An LLM it runs",
+          sub: "Local (GGUF) or remote (OpenAI, Anthropic, Gemini, etc)",
+        },
       ],
     },
   },
@@ -195,16 +220,20 @@ const HomeEngines = () => (
                           </span>
                         ))}
                       </div>
-                      {step.node.bits.map((bit) => (
-                        <div className={styles.nodeBit} key={bit.text}>
-                          {bit.label ? (
-                            <span className={styles.nodeChip}>{bit.label}</span>
-                          ) : (
-                            <span className={styles.nodeDot} />
-                          )}
-                          <span>{bit.text}</span>
-                        </div>
-                      ))}
+                      <div className={styles.nodeInner}>
+                        <div className={styles.nodeInnerHead}>{step.node.innerHead}</div>
+                        {step.node.layers.map((layer) => (
+                          <div className={styles.nodeLayer} key={layer.name}>
+                            <span className={`${styles.nodeLayerIcon} ${styles[layer.tone]}`}>
+                              <layer.Icon />
+                            </span>
+                            <div>
+                              <div className={styles.nodeLayerName}>{layer.name}</div>
+                              <div className={styles.nodeLayerSub}>{layer.sub}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
