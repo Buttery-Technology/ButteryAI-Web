@@ -10,16 +10,16 @@
   position: relative;
   max-width: 1543px;
   margin-inline: auto;
-  padding-block: 160px;
+  padding-block: 112px;
   padding-inline: 80px;
 
   @include mq(1200) {
-    padding-block: 120px;
+    padding-block: 88px;
     padding-inline: 40px;
   }
 
   @include mq(768) {
-    padding-block: 80px;
+    padding-block: 64px;
     padding-inline: 20px;
   }
 }
