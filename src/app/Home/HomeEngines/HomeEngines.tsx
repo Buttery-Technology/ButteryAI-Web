@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo-no-melting.svg";
+import CheckCircle from "@assets/icons/check-circle.svg?react";
 import styles from "./HomeEngines.module.scss";
 
 const ShieldIcon = () => (
@@ -46,19 +47,6 @@ const LockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="5" y="11" width="14" height="9" rx="2" />
     <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-  </svg>
-);
-
-const HubIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="2.6" />
-    <circle cx="12" cy="4" r="1.5" />
-    <circle cx="12" cy="20" r="1.5" />
-    <circle cx="5" cy="8" r="1.5" />
-    <circle cx="19" cy="8" r="1.5" />
-    <circle cx="5" cy="16" r="1.5" />
-    <circle cx="19" cy="16" r="1.5" />
-    <path d="M12 6v3.4M12 14.6V18M9.9 10.9 6.3 8.9M14.1 10.9l3.6-2M9.9 13.1l-3.6 2M14.1 13.1l3.6 2" />
   </svg>
 );
 
@@ -121,6 +109,15 @@ const STEPS: Step[] = [
   },
 ];
 
+const ADVANTAGES = [
+  "No token loss",
+  "End-to-end encryption",
+  "Tamper-evident audit trail",
+  "Fast & efficient — pure Swift",
+  "Runs local, cloud, or on-prem",
+  "Gets more accurate over time",
+];
+
 const HomeEngines = () => (
   <section className={styles.root} data-section="engines">
     <div className={styles.header}>
@@ -133,111 +130,108 @@ const HomeEngines = () => (
       </p>
     </div>
 
-    <div className={styles.diagram}>
-      <div className={styles.endTop}>Request</div>
-      <span className={styles.vArrow} />
+    <div className={styles.layout}>
+      <div className={styles.advantages}>
+        <div className={styles.advHead}>Built in on every request</div>
+        <ul className={styles.advList}>
+          {ADVANTAGES.map((adv) => (
+            <li key={adv} className={styles.advItem}>
+              <CheckCircle className={styles.advCheck} />
+              <span>{adv}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      {/* ButteryAI wraps DAIS wraps the engines */}
-      <div className={styles.product}>
-        <div className={styles.productHead}>
-          <img src={butteryaiLogo} alt="" className={styles.productLogo} />
-          <div className={styles.productText}>
-            <div className={styles.productName}>ButteryAI</div>
-            <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
-          </div>
-          <div className={styles.productChips}>
-            {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
-              <span key={c} className={styles.productChip}>
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
+      <div className={styles.diagram}>
+        <div className={styles.endTop}>Request</div>
+        <span className={styles.vArrow} />
 
-        <div className={styles.dais}>
-          <span className={styles.daisTag}>DAIS · Distributed AI System</span>
-
-          <div className={styles.coreBand}>
-            <span className={styles.coreBadge}>
-              <HubIcon />
-            </span>
-            <div className={styles.coreText}>
-              <div className={styles.coreName}>DAIS Core</div>
-              <div className={styles.coreDesc}>
-                The brain that holds every engine and drives the steps below — running them in-process, in milliseconds.
-              </div>
-              <div className={styles.coreChips}>
-                <span className={styles.coreChip}>Pure Swift</span>
-                <span className={styles.coreChip}>In-process</span>
-                <span className={styles.coreChip}>No token loss</span>
-              </div>
+        {/* ButteryAI wraps DAIS wraps the engines */}
+        <div className={styles.product}>
+          <div className={styles.productHead}>
+            <img src={butteryaiLogo} alt="" className={styles.productLogo} />
+            <div className={styles.productText}>
+              <div className={styles.productName}>ButteryAI</div>
+              <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
+            </div>
+            <div className={styles.productChips}>
+              {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
+                <span key={c} className={styles.productChip}>
+                  {c}
+                </span>
+              ))}
             </div>
           </div>
 
-          <div className={styles.timeline}>
-            <span className={styles.packet} />
-            {STEPS.map((step, i) => (
-              <div className={styles.item} key={step.key}>
-                <span
-                  className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
-                  style={{ backgroundColor: step.color }}
-                >
-                  <step.Icon />
-                </span>
-                <span className={styles.stepNum}>{i + 1}</span>
-                <div className={styles.itemText}>
-                  <span className={styles.name}>{step.name}</span>
-                  <span className={styles.desc}>{step.desc}</span>
-                  {step.chips && (
-                    <div className={styles.chips}>
-                      {step.chips.map((chip) => (
-                        <span key={chip} className={styles.chip}>
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {step.node && (
-                    <div className={styles.nodePanel}>
-                      <div className={styles.nodePanelHead}>{step.node.head}</div>
-                      <div className={styles.nodeParallel}>
-                        {step.node.parallel.map((n) => (
-                          <span key={n} className={styles.nodeHexChip}>
-                            {n}
+          <div className={styles.dais}>
+            <span className={styles.daisTag}>DAIS · Distributed AI System</span>
+
+            <div className={styles.timeline}>
+              <span className={styles.packet} />
+              {STEPS.map((step, i) => (
+                <div className={styles.item} key={step.key}>
+                  <span
+                    className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
+                    style={{ backgroundColor: step.color }}
+                  >
+                    <step.Icon />
+                  </span>
+                  <span className={styles.stepNum}>{i + 1}</span>
+                  <div className={styles.itemText}>
+                    <span className={styles.name}>{step.name}</span>
+                    <span className={styles.desc}>{step.desc}</span>
+                    {step.chips && (
+                      <div className={styles.chips}>
+                        {step.chips.map((chip) => (
+                          <span key={chip} className={styles.chip}>
+                            {chip}
                           </span>
                         ))}
                       </div>
-                      {step.node.bits.map((bit) => (
-                        <div className={styles.nodeBit} key={bit.text}>
-                          {bit.label ? (
-                            <span className={styles.nodeChip}>{bit.label}</span>
-                          ) : (
-                            <span className={styles.nodeDot} />
-                          )}
-                          <span>{bit.text}</span>
+                    )}
+                    {step.node && (
+                      <div className={styles.nodePanel}>
+                        <div className={styles.nodePanelHead}>{step.node.head}</div>
+                        <div className={styles.nodeParallel}>
+                          {step.node.parallel.map((n) => (
+                            <span key={n} className={styles.nodeHexChip}>
+                              {n}
+                            </span>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
+                        {step.node.bits.map((bit) => (
+                          <div className={styles.nodeBit} key={bit.text}>
+                            {bit.label ? (
+                              <span className={styles.nodeChip}>{bit.label}</span>
+                            ) : (
+                              <span className={styles.nodeDot} />
+                            )}
+                            <span>{bit.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Encryption + audit blanket the whole pipeline */}
-          <div className={styles.encBand}>
-            <span className={styles.encIcon}>
-              <LockIcon />
-            </span>
-            <span>
-              <b>Encrypted end-to-end</b> and written to a <b>tamper-evident audit trail</b> — across every step above.
-            </span>
+            {/* Encryption + audit blanket the whole pipeline */}
+            <div className={styles.encBand}>
+              <span className={styles.encIcon}>
+                <LockIcon />
+              </span>
+              <span>
+                <b>Encrypted end-to-end</b> and written to a <b>tamper-evident audit trail</b> — across every step above.
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <span className={styles.vArrow} />
-      <div className={styles.endBottom}>Trusted output ✓</div>
+        <span className={styles.vArrow} />
+        <div className={styles.endBottom}>Trusted output ✓</div>
+      </div>
     </div>
 
     <p className={styles.loop}>

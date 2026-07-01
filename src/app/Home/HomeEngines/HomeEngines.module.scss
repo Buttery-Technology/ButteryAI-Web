@@ -19,6 +19,73 @@
   max-width: 760px;
 }
 
+/* Advantages column + diagram, side by side */
+.layout {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  @include mq(900) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+  }
+}
+
+.advantages {
+  flex: 0 0 auto;
+  width: 250px;
+  padding-top: 72px;
+
+  @include mq(900) {
+    width: auto;
+    padding-top: 0;
+  }
+}
+
+.advHead {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 14px;
+  color: var(--buttery-black);
+  margin-bottom: 16px;
+}
+
+.advList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  @include mq(900) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+  }
+
+  @include mq(768) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.advItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--buttery-black);
+}
+
+.advCheck {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+
 /* Vertical flow: Request -> ButteryAI (wraps DAIS wraps engines) -> Trusted output */
 .diagram {
   max-width: 640px;
