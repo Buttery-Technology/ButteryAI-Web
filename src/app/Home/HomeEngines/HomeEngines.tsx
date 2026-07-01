@@ -62,7 +62,7 @@ const HubIcon = () => (
   </svg>
 );
 
-type FlowNode = {
+type Step = {
   key: string;
   name: string;
   desc: string;
@@ -70,37 +70,55 @@ type FlowNode = {
   Icon: FC;
   hex?: boolean;
   chips?: string[];
-  node?: { head: string; bits: { label: string | null; text: string }[] };
+  node?: { head: string; parallel: string[]; bits: { label: string | null; text: string }[] };
 };
 
-const FLOW: FlowNode[] = [
-  { key: "sec", name: "Security & Trust", desc: "Screens the request before anything runs", color: "#d1495b", Icon: ShieldIcon },
-  { key: "route", name: "Routing Engine", desc: "Sends it on-device, to the cloud, or split", color: "#288ed2", Icon: RouteIcon },
-  { key: "mgmt", name: "Management Engine", desc: "Plans the steps and calls the right tools", color: "#755cba", Icon: LayersIcon },
+const STEPS: Step[] = [
+  {
+    key: "sec",
+    name: "Screen the request",
+    desc: "Checks for threats and anomalies and decides whether it's safe to continue.",
+    color: "#d1495b",
+    Icon: ShieldIcon,
+  },
+  {
+    key: "route",
+    name: "Understand & route",
+    desc: "Works out what you're asking, decides which nodes should handle it, and pulls in any relevant knowledge and context.",
+    color: "#288ed2",
+    Icon: RouteIcon,
+  },
+  {
+    key: "mgmt",
+    name: "Plan the work",
+    desc: "Breaks the task into steps, calls the right tools, and coordinates the run across nodes.",
+    color: "#755cba",
+    Icon: LayersIcon,
+  },
   {
     key: "node",
-    name: "Node processing",
-    desc: "A specialized node runs the query — with its own intelligence, not just a raw model call",
+    name: "Run across nodes",
+    desc: "Dispatches to one — or many — specialized nodes at once.",
     color: "#f9c000",
     Icon: CpuIcon,
     hex: true,
     node: {
-      head: "Inside each node",
+      head: "Nodes run in parallel",
+      parallel: ["Node 1", "Node 2", "Node n"],
       bits: [
-        { label: null, text: "Its own intelligence, knowledge & context" },
-        { label: "LLM", text: "Runs a model — local (GGUF) or remote (OpenAI, Anthropic)" },
+        { label: null, text: "Each node adds its own intelligence, knowledge & context" },
+        { label: "LLM", text: "and runs a model — local (GGUF) or remote (OpenAI, Anthropic)" },
       ],
     },
   },
   {
     key: "eval",
-    name: "Evaluation",
-    desc: "Scores value, trust & confidence",
+    name: "Evaluate & decide",
+    desc: "Scores the answer for value, trust, and confidence — and reruns any step that didn't meet the bar before you see it.",
     color: "#22908c",
     Icon: GaugeIcon,
     chips: ["KnowledgeIntelligence", "TrustIntelligence", "Epistemic"],
   },
-  { key: "enc", name: "Encrypt & audit", desc: "Signs, encrypts, and logs the answer", color: "#0f9b81", Icon: LockIcon },
 ];
 
 const HomeEngines = () => (
@@ -110,8 +128,8 @@ const HomeEngines = () => (
         Powered by <span>DAIS</span> — not a wrapper.
       </h2>
       <p className={styles.subtitle}>
-        ButteryAI runs on DAIS, our distributed AI system. Every request flows through its intelligence engines —
-        routed, orchestrated, evaluated, and encrypted — before you ever see an answer.
+        ButteryAI runs on DAIS, our distributed AI system. Here&apos;s what happens to every request — screened,
+        understood, planned, run across nodes, and evaluated — all encrypted and audited end to end.
       </p>
     </div>
 
@@ -146,7 +164,7 @@ const HomeEngines = () => (
             <div className={styles.coreText}>
               <div className={styles.coreName}>DAIS Core</div>
               <div className={styles.coreDesc}>
-                The brain that holds and orchestrates every engine below — running them in-process, in milliseconds.
+                The brain that holds every engine and drives the steps below — running them in-process, in milliseconds.
               </div>
               <div className={styles.coreChips}>
                 <span className={styles.coreChip}>Pure Swift</span>
@@ -158,30 +176,38 @@ const HomeEngines = () => (
 
           <div className={styles.timeline}>
             <span className={styles.packet} />
-            {FLOW.map((node) => (
-              <div className={styles.item} key={node.key}>
+            {STEPS.map((step, i) => (
+              <div className={styles.item} key={step.key}>
                 <span
-                  className={`${styles.badge} ${node.hex ? styles.badgeHex : ""}`}
-                  style={{ backgroundColor: node.color }}
+                  className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
+                  style={{ backgroundColor: step.color }}
                 >
-                  <node.Icon />
+                  <step.Icon />
                 </span>
+                <span className={styles.stepNum}>{i + 1}</span>
                 <div className={styles.itemText}>
-                  <span className={styles.name}>{node.name}</span>
-                  <span className={styles.desc}>{node.desc}</span>
-                  {node.chips && (
+                  <span className={styles.name}>{step.name}</span>
+                  <span className={styles.desc}>{step.desc}</span>
+                  {step.chips && (
                     <div className={styles.chips}>
-                      {node.chips.map((chip) => (
+                      {step.chips.map((chip) => (
                         <span key={chip} className={styles.chip}>
                           {chip}
                         </span>
                       ))}
                     </div>
                   )}
-                  {node.node && (
+                  {step.node && (
                     <div className={styles.nodePanel}>
-                      <div className={styles.nodePanelHead}>{node.node.head}</div>
-                      {node.node.bits.map((bit) => (
+                      <div className={styles.nodePanelHead}>{step.node.head}</div>
+                      <div className={styles.nodeParallel}>
+                        {step.node.parallel.map((n) => (
+                          <span key={n} className={styles.nodeHexChip}>
+                            {n}
+                          </span>
+                        ))}
+                      </div>
+                      {step.node.bits.map((bit) => (
                         <div className={styles.nodeBit} key={bit.text}>
                           {bit.label ? (
                             <span className={styles.nodeChip}>{bit.label}</span>
@@ -196,6 +222,16 @@ const HomeEngines = () => (
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Encryption + audit blanket the whole pipeline */}
+          <div className={styles.encBand}>
+            <span className={styles.encIcon}>
+              <LockIcon />
+            </span>
+            <span>
+              <b>Encrypted end-to-end</b> and written to a <b>tamper-evident audit trail</b> — across every step above.
+            </span>
           </div>
         </div>
       </div>

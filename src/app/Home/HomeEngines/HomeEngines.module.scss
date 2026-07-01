@@ -265,8 +265,81 @@
   filter: drop-shadow(0 5px 10px rgba(5, 17, 34, 0.18));
 }
 
+.stepNum {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  z-index: 3;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--surface-line);
+  color: var(--buttery-black);
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(5, 17, 34, 0.12);
+}
+
 .itemText {
   padding-top: 3px;
+}
+
+/* Parallel node chips inside the node panel */
+.nodeParallel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 11px;
+}
+
+.nodeHexChip {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--buttery-black);
+  background: rgba(249, 192, 0, 0.22);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+/* Encryption + audit — blankets the whole pipeline */
+.encBand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 22px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px dashed #c3ccd4;
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+
+  b {
+    color: var(--buttery-black);
+    font-weight: 700;
+  }
+}
+
+.encIcon {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(15, 155, 129, 0.12);
+  color: var(--buttery-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 17px;
+    height: 17px;
+  }
 }
 
 /* "Inside each node" nested panel */
