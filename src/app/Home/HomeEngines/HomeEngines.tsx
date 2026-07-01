@@ -49,6 +49,19 @@ const LockIcon = () => (
   </svg>
 );
 
+const HubIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="2.6" />
+    <circle cx="12" cy="4" r="1.5" />
+    <circle cx="12" cy="20" r="1.5" />
+    <circle cx="5" cy="8" r="1.5" />
+    <circle cx="19" cy="8" r="1.5" />
+    <circle cx="5" cy="16" r="1.5" />
+    <circle cx="19" cy="16" r="1.5" />
+    <path d="M12 6v3.4M12 14.6V18M9.9 10.9 6.3 8.9M14.1 10.9l3.6-2M9.9 13.1l-3.6 2M14.1 13.1l3.6 2" />
+  </svg>
+);
+
 type FlowNode = {
   key: string;
   name: string;
@@ -125,6 +138,24 @@ const HomeEngines = () => (
 
         <div className={styles.dais}>
           <span className={styles.daisTag}>DAIS · Distributed AI System</span>
+
+          <div className={styles.coreBand}>
+            <span className={styles.coreBadge}>
+              <HubIcon />
+            </span>
+            <div className={styles.coreText}>
+              <div className={styles.coreName}>DAIS Core</div>
+              <div className={styles.coreDesc}>
+                The brain that holds and orchestrates every engine below — running them in-process, in milliseconds.
+              </div>
+              <div className={styles.coreChips}>
+                <span className={styles.coreChip}>Pure Swift</span>
+                <span className={styles.coreChip}>In-process</span>
+                <span className={styles.coreChip}>No token loss</span>
+              </div>
+            </div>
+          </div>
+
           <div className={styles.timeline}>
             <span className={styles.packet} />
             {FLOW.map((node) => (

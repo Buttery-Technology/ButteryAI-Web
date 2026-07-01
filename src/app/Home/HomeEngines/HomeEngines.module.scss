@@ -146,6 +146,70 @@
   border-radius: 20px;
 }
 
+/* DAIS Core — the orchestrator that holds the engines */
+.coreBand {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(40, 142, 210, 0.07), rgba(34, 144, 140, 0.07));
+  border: 1px solid var(--surface-line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.coreBadge {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--buttery-black);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(5, 17, 34, 0.18);
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.coreText {
+  flex: 1 1 auto;
+}
+
+.coreName {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  color: var(--buttery-black);
+}
+
+.coreDesc {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+.coreChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.coreChip {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--buttery-blue);
+  background: rgba(40, 142, 210, 0.1);
+  border-radius: 20px;
+  padding: 3px 9px;
+}
+
 /* Engine timeline (vertical) */
 .timeline {
   position: relative;
