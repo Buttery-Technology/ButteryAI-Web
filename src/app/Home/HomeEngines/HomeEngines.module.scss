@@ -6,7 +6,7 @@
 
 .header {
   text-align: left;
-  margin: 0 0 40px;
+  margin: 0 0 44px;
 }
 
 .title {
@@ -16,57 +16,193 @@
 .subtitle {
   @include headerSubtitle;
   margin-top: 14px;
+  max-width: 680px;
 }
 
-.list {
-  border-top: 1px solid var(--surface-line);
+/* Horizontal flow — scrolls on narrow screens */
+.scroll {
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 48px;
-  align-items: baseline;
-  padding: 26px 4px;
-  border-bottom: 1px solid var(--surface-line);
-
-  @include mq(1200) {
-    grid-template-columns: 260px 1fr;
-    gap: 32px;
-  }
-
-  @include mq(768) {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 22px 0;
-  }
-}
-
-.head {
+.pipeline {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 980px;
+  padding: 10px 8px 6px;
 }
 
-.name {
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 152px;
+  flex: 0 0 auto;
+}
+
+.stageWide {
+  width: 196px;
+}
+
+/* Engine node — brand hexagon */
+.hex {
+  width: 60px;
+  height: 66px;
+  flex: 0 0 auto;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  filter: drop-shadow(0 6px 14px rgba(5, 17, 34, 0.16));
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.hexBlue {
+  background: #288ed2;
+}
+.hexPurple {
+  background: #755cba;
+}
+.hexTeal {
+  background: #22908c;
+}
+
+/* Prompt / answer nodes */
+.io {
+  width: 60px;
+  height: 60px;
+  margin-top: 3px;
+  border-radius: 16px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.ioStart {
+  background: #eef3f8;
+  color: var(--buttery-blue);
+  border: 1px solid var(--surface-line);
+}
+
+.ioEnd {
+  background: var(--buttery-green);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(15, 155, 129, 0.28);
+}
+
+.label {
+  margin-top: 14px;
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 20px;
+  font-size: 14px;
   color: var(--buttery-black);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .tag {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.3px;
   color: var(--buttery-blue);
   background: rgba(40, 142, 210, 0.1);
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 20px;
 }
 
-.desc {
-  font-size: 15px;
-  line-height: 1.6;
+.caption {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
   color: var(--text-secondary);
+  max-width: 152px;
+}
+
+.chips {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: #3a454b;
+  background: var(--card-bg);
+  border: 1px solid var(--surface-line);
+  border-radius: 20px;
+  padding: 4px 10px;
+  white-space: nowrap;
+
+  em {
+    font-style: normal;
+    color: var(--buttery-blue);
+    margin-left: 4px;
+    font-size: 9.5px;
+    letter-spacing: 0.3px;
+  }
+}
+
+/* Connector between stages */
+.link {
+  flex: 1 1 40px;
+  min-width: 40px;
+  height: 2px;
+  margin-top: 33px;
+  position: relative;
+  background: repeating-linear-gradient(90deg, #cfd8de 0 6px, transparent 6px 12px);
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 6px solid #cfd8de;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+}
+
+/* Feedback loop caption */
+.loop {
+  margin: 36px auto 0;
+  max-width: 720px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loopIcon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(40, 142, 210, 0.1);
+  color: var(--buttery-blue);
+  font-size: 15px;
 }
