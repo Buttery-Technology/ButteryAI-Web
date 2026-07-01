@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo-no-melting.svg";
 import styles from "./HomeEngines.module.scss";
 
@@ -26,6 +27,13 @@ const LayersIcon = () => (
   </svg>
 );
 
+const CpuIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="6.5" y="6.5" width="11" height="11" rx="2" />
+    <path d="M9.5 2.5v3M14.5 2.5v3M9.5 18.5v3M14.5 18.5v3M2.5 9.5h3M2.5 14.5h3M18.5 9.5h3M18.5 14.5h3" />
+  </svg>
+);
+
 const GaugeIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4.5 15a7.5 7.5 0 0 1 15 0" />
@@ -41,10 +49,36 @@ const LockIcon = () => (
   </svg>
 );
 
-const FLOW = [
+type FlowNode = {
+  key: string;
+  name: string;
+  desc: string;
+  color: string;
+  Icon: FC;
+  hex?: boolean;
+  chips?: string[];
+  node?: { head: string; bits: { label: string | null; text: string }[] };
+};
+
+const FLOW: FlowNode[] = [
   { key: "sec", name: "Security & Trust", desc: "Screens the request before anything runs", color: "#d1495b", Icon: ShieldIcon },
   { key: "route", name: "Routing Engine", desc: "Sends it on-device, to the cloud, or split", color: "#288ed2", Icon: RouteIcon },
-  { key: "mgmt", name: "Management Engine", desc: "Plans, calls tools, runs your nodes", color: "#755cba", Icon: LayersIcon },
+  { key: "mgmt", name: "Management Engine", desc: "Plans the steps and calls the right tools", color: "#755cba", Icon: LayersIcon },
+  {
+    key: "node",
+    name: "Node processing",
+    desc: "A specialized node runs the query — with its own intelligence, not just a raw model call",
+    color: "#f9c000",
+    Icon: CpuIcon,
+    hex: true,
+    node: {
+      head: "Inside each node",
+      bits: [
+        { label: null, text: "Its own intelligence, knowledge & context" },
+        { label: "LLM", text: "Runs a model — local (GGUF) or remote (OpenAI, Anthropic)" },
+      ],
+    },
+  },
   {
     key: "eval",
     name: "Evaluation",
@@ -95,7 +129,10 @@ const HomeEngines = () => (
             <span className={styles.packet} />
             {FLOW.map((node) => (
               <div className={styles.item} key={node.key}>
-                <span className={styles.badge} style={{ backgroundColor: node.color }}>
+                <span
+                  className={`${styles.badge} ${node.hex ? styles.badgeHex : ""}`}
+                  style={{ backgroundColor: node.color }}
+                >
                   <node.Icon />
                 </span>
                 <div className={styles.itemText}>
@@ -110,6 +147,21 @@ const HomeEngines = () => (
                       ))}
                     </div>
                   )}
+                  {node.node && (
+                    <div className={styles.nodePanel}>
+                      <div className={styles.nodePanelHead}>{node.node.head}</div>
+                      {node.node.bits.map((bit) => (
+                        <div className={styles.nodeBit} key={bit.text}>
+                          {bit.label ? (
+                            <span className={styles.nodeChip}>{bit.label}</span>
+                          ) : (
+                            <span className={styles.nodeDot} />
+                          )}
+                          <span>{bit.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -118,7 +170,7 @@ const HomeEngines = () => (
       </div>
 
       <span className={styles.vArrow} />
-      <div className={`${styles.endBottom}`}>Trusted output ✓</div>
+      <div className={styles.endBottom}>Trusted output ✓</div>
     </div>
 
     <p className={styles.loop}>
