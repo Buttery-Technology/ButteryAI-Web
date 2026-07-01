@@ -107,7 +107,7 @@ const STEPS: Step[] = [
       parallel: ["Node 1", "Node 2", "Node n"],
       bits: [
         { label: null, text: "Each node adds its own intelligence, knowledge & context" },
-        { label: "LLM", text: "and runs a model — local (GGUF) or remote (OpenAI, Anthropic)" },
+        { label: "LLM", text: "and runs a model — local (GGUF) or remote (OpenAI, Anthropic, Gemini, etc)" },
       ],
     },
   },
@@ -117,7 +117,7 @@ const STEPS: Step[] = [
     desc: "Scores the answer for value, trust, and confidence — and reruns any step that didn't meet the bar before you see it.",
     color: "#22908c",
     Icon: GaugeIcon,
-    chips: ["KnowledgeIntelligence", "TrustIntelligence", "Epistemic"],
+    chips: ["KnowledgeIntelligence", "TrustIntelligence", "Confidence"],
   },
 ];
 
