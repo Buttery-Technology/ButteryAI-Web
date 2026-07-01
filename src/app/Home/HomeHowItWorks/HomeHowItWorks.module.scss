@@ -20,7 +20,7 @@
 
 .note {
   font-family: var(--sf-pro-text);
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.6;
   color: var(--text-secondary);
   text-align: left;
@@ -47,21 +47,21 @@
 
 .number {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 18px;
+  font-size: 15px;
   color: var(--buttery-blue);
 }
 
 .cardTitle {
   font-family: var(--sf-pro-rounded-bold);
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.2;
   color: var(--buttery-black);
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .cardBody {
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.55;
   color: var(--buttery-black);
-  margin-top: 14px;
+  margin-top: 10px;
 }

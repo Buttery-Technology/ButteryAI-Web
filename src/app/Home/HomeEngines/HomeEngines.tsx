@@ -115,7 +115,6 @@ const ADVANTAGES = [
   "Tamper-evident audit trail",
   "Fast & efficient — pure Swift",
   "Runs local, cloud, or on-prem",
-  "Gets more accurate over time",
 ];
 
 const HomeEngines = () => (
@@ -130,114 +129,104 @@ const HomeEngines = () => (
       </p>
     </div>
 
-    <div className={styles.layout}>
-      <div className={styles.advantages}>
-        <div className={styles.advHead}>Built in on every request</div>
-        <ul className={styles.advList}>
-          {ADVANTAGES.map((adv) => (
-            <li key={adv} className={styles.advItem}>
-              <CheckCircle className={styles.advCheck} />
-              <span>{adv}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className={styles.advCards}>
+      {ADVANTAGES.map((adv) => (
+        <div key={adv} className={styles.advCard}>
+          <CheckCircle className={styles.advCheck} />
+          <span>{adv}</span>
+        </div>
+      ))}
+    </div>
 
-      <div className={styles.diagram}>
-        <div className={styles.endTop}>Request</div>
-        <span className={styles.vArrow} />
-
-        {/* ButteryAI wraps DAIS wraps the engines */}
-        <div className={styles.product}>
-          <div className={styles.productHead}>
-            <img src={butteryaiLogo} alt="" className={styles.productLogo} />
-            <div className={styles.productText}>
-              <div className={styles.productName}>ButteryAI</div>
-              <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
-            </div>
-            <div className={styles.productChips}>
-              {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
-                <span key={c} className={styles.productChip}>
-                  {c}
-                </span>
-              ))}
-            </div>
+    <div className={styles.diagram}>
+      <div className={styles.product}>
+        <div className={styles.productHead}>
+          <img src={butteryaiLogo} alt="" className={styles.productLogo} />
+          <div className={styles.productText}>
+            <div className={styles.productName}>ButteryAI</div>
+            <div className={styles.productTag}>The platform you build, chat, and deploy on</div>
           </div>
-
-          <div className={styles.dais}>
-            <span className={styles.daisTag}>DAIS · Distributed AI System</span>
-
-            <div className={styles.timeline}>
-              <span className={styles.packet} />
-              {STEPS.map((step, i) => (
-                <div className={styles.item} key={step.key}>
-                  <span
-                    className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
-                    style={{ backgroundColor: step.color }}
-                  >
-                    <step.Icon />
-                  </span>
-                  <span className={styles.stepNum}>{i + 1}</span>
-                  <div className={styles.itemText}>
-                    <span className={styles.name}>{step.name}</span>
-                    <span className={styles.desc}>{step.desc}</span>
-                    {step.chips && (
-                      <div className={styles.chips}>
-                        {step.chips.map((chip) => (
-                          <span key={chip} className={styles.chip}>
-                            {chip}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    {step.node && (
-                      <div className={styles.nodePanel}>
-                        <div className={styles.nodePanelHead}>{step.node.head}</div>
-                        <div className={styles.nodeParallel}>
-                          {step.node.parallel.map((n) => (
-                            <span key={n} className={styles.nodeHexChip}>
-                              {n}
-                            </span>
-                          ))}
-                        </div>
-                        {step.node.bits.map((bit) => (
-                          <div className={styles.nodeBit} key={bit.text}>
-                            {bit.label ? (
-                              <span className={styles.nodeChip}>{bit.label}</span>
-                            ) : (
-                              <span className={styles.nodeDot} />
-                            )}
-                            <span>{bit.text}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Encryption + audit blanket the whole pipeline */}
-            <div className={styles.encBand}>
-              <span className={styles.encIcon}>
-                <LockIcon />
+          <div className={styles.productChips}>
+            {["Chat", "Workflows", "Nodes", "SDK"].map((c) => (
+              <span key={c} className={styles.productChip}>
+                {c}
               </span>
-              <span>
-                <b>Encrypted end-to-end</b> and written to a <b>tamper-evident audit trail</b> — across every step above.
-              </span>
-            </div>
+            ))}
           </div>
         </div>
 
-        <span className={styles.vArrow} />
-        <div className={styles.endBottom}>Trusted output ✓</div>
+        <div className={styles.dais}>
+          <span className={styles.daisTag}>DAIS · Distributed AI System</span>
+
+          <div className={styles.timeline}>
+            <span className={styles.packet} />
+            {STEPS.map((step, i) => (
+              <div className={styles.item} key={step.key}>
+                <span
+                  className={`${styles.badge} ${step.hex ? styles.badgeHex : ""}`}
+                  style={{ backgroundColor: step.color }}
+                >
+                  <step.Icon />
+                </span>
+                <span className={styles.stepNum}>{i + 1}</span>
+                <div className={styles.itemText}>
+                  <span className={styles.name}>{step.name}</span>
+                  <span className={styles.desc}>{step.desc}</span>
+                  {step.chips && (
+                    <div className={styles.chips}>
+                      {step.chips.map((chip) => (
+                        <span key={chip} className={styles.chip}>
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {step.node && (
+                    <div className={styles.nodePanel}>
+                      <div className={styles.nodePanelHead}>{step.node.head}</div>
+                      <div className={styles.nodeParallel}>
+                        {step.node.parallel.map((n) => (
+                          <span key={n} className={styles.nodeHexChip}>
+                            {n}
+                          </span>
+                        ))}
+                      </div>
+                      {step.node.bits.map((bit) => (
+                        <div className={styles.nodeBit} key={bit.text}>
+                          {bit.label ? (
+                            <span className={styles.nodeChip}>{bit.label}</span>
+                          ) : (
+                            <span className={styles.nodeDot} />
+                          )}
+                          <span>{bit.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Encryption + audit blanket the whole pipeline */}
+          <div className={styles.encBand}>
+            <span className={styles.encIcon}>
+              <LockIcon />
+            </span>
+            <span>
+              <b>Encrypted end-to-end</b> and written to a <b>tamper-evident audit trail</b> — across every step above.
+            </span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <p className={styles.loop}>
+    <div className={styles.loopCard}>
       <span className={styles.loopIcon}>↻</span>
-      Every scored interaction feeds back — DAIS gets more accurate over time.
-    </p>
+      <span>
+        Every scored interaction feeds back — <b>DAIS gets more accurate over time.</b>
+      </span>
+    </div>
   </section>
 );
 
