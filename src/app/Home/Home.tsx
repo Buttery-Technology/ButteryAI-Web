@@ -3,6 +3,7 @@ import { NavBar } from "../NavBar";
 import { HomeHero } from "./HomeHero";
 import { HomePillars } from "./HomePillars";
 import { HomeHowItWorks } from "./HomeHowItWorks";
+import { HomeEngines } from "./HomeEngines";
 import { HomeTrust } from "./HomeTrust";
 import { HomeSecurity } from "./HomeSecurity";
 import { HomeGovernance } from "./HomeGovernance";
@@ -19,6 +20,7 @@ const Home = () => {
       <HomeHero />
       <HomePillars />
       <HomeHowItWorks />
+      <HomeEngines />
       <HomeTrust />
       <HomeSecurity />
       <HomeGovernance />
