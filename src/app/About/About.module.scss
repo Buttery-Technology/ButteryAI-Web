@@ -54,10 +54,12 @@
     padding: 0 20px;
   }
 
-  // Left-align the ProductWindow so its leading edge matches the title above
-  // (overrides the window's own `margin: 0 auto` centering).
+  // Make the ProductWindow fill the column so its leading AND trailing edges
+  // match the title/intro above and the info section below (overrides the
+  // window's own `margin: 0 auto` centering and 940px cap).
   > div {
     margin-inline: 0;
+    max-width: none;
   }
 
   img {
