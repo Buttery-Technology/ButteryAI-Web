@@ -44,36 +44,31 @@ const NavBar = () => {
 
   return (
     <nav className={styles.nav} aria-label="Primary">
-      {ITEMS.map((item, i) => {
+      {ITEMS.map((item) => {
         const active = pathname === item.to;
         return (
-          <span className={styles.cell} key={item.to}>
-            {i > 0 && <span className={styles.divider} aria-hidden="true" />}
-            <Link
-              to={item.to}
-              className={`${styles.link} ${active ? styles.active : ""}`}
-              aria-label={item.label}
-              aria-current={active ? "page" : undefined}
-              title={item.label}
-            >
-              <item.Icon />
-            </Link>
-          </span>
+          <Link
+            key={item.to}
+            to={item.to}
+            className={`${styles.link} ${active ? styles.active : ""}`}
+            aria-label={item.label}
+            aria-current={active ? "page" : undefined}
+            title={item.label}
+          >
+            <item.Icon />
+          </Link>
         );
       })}
 
-      <span className={styles.cell}>
-        <span className={styles.divider} aria-hidden="true" />
-        <button
-          type="button"
-          onClick={openEnterpriseEmail}
-          className={styles.link}
-          aria-label="Book a demo"
-          title="Book a demo"
-        >
-          <CalendarIcon />
-        </button>
-      </span>
+      <button
+        type="button"
+        onClick={openEnterpriseEmail}
+        className={styles.link}
+        aria-label="Book a demo"
+        title="Book a demo"
+      >
+        <CalendarIcon />
+      </button>
     </nav>
   );
 };
