@@ -6,6 +6,7 @@ import { HomeHowItWorks } from "./HomeHowItWorks";
 import { HomeEngines } from "./HomeEngines";
 import { HomeTrust } from "./HomeTrust";
 import { HomeEnterprise } from "./HomeEnterprise";
+import { HomeOwnership } from "./HomeOwnership";
 import { HomeIntelligence } from "./HomeIntelligence";
 import { HomeFooter } from "./HomeFooter";
 
@@ -21,6 +22,7 @@ const Home = () => {
       <HomeEngines />
       <HomeTrust />
       <HomeEnterprise />
+      <HomeOwnership />
       <HomeIntelligence />
       <HomeFooter />
     </>
