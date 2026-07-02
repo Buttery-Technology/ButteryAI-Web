@@ -171,6 +171,7 @@ const HomeEngines = () => (
         </div>
       </div>
 
+      <div className={styles.right}>
       <div className={styles.diagram}>
       <div className={styles.product}>
         <div className={styles.productHead}>
@@ -256,13 +257,14 @@ const HomeEngines = () => (
         </div>
       </div>
       </div>
-    </div>
 
-    <div className={styles.loopCard}>
-      <span className={styles.loopIcon}>↻</span>
-      <span>
-        Every scored interaction feeds back — <b>DAIS gets more accurate over time.</b>
-      </span>
+      <div className={styles.loopCard}>
+        <span className={styles.loopIcon}>↻</span>
+        <span>
+          Every scored interaction feeds back — <b>DAIS gets more accurate over time.</b>
+        </span>
+      </div>
+      </div>
     </div>
   </section>
 );
