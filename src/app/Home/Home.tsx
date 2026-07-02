@@ -1,31 +1,32 @@
+import { useDocumentTitle } from "@hooks";
+import { NavBar } from "../NavBar";
 import { HomeHero } from "./HomeHero";
-import { HomeEfficiency } from "./HomeEfficiency";
-import { HomeSmart } from "./HomeSmart";
-import { HomeNextGen } from "./HomeNextGen";
-import { HomeExtensions } from "./HomeExtensions";
-import { HomeWorkflows } from "./HomeWorkflows";
-import { HomeSecurity } from "./HomeSecurity";
-import { HomeGovernance } from "./HomeGovernance";
-import { HomeDesign } from "./HomeDesign";
-import { HomeSwift } from "./HomeSwift";
-import { HomeTeam } from "./HomeTeam";
+import { HomePillars } from "./HomePillars";
+import { HomeHowItWorks } from "./HomeHowItWorks";
+import { HomeEngines } from "./HomeEngines";
+import { HomeTrust } from "./HomeTrust";
+import { HomeEnterprise } from "./HomeEnterprise";
+import { HomeOwnership } from "./HomeOwnership";
+import { HomeIntelligence } from "./HomeIntelligence";
 import { HomeFooter } from "./HomeFooter";
 
-const Home = () => (
-  <>
-    <HomeHero />
-    <HomeNextGen />
-    <HomeSmart />
-    <HomeEfficiency />
-    <HomeExtensions />
-    <HomeWorkflows />
-    <HomeSecurity />
-    <HomeGovernance />
-    <HomeDesign />
-    <HomeSwift />
-    <HomeTeam />
-    <HomeFooter />
-  </>
-);
+const Home = () => {
+  useDocumentTitle("ButteryAI — Build AI you can trust and own");
+
+  return (
+    <>
+      <NavBar />
+      <HomeHero />
+      <HomePillars />
+      <HomeHowItWorks />
+      <HomeEngines />
+      <HomeTrust />
+      <HomeEnterprise />
+      <HomeOwnership />
+      <HomeIntelligence />
+      <HomeFooter />
+    </>
+  );
+};
 
 export default Home;

@@ -1,0 +1,419 @@
+@use "@mixins" as *;
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: 22px 40px;
+
+  @include mq(768) {
+    padding: 16px 20px;
+  }
+
+  img {
+    height: 40px;
+    width: auto;
+  }
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+
+  a {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--buttery-black);
+    }
+  }
+
+  @include mq(768) {
+    gap: 16px;
+
+    a {
+      display: none;
+    }
+  }
+}
+
+.navCta {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 30px;
+  background-color: var(--buttery-blue);
+  color: var(--white-light);
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  @include scaleAnimation;
+
+  &:hover {
+    background-color: var(--buttery-blue-hover);
+  }
+}
+
+.root {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding: 96px 40px 120px;
+
+  @include mq(768) {
+    padding: 84px 20px 80px;
+  }
+}
+
+.header {
+  text-align: left;
+  max-width: 920px;
+  margin: 12px 0 56px;
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 40px;
+  line-height: 1.04;
+  letter-spacing: -1px;
+  color: var(--buttery-black);
+
+  @include mq(1200) {
+    font-size: 34px;
+  }
+
+  @include mq(768) {
+    font-size: 28px;
+  }
+}
+
+.subtitle {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-top: 14px;
+  max-width: 680px;
+
+  @include mq(768) {
+    font-size: 15px;
+  }
+}
+
+.founderLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  font-size: 14px;
+  color: var(--text-secondary);
+
+  @include mq(768) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.founderBadge {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: #8a6400;
+  background: rgba(202, 150, 0, 0.12);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ---------- Plan columns (line-separated, à la Linear) ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: stretch;
+
+  @include mq(1200) {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
+  }
+
+  @include mq(768) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 28px 28px;
+  border-left: 1px solid var(--surface-line);
+
+  &:first-child {
+    border-left: none;
+  }
+
+  @include mq(1200) {
+    &:nth-child(odd) {
+      border-left: none;
+    }
+  }
+
+  @include mq(768) {
+    border-left: none;
+    border-top: 1px solid var(--surface-line);
+    padding: 32px 6px;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+}
+
+.planName {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 30px;
+  color: var(--buttery-black);
+}
+
+.tagline {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+// Fixed-height price block so the feature lists start on the same line
+.priceArea {
+  min-height: 52px;
+  margin-top: 18px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.price {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 20px;
+  line-height: 1.1;
+  color: var(--buttery-black);
+}
+
+.unit {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--dark-gray);
+  margin-top: 8px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--surface-line);
+  margin: 6px 0 20px;
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--buttery-black);
+  }
+}
+
+.highlightHead {
+  font-family: var(--sf-pro-rounded-bold);
+  color: var(--text-secondary) !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+// Pins every CTA to the bottom of its column so they line up
+.ctaWrap {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.btnPrimary,
+.btnGhost {
+  height: 48px;
+  border-radius: 30px;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  width: 100%;
+  transition: 0.2s;
+
+  &:not(:disabled):hover {
+    transform: scale(1.02);
+  }
+}
+
+.btnPrimary {
+  background-color: var(--buttery-blue);
+  color: var(--white-light);
+  box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
+
+  &:hover {
+    background-color: var(--buttery-blue-hover);
+  }
+}
+
+.btnGhost {
+  background-color: transparent;
+  color: var(--buttery-black);
+  border: 1px solid #d5dde3;
+
+  &:hover {
+    background-color: var(--card-bg);
+  }
+}
+
+/* ---------- Comparison table ---------- */
+.compare {
+  margin-top: 96px;
+}
+
+.compareTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 32px;
+  color: var(--buttery-black);
+  text-align: left;
+  margin-bottom: 36px;
+
+  @include mq(768) {
+    font-size: 24px;
+  }
+}
+
+.tableScroll {
+  @include mq(900) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  @include mq(900) {
+    min-width: 820px;
+  }
+
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 16px 18px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  // Plan column header — sticks to the top while scrolling the matrix
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+    border-bottom: 1px solid var(--surface-line);
+    width: 21%;
+
+    &.corner {
+      width: 16%;
+      border-bottom: none;
+    }
+  }
+}
+
+.colName {
+  display: block;
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 18px;
+  color: var(--buttery-black);
+}
+
+.colPrice {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.catRow th {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--buttery-blue);
+  padding-top: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--surface-line);
+}
+
+.rowLabel {
+  font-weight: 600;
+  color: var(--buttery-black);
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #f0f3f6;
+}
+
+.table tbody tr:not(.catRow):hover {
+  background: #fafbfc;
+}
+
+.table tbody td {
+  color: var(--text-secondary);
+}
+
+// Capability cell: green check + value, like Linear's "✓ Unlimited"
+.cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cellCheck {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.cellEmpty {
+  color: #c4ccd2;
+  font-size: 15px;
+}
+
+.footnote {
+  max-width: 820px;
+  margin: 56px 0 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--dark-gray);
+}

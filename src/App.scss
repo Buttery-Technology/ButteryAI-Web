@@ -61,6 +61,18 @@ button {
   --sf-pro-text: "SF Pro Text", "Myriad Set Pro", "SF Pro Icons", "Apple Legacy Chevron", "Helvetica Neue", Helvetica,
     Arial, sans-serif;
   --sf-pro-rounded-bold: "SF Pro Rounded Bold", sans-serif;
+
+  /* Brand tokens (mirrors Figma variables) */
+  --buttery-blue: #288ed2;
+  --buttery-blue-hover: #1f72ab;
+  --buttery-black: #272d31;
+  --buttery-green: #0f9b81;
+  --dark-gray: #8d8d8d;
+  --buttery-gray-3: #ededed;
+  --card-bg: #f9f9f9;
+  --surface-line: #e6ecf1;
+  --text-secondary: #576773;
+  --white-light: #f7fbff;
 }
 
 body {
