@@ -299,7 +299,7 @@
   font-family: var(--sf-pro-rounded-bold);
   font-size: 32px;
   color: var(--buttery-black);
-  text-align: center;
+  text-align: left;
   margin-bottom: 36px;
 
   @include mq(768) {
@@ -411,8 +411,8 @@
 
 .footnote {
   max-width: 820px;
-  margin: 56px auto 0;
-  text-align: center;
+  margin: 56px 0 0;
+  text-align: left;
   font-size: 14px;
   line-height: 1.6;
   color: var(--dark-gray);

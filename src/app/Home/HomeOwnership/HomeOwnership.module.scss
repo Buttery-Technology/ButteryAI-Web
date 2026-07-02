@@ -2,7 +2,7 @@
 
 .root {
   @include sectionShell;
-  text-align: center;
+  text-align: left;
 }
 
 .title {
@@ -14,14 +14,14 @@
   line-height: 1.6;
   color: var(--text-secondary);
   max-width: 900px;
-  margin: 18px auto 0;
+  margin: 18px 0 0;
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 30px;
 }
 
