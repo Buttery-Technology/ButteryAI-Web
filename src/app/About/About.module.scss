@@ -1,0 +1,118 @@
+@use "@mixins" as *;
+
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 104px 40px 0;
+
+  @include mq(768) {
+    padding: 84px 20px 0;
+  }
+}
+
+.title {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 40px;
+  line-height: 1.04;
+  letter-spacing: -1px;
+  color: var(--buttery-black);
+  max-width: 820px;
+
+  span {
+    color: var(--buttery-blue);
+  }
+
+  @include mq(1200) {
+    font-size: 34px;
+  }
+
+  @include mq(768) {
+    font-size: 28px;
+  }
+}
+
+.intro {
+  margin: 18px 0 0;
+  max-width: 640px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+
+  @include mq(768) {
+    font-size: 16px;
+  }
+}
+
+.visual {
+  max-width: 1100px;
+  margin: 56px auto 0;
+  padding: 0 40px;
+
+  @include mq(768) {
+    margin-top: 40px;
+    padding: 0 20px;
+  }
+
+  // Make the ProductWindow fill the column so its leading AND trailing edges
+  // match the title/intro above and the info section below (overrides the
+  // window's own `margin: 0 auto` centering and 940px cap).
+  > div {
+    margin-inline: 0;
+    max-width: none;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 540px;
+    height: auto;
+    margin: 0 auto;
+  }
+}
+
+.info {
+  max-width: 1100px;
+  margin: 96px auto 0;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 56px;
+
+  @include mq(1200) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @include mq(768) {
+    margin-top: 64px;
+    padding: 0 20px;
+  }
+}
+
+.infoHeading {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 30px;
+  line-height: 1.12;
+  color: var(--buttery-black);
+
+  @include mq(768) {
+    font-size: 24px;
+  }
+}
+
+.infoBody {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+
+    @include mq(768) {
+      font-size: 15px;
+    }
+  }
+}
