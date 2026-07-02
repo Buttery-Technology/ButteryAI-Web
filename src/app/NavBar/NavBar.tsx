@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { openEnterpriseEmail } from "@common/contact";
 import styles from "./NavBar.module.scss";
 
 const HouseIcon = () => (
@@ -21,6 +22,14 @@ const InfoIcon = () => (
     <circle cx="12" cy="12" r="9.2" />
     <path d="M12 11v5" />
     <path d="M12 7.8v.01" />
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3.5" y="5" width="17" height="16" rx="2.5" />
+    <path d="M3.5 9.5h17" />
+    <path d="M8 3.5v3M16 3.5v3" />
   </svg>
 );
 
@@ -52,6 +61,19 @@ const NavBar = () => {
           </span>
         );
       })}
+
+      <span className={styles.cell}>
+        <span className={styles.divider} aria-hidden="true" />
+        <button
+          type="button"
+          onClick={openEnterpriseEmail}
+          className={styles.link}
+          aria-label="Book a demo"
+          title="Book a demo"
+        >
+          <CalendarIcon />
+        </button>
+      </span>
     </nav>
   );
 };
