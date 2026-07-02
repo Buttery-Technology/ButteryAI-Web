@@ -4,9 +4,32 @@
   @include sectionShell;
 }
 
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px);
+  gap: 56px;
+  align-items: start;
+  margin-bottom: 26px;
+
+  @include mq(1024) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.left {
+  min-width: 0;
+  position: sticky;
+  top: 96px;
+
+  @include mq(1024) {
+    position: static;
+  }
+}
+
 .header {
   text-align: left;
-  margin: 0 0 32px;
+  margin: 0 0 28px;
 }
 
 .title {
@@ -23,10 +46,9 @@
 .advCards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
-  max-width: 780px;
-  margin: 0 auto 30px;
+  margin: 0;
 }
 
 .advCard {
@@ -51,7 +73,7 @@
 /* Diagram — ButteryAI wraps DAIS wraps the engines */
 .diagram {
   max-width: 640px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .product {
@@ -419,7 +441,7 @@
   align-items: center;
   gap: 12px;
   max-width: 640px;
-  margin: 26px auto 0;
+  margin: 0;
   padding: 14px 18px;
   background: var(--card-bg);
   border: 1px solid var(--surface-line);

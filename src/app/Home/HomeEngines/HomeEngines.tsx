@@ -149,7 +149,9 @@ const ADVANTAGES = [
 
 const HomeEngines = () => (
   <section className={styles.root} data-section="engines">
-    <div className={styles.header}>
+    <div className={styles.layout}>
+      <div className={styles.left}>
+        <div className={styles.header}>
       <h2 className={styles.title}>
         Powered by <span>DAIS</span> — not a wrapper.
       </h2>
@@ -165,10 +167,11 @@ const HomeEngines = () => (
           <CheckCircle className={styles.advCheck} />
           <span>{adv}</span>
         </div>
-      ))}
-    </div>
+        ))}
+        </div>
+      </div>
 
-    <div className={styles.diagram}>
+      <div className={styles.diagram}>
       <div className={styles.product}>
         <div className={styles.productHead}>
           <img src={butteryaiLogo} alt="" className={styles.productLogo} />
@@ -251,6 +254,7 @@ const HomeEngines = () => (
             </span>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
