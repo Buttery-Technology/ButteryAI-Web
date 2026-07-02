@@ -37,7 +37,7 @@ const Chat = ({ clusterID }: Props) => {
     if (conversationId) return conversationId;
 
     try {
-      const createReq = CREATE_CONVERSATION("Chat", { type: "cluster" });
+      const createReq = CREATE_CONVERSATION("New Chat", { type: "cluster" });
       const createRes = await fetch(createReq.url, createReq.options);
       if (createRes.ok) {
         const conv = await createRes.json();
