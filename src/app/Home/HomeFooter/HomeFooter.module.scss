@@ -86,60 +86,14 @@
   }
 }
 
-.connectSection {
-  margin-top: 64px;
-}
-
-.connectTitle {
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 24px;
-  color: var(--buttery-black);
-}
-
-.socialLinks {
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-  margin-top: 16px;
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include scaleAnimation;
-  }
-}
-
-.productBy {
-  font-family: var(--sf-pro-rounded-bold);
-  font-weight: 400;
-  font-size: 24px;
-  color: var(--buttery-black);
-  margin-top: 56px;
-}
-
-.butteryLogo {
-  width: 164px;
-  height: 164px;
-  object-fit: contain;
-  // PNG has built-in transparent padding (~25% top); pull up to sit close to the label
-  margin-top: -28px;
-
-  @include mq(768) {
-    width: 120px;
-    height: 120px;
-    margin-top: -20px;
-  }
-}
-
 .bottomRow {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
-  margin-top: 48px;
-  font-family: var(--sf-pro-rounded-bold);
-  font-weight: 500;
+  margin-top: 64px;
+  font-family: var(--sf-pro-text);
+  font-weight: 400;
   font-size: 16px;
   color: var(--buttery-black);
 
