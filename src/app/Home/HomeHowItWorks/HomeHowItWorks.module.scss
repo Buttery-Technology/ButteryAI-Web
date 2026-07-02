@@ -1,0 +1,67 @@
+@use "@mixins" as *;
+
+.root {
+  @include sectionShell;
+}
+
+.header {
+  text-align: left;
+  margin: 0 0 32px;
+}
+
+.title {
+  @include headerTitle;
+}
+
+.subtitle {
+  @include headerSubtitle;
+  margin-top: 10px;
+}
+
+.note {
+  font-family: var(--sf-pro-text);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  text-align: left;
+  max-width: 700px;
+  margin: 6px 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+
+  @include mq(768) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  @include cardBase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.number {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 15px;
+  color: var(--buttery-blue);
+}
+
+.cardTitle {
+  font-family: var(--sf-pro-rounded-bold);
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--buttery-black);
+  margin-top: 8px;
+}
+
+.cardBody {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--buttery-black);
+  margin-top: 10px;
+}

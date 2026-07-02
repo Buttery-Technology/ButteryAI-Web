@@ -6,8 +6,19 @@ import { useAPIKeys } from "./useAPIKeys";
 import { useClusterConnection } from "./useClusterConnection";
 import { useWorkflows } from "./useWorkflows";
 import { useWorkflow } from "./useWorkflow";
+import { useDocumentTitle } from "./useDocumentTitle";
 
-export { useForm, useUserContext, useTrainingAPI, useTrainingSSE, useAPIKeys, useClusterConnection, useWorkflows, useWorkflow };
+export {
+  useForm,
+  useUserContext,
+  useTrainingAPI,
+  useTrainingSSE,
+  useAPIKeys,
+  useClusterConnection,
+  useWorkflows,
+  useWorkflow,
+  useDocumentTitle,
+};
 
 export type {
   TrainingJobStatus,
