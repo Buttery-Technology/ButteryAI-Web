@@ -5,6 +5,7 @@ import Cluster from "@assets/icons/cluster.svg?react";
 import Chat from "@assets/icons/chat.svg?react";
 import Settings from "@assets/icons/settings.svg?react";
 import WorkflowIcon from "@assets/icons/workflow.svg?react";
+import SkillsIcon from "@assets/icons/list-bullet.svg?react";
 import type { DashboardTab } from "../../../types/api";
 import styles from "./Menu.module.scss";
 
@@ -13,6 +14,7 @@ const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   chat: Chat,
   settings: Settings,
   workflow: WorkflowIcon,
+  skills: SkillsIcon,
 };
 
 const defaultTabs: DashboardTab[] = [
@@ -47,10 +49,14 @@ interface Props {
 export const Menu = ({ tabs }: Props) => {
   const { user } = useUserContext();
   const workflowTab: DashboardTab = { id: "workflows", label: "Workflows", icon: "workflow", route: "/dashboard/workflows", order: 5 };
+  const skillsTab: DashboardTab = { id: "skills", label: "Skills", icon: "skills", route: "/dashboard/skills", order: 6 };
   const baseTabs = tabs && tabs.length > 0 ? tabs : defaultTabs;
-  const activeTabs = baseTabs.find((t) => t.id === "workflows")
+  const withWorkflows = baseTabs.find((t) => t.id === "workflows")
     ? baseTabs
-    : [...baseTabs, workflowTab].sort((a, b) => a.order - b.order);
+    : [...baseTabs, workflowTab];
+  const activeTabs = (withWorkflows.find((t) => t.id === "skills")
+    ? withWorkflows
+    : [...withWorkflows, skillsTab]).sort((a, b) => a.order - b.order);
   const tabLabel = useActiveTab(activeTabs);
 
   const isOnline = user?.isOnline ?? false;
