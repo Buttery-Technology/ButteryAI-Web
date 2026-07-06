@@ -367,6 +367,61 @@ export const DELETE_WORKFLOW = (id: string) => ({
   },
 });
 
+// --- Skills (Phase 11 — over the Phase 9 /api/skills endpoints) ---
+
+export const GET_SKILLS = (limit?: number, offset?: number) => {
+  const params = new URLSearchParams();
+  if (limit) params.set("limit", String(limit));
+  if (offset) params.set("offset", String(offset));
+  const qs = params.toString();
+  return {
+    url: BUTTERY_API_URL + "/skills" + (qs ? `?${qs}` : ""),
+    options: { method: "GET" as const, ...cookieOptions },
+  };
+};
+
+export const GET_SKILL = (id: string) => ({
+  url: BUTTERY_API_URL + `/skills/${id}`,
+  options: { method: "GET" as const, ...cookieOptions },
+});
+
+export const CREATE_SKILL = (data: {
+  body: string;
+  title?: string;
+  summary?: string;
+  keywords?: string[];
+  domain?: string;
+  scope?: string;
+}) => ({
+  url: BUTTERY_API_URL + "/skills",
+  options: {
+    method: "POST" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const UPDATE_SKILL = (id: string, data: Record<string, unknown>) => ({
+  url: BUTTERY_API_URL + `/skills/${id}`,
+  options: {
+    method: "PUT" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    ...cookieOptions,
+  },
+});
+
+export const DELETE_SKILL = (id: string) => ({
+  url: BUTTERY_API_URL + `/skills/${id}`,
+  options: {
+    method: "DELETE" as const,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ permanent: false }),
+    ...cookieOptions,
+  },
+});
+
 // Workflow Steps
 export const GET_WORKFLOW_STEPS = (workflowID: string) => ({
   url: BUTTERY_API_URL + `/workflows/${workflowID}/steps`,

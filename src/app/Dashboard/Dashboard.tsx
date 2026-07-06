@@ -6,6 +6,7 @@ import { Chat } from "./Chat";
 import { Settings } from "./Settings";
 import { APIKeys } from "./Settings/APIKeys";
 import { Workflows } from "./Workflows";
+import { Skills } from "./Skills";
 // import { Training } from "./Training";
 
 const Dashboard = () => {
@@ -28,6 +29,7 @@ const Dashboard = () => {
         <Route path="/" element={<Cluster summaryCards={dashboard.summaryCards} nodes={dashboard.nodes} isLoading={dashboard.isLoading} clusterConnectionInfo={clusterConnectionInfo} clusterID={clusterID} />} />
         <Route path="chat" element={<Chat clusterID={clusterID} />} />
         <Route path="workflows" element={<Workflows />} />
+        <Route path="skills" element={<Skills />} />
         {/* <Route path="training" element={<Training />} /> */}
         <Route path="settings" element={<Settings valueCards={dashboard.valueCards} trustCards={dashboard.trustCards} extensions={dashboard.extensions} extensionTemplates={dashboard.extensionTemplates} isLoading={dashboard.isLoading} onRefresh={dashboard.refetch} />} />
         <Route path="api-keys" element={<APIKeys clusterID={clusterID} />} />

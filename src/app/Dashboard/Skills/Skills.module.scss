@@ -1,0 +1,260 @@
+.root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #272d31;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+
+.primaryBtn {
+  background: #d12a89;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #d12a89;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.error {
+  background: rgba(209, 42, 137, 0.08);
+  color: #b91c6b;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.empty {
+  color: #6b7280;
+  font-size: 14px;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.count {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.rowMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover { background: #f9fafb; }
+}
+
+.rowTitle {
+  font-size: 15px;
+  font-weight: 500;
+  color: #272d31;
+}
+
+.rowSummary {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.rowMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.active { background: rgba(16, 185, 129, 0.12); color: #047857; }
+.pending { background: rgba(245, 158, 11, 0.14); color: #b45309; }
+.rejected { background: rgba(239, 68, 68, 0.12); color: #b91c1c; }
+.disabled { background: rgba(107, 114, 128, 0.12); color: #4b5563; }
+
+.badgeAuto {
+  font-size: 11px;
+  color: #7c3aed;
+}
+
+.scope {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: capitalize;
+}
+
+.date {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-left: auto;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 0 14px;
+  cursor: pointer;
+  align-self: stretch;
+
+  &:hover { color: #d12a89; }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.sheet {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.sheetTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #272d31;
+  margin: 0 0 16px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.bodyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  resize: vertical;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.preview {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  color: #272d31;
+  min-height: 120px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin: -4px 0 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
