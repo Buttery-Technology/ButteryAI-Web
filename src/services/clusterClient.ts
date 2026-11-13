@@ -51,6 +51,8 @@ export function clearClusterToken(): void {
   tokenExpiresAt = 0;
 }
 
+export const STREAM_CLOSED_EARLY = "The connection closed before the answer finished.";
+
 export interface StreamChunk {
   payload: string;
   timestamp: number;
@@ -216,5 +218,5 @@ export async function queryCluster(
     }
   }
 
-  return latestText;
+  throw new Error(STREAM_CLOSED_EARLY);
 }
