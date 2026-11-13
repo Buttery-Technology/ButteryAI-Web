@@ -197,8 +197,8 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
           try {
             const parsed = JSON.parse(jsonStr);
 
-            if (parsed.done) break;
             if (parsed.error) throw new Error(parsed.error);
+            if (parsed.done) break;
 
             if (parsed.payload) {
               // Decode base64 payload → JSON QueryOutput(s)

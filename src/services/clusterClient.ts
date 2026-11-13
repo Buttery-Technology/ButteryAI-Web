@@ -166,13 +166,14 @@ export async function queryCluster(
       try {
         const parsed = JSON.parse(jsonStr);
 
+        // The final done event can carry the error, so check it first.
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
+
         if (parsed.done) {
           // Stream complete
           return latestText;
-        }
-
-        if (parsed.error) {
-          throw new Error(parsed.error);
         }
 
         if (parsed.payload) {
