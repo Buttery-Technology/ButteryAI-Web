@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { CREATE_CONVERSATION, GET_CONVERSATIONS, GET_MESSAGES, QUERY_NODE } from "../../../api";
+import { STREAM_CLOSED_EARLY } from "../../../services/clusterClient";
 import { Messages } from "../../Dashboard/Chat/Messages";
 import { type Message } from "../../Dashboard/Chat/Chat";
 import { SummaryCards } from "@common";
@@ -176,6 +177,7 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
       const decoder = new TextDecoder();
       let buffer = "";
       let latestText = "";
+      let sawDone = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -197,8 +199,11 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
           try {
             const parsed = JSON.parse(jsonStr);
 
-            if (parsed.done) break;
             if (parsed.error) throw new Error(parsed.error);
+            if (parsed.done) {
+              sawDone = true;
+              break;
+            }
 
             if (parsed.payload) {
               // Decode base64 payload → JSON QueryOutput(s)
@@ -233,6 +238,8 @@ const Overview = ({ node, overviewCards = [], isLoadingDetail }: Props) => {
           }
         }
       }
+
+      if (!sawDone) throw new Error(STREAM_CLOSED_EARLY);
 
       // If we never got any text, show error
       if (!latestText) {

@@ -51,6 +51,8 @@ export function clearClusterToken(): void {
   tokenExpiresAt = 0;
 }
 
+export const STREAM_CLOSED_EARLY = "The connection closed before the answer finished.";
+
 export interface StreamChunk {
   payload: string;
   timestamp: number;
@@ -166,13 +168,14 @@ export async function queryCluster(
       try {
         const parsed = JSON.parse(jsonStr);
 
+        // The final done event can carry the error, so check it first.
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
+
         if (parsed.done) {
           // Stream complete
           return latestText;
-        }
-
-        if (parsed.error) {
-          throw new Error(parsed.error);
         }
 
         if (parsed.payload) {
@@ -215,5 +218,5 @@ export async function queryCluster(
     }
   }
 
-  return latestText;
+  throw new Error(STREAM_CLOSED_EARLY);
 }

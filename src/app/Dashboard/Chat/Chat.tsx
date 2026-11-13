@@ -5,7 +5,7 @@ import { History } from "./History";
 import { ResetButton } from "./ResetButton";
 import { Messages } from "./Messages";
 import { Form } from "./Form";
-import { typewriterEffect } from "./utils";
+import { typewriterEffect, withoutEmptyAIMessage } from "./utils";
 import styles from "./Chat.module.scss";
 
 const quitCommands = ["exit", "q", "quit"];
@@ -158,6 +158,8 @@ const Chat = ({ clusterID }: Props) => {
           inputRef.current?.focus();
           return;
         }
+
+        setMessages((prev) => withoutEmptyAIMessage(prev, aiMessageIndex));
       } catch {
         // Direct connection failed — remove the empty AI message and fall back
         setMessages((prev) => prev.slice(0, -1));
