@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useDocumentTitle } from "@hooks";
 import { NavBar } from "../NavBar";
 import { HomeHero } from "./HomeHero";
@@ -15,6 +17,18 @@ import { ScrollCue } from "./ScrollCue";
 
 const Home = () => {
   useDocumentTitle("ButteryAI — Build your own AI tech stack with AI specialists");
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash !== "#enterprise") return;
+    let alive = true;
+    (document.fonts?.ready ?? Promise.resolve()).then(() =>
+      requestAnimationFrame(() => alive && document.getElementById("enterprise")?.scrollIntoView({ block: "start" })),
+    );
+    return () => {
+      alive = false;
+    };
+  }, [hash]);
 
   return (
     <>

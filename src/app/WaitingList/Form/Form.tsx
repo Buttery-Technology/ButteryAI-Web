@@ -105,7 +105,7 @@ const Form = () => {
         <input
           type="text"
           id="name"
-          name="name"
+          autoComplete="name"
           placeholder="Joana"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -121,7 +121,7 @@ const Form = () => {
         <input
           type="email"
           id="email"
-          name="email"
+          autoComplete="email"
           placeholder="joana@buttery.technology"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -136,7 +136,6 @@ const Form = () => {
         </label>
         <textarea
           id="buildDescription"
-          name="buildDescription"
           placeholder="Tell us about your project..."
           value={buildDescription}
           onChange={(e) => setBuildDescription(e.target.value)}

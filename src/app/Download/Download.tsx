@@ -35,7 +35,10 @@ const DownloadIcon = () => (
 
 const formatSize = (bytes: number) => `${Math.max(1, Math.round(bytes / 1_000_000))} MB`;
 
+const INVITE = "ButteryAI for Mac is open to approved accounts. Our team sets up each new account.";
+
 const Status = ({ state }: { state: ReleaseState }) => {
+  if (state.status === "invite") return <>{INVITE}</>;
   if (state.status === "ready") {
     const { version, size } = state.release;
     return <>{size ? `Version ${version} · ${formatSize(size)}` : `Version ${version}`}</>;
@@ -74,7 +77,11 @@ const Download = () => {
           <p className={styles.subtitle}>Build AI specialists on your Mac and grow your own AI tech stack.</p>
 
           <div className={styles.action} data-cta="download" data-state={state.status}>
-            {state.status === "ready" ? (
+            {state.status === "invite" ? (
+              <Link className={styles.button} to="/waiting-list">
+                Request access
+              </Link>
+            ) : state.status === "ready" ? (
               <a className={styles.button} href={state.release.url}>
                 {label}
               </a>
@@ -91,8 +98,7 @@ const Download = () => {
           <noscript>
             <style>{"[data-cta=download]{display:none}"}</style>
             <p className={styles.noscript}>
-              Turn on JavaScript to download ButteryAI, or email <a href={`mailto:${INFO_EMAIL}`}>{INFO_EMAIL}</a> for a
-              download link.
+              {INVITE} <a href="/waiting-list">Request access</a>
             </p>
           </noscript>
 

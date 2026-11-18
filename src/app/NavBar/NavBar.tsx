@@ -1,4 +1,4 @@
-import { FocusEvent, PointerEvent, useEffect, useRef, useState } from "react";
+import { FocusEvent, KeyboardEvent, PointerEvent, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import styles from "./NavBar.module.scss";
@@ -48,13 +48,18 @@ const ITEMS = [
 
 let hintPlayed = false;
 
+const HIDE_AFTER = 80;
+
 const NavBar = () => {
   const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [nudge] = useState(() => !hintPlayed);
   const navRef = useRef<HTMLElement>(null);
+  const brandRef = useRef<HTMLAnchorElement>(null);
   const closeTimer = useRef(0);
+  const escaping = useRef(false);
 
   const show = () => {
     window.clearTimeout(closeTimer.current);
@@ -78,8 +83,30 @@ const NavBar = () => {
     if (!navRef.current?.contains(e.relatedTarget as Node | null)) hide(0);
   };
 
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key !== "Escape") return;
+    if (document.activeElement !== brandRef.current) {
+      escaping.current = true;
+      brandRef.current?.focus();
+      escaping.current = false;
+    }
+    hide(0);
+  };
+
+  const onBrandFocus = () => {
+    if (!escaping.current) show();
+  };
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y < HIDE_AFTER) setHidden(false);
+      else if (Math.abs(y - last) < 6) return;
+      else setHidden(y > last);
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -97,17 +124,19 @@ const NavBar = () => {
       className={styles.nav}
       aria-label="Primary"
       data-open={open ? "1" : "0"}
+      data-hidden={hidden ? "1" : "0"}
       onPointerLeave={onLeave}
       onBlur={onBlur}
-      onKeyDown={(e) => e.key === "Escape" && hide(0)}
+      onKeyDown={onKeyDown}
     >
       <Link
+        ref={brandRef}
         to="/"
         className={styles.brand}
         data-scrolled={scrolled ? "1" : "0"}
         aria-label="ButteryAI home"
         onPointerEnter={onEnter}
-        onFocus={show}
+        onFocus={onBrandFocus}
       >
         <img src={butteryaiLogo} alt="" className={styles.brandMark} />
       </Link>

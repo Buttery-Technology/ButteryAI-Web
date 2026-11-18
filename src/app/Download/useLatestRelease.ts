@@ -1,35 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GET_LATEST_RELEASE } from "../../api";
+import { parseRelease, type Release } from "./release";
 
-export type Release = {
-  version: string;
-  url: string;
-  size?: number;
-};
+export type { Release } from "./release";
 
-export type ReleaseState = { status: "loading" } | { status: "ready"; release: Release } | { status: "error" };
+export type ReleaseState =
+  | { status: "loading" }
+  | { status: "ready"; release: Release }
+  | { status: "invite" }
+  | { status: "error" };
 
-const PLATFORM = "macos-arm64";
 const TIMEOUT_MS = 12000;
 
-const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null;
-
-const parseRelease = (data: unknown): Release => {
-  if (!isRecord(data) || typeof data.version !== "string" || !data.version || !isRecord(data.platforms)) {
-    throw new Error("Unexpected release response");
-  }
-  const asset = data.platforms[PLATFORM];
-  if (!isRecord(asset) || typeof asset.url !== "string") {
-    throw new Error(`No ${PLATFORM} build in release ${data.version}`);
-  }
-  const url = new URL(asset.url);
-  if (url.protocol !== "https:") {
-    throw new Error("Download URL is not https");
-  }
-  return { version: data.version, url: url.href, size: typeof asset.size === "number" ? asset.size : undefined };
-};
-
-const fetchLatestRelease = async (): Promise<Release> => {
+const fetchLatestRelease = async (): Promise<Release | null> => {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -44,9 +27,12 @@ const fetchLatestRelease = async (): Promise<Release> => {
   }
 };
 
+const stateFor = (release: Release | null): ReleaseState =>
+  release ? { status: "ready", release } : { status: "invite" };
+
 export const useLatestRelease = () => {
   const [state, setState] = useState<ReleaseState>({ status: "loading" });
-  const pending = useRef<Promise<Release> | null>(null);
+  const pending = useRef<Promise<Release | null> | null>(null);
   const queued = useRef(false);
 
   const resolve = useCallback(() => {
@@ -59,7 +45,7 @@ export const useLatestRelease = () => {
   useEffect(() => {
     let active = true;
     resolve().then(
-      (release) => active && setState({ status: "ready", release }),
+      (release) => active && setState(stateFor(release)),
       (error: unknown) => {
         if (!active) return;
         console.error("ButteryAI release check failed:", error);
@@ -77,8 +63,8 @@ export const useLatestRelease = () => {
     setState({ status: "loading" });
     try {
       const release = await resolve();
-      setState({ status: "ready", release });
-      window.location.assign(release.url);
+      setState(stateFor(release));
+      if (release) window.location.assign(release.url);
     } catch (error) {
       console.error("ButteryAI release check failed:", error);
       setState({ status: "error" });

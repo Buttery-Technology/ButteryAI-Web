@@ -95,7 +95,7 @@ const COMPARISON: Group[] = [
   {
     category: "Security",
     rows: [
-      { label: "Encryption — transport", cells: ["TLS to server", "+ mTLS between nodes", "+ key rotation controls", "+ key rotation controls"] },
+      { label: "Encryption — transport", cells: ["TLS to server", "TLS to server", "TLS to server", "TLS to server"] },
       { label: "Permissions & RBAC", cells: ["Self-only", "Per-cluster", "Per-org roles", "Per-org roles"] },
       { label: "Governance", cells: ["—", "Basic policy gates", "Per-org custom policies", "+ compliance reporting + export"] },
       { label: "Compliance posture", cells: ["—", "—", "SOC 2 — coming 2027", "SOC 2 — coming 2027"] },
@@ -113,7 +113,7 @@ const COMPARISON: Group[] = [
     category: "Usage",
     rows: [
       { label: "Included platform tokens / mo", cells: ["500K", "5M", "30M pooled / org", "Unlimited / 500M+ committed"] },
-      { label: "Pre-query token estimate", cells: ["—", "Pre-query estimate", "+ per-member drill-down", "+ budget alerts + forecasting"] },
+      { label: "Pre-query token estimate", cells: ["—", "Coming soon", "Coming soon", "Coming soon"] },
       { label: "Overage rate", cells: ["Hard cap", "$0.50 / 1M tokens", "$0.30 / 1M tokens", "Custom committed"] },
     ],
   },
@@ -125,7 +125,7 @@ const Pricing = () => {
   const renderCell = (value: string) =>
     value === "—" ? null : (
       <span className={styles.cell}>
-        <CheckCircle className={styles.cellCheck} />
+        {!/coming/i.test(value) && <CheckCircle className={styles.cellCheck} />}
         <span>{value}</span>
       </span>
     );
@@ -224,7 +224,7 @@ const Pricing = () => {
         </section>
 
         <p className={styles.footnote}>
-          Every plan includes local-first inference and the full audit trail. Prices in USD.
+          Every plan includes local-first inference and a step-by-step record of every answer. Prices in USD.
           Team requires a 3-seat minimum; Enterprise is custom-quoted on top of the published floor.
         </p>
       </main>

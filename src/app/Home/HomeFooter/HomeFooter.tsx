@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import { HEX_PATH, HEX_VIEWBOX, SPECIALISTS, scrollToEnterprise, useInView } from "../shared";
 import styles from "./HomeFooter.module.scss";
@@ -56,6 +56,7 @@ const Glyph = ({ d }: { d: string[] }) => (
 const HomeFooter = () => {
   const [clusterRef, played] = useInView<HTMLDivElement>();
   const [ghostRef, ghostVisible] = useInView<HTMLDivElement>("0px", false);
+  const { pathname } = useLocation();
 
   return (
     <footer className={styles.root} data-section="footer">
@@ -102,9 +103,15 @@ const HomeFooter = () => {
           <Link to="/download" className={styles.btnPrimary}>
             Start building
           </Link>
-          <button type="button" className={styles.btnGhost} onClick={scrollToEnterprise}>
-            For Enterprise
-          </button>
+          {pathname === "/" ? (
+            <button type="button" className={styles.btnGhost} onClick={scrollToEnterprise}>
+              For Enterprise
+            </button>
+          ) : (
+            <Link to="/#enterprise" className={styles.btnGhost}>
+              For Enterprise
+            </Link>
+          )}
         </div>
       </div>
 

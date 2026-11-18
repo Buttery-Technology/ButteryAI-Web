@@ -30,6 +30,7 @@ import {
 import styles from "./StackUntangle.module.scss";
 
 const NAV_CLEAR = 104;
+const NARROW_FLOOR = 320;
 const FLOW = 3;
 const FLOW_SPEED = 0.2;
 const STAGE: Record<Variant, { min: number; max: number; ratio: number }> = {
@@ -243,8 +244,11 @@ const StackUntangle = ({ outro }: { outro?: ReactNode }) => {
     const sizeStage = () => {
       const W = stage.clientWidth;
       const { min, max, ratio } = STAGE[variant];
-      const avail = view.vh - NAV_CLEAR - (dom.outro?.offsetHeight ?? 0) - 32;
-      const H = Math.round(Math.max(min, Math.min(max, W * ratio, avail)));
+      const outroH = dom.outro?.offsetHeight ?? 0;
+      const avail = view.vh - NAV_CLEAR - outroH - 32;
+      let H = Math.round(Math.max(min, Math.min(max, W * ratio, avail)));
+      const fit = Math.round(view.vh - outroH - 20);
+      if (variant === "narrow" && fit < H) H = Math.max(NARROW_FLOOR, fit);
       if (stage.style.height !== `${H}px`) stage.style.height = `${H}px`;
       const scale = variant === "wide" ? Math.min(1.3, Math.max(1, Math.min(W / 1180, H / 460))) : 1;
       stage.style.setProperty("--k", scale.toFixed(3));

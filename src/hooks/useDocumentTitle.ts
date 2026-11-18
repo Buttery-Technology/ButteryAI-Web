@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 
+const DEFAULT_TITLE = "ButteryAI — Build your own AI tech stack with AI specialists";
+
 /**
  * Sets `document.title` while the component is mounted and restores the
- * previous title on unmount. Used to give marketing pages Linear-style
+ * site's default title on unmount. Used to give marketing pages Linear-style
  * tab titles (e.g. "About – ButteryAI").
  */
 export const useDocumentTitle = (title: string) => {
   useEffect(() => {
-    const previous = document.title;
     document.title = title;
     return () => {
-      document.title = previous;
+      document.title = DEFAULT_TITLE;
     };
   }, [title]);
 };
