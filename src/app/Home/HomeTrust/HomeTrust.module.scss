@@ -21,6 +21,7 @@
   font-size: 34px;
   line-height: 1.1;
   color: var(--buttery-black);
+  text-wrap: balance;
 
   span {
     color: var(--buttery-blue);
@@ -93,6 +94,10 @@
   border-radius: 22px;
   box-shadow: 0 6px 16px rgba(5, 17, 34, 0.1);
   padding: 30px;
+
+  @include mq(480) {
+    padding: 20px 16px;
+  }
 }
 
 .panelTitle {
@@ -100,47 +105,6 @@
   font-size: 15px;
   color: var(--buttery-black);
   margin-bottom: 18px;
-}
-
-.bars {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.barRow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.bn {
-  width: 74px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #566;
-}
-
-.track {
-  flex: 1;
-  height: 9px;
-  border-radius: 20px;
-  background: #e9eef3;
-  overflow: hidden;
-}
-
-.fill {
-  display: block;
-  height: 100%;
-  border-radius: 20px;
-}
-
-.pct {
-  width: 42px;
-  text-align: right;
-  font-size: 13px;
-  font-weight: 800;
 }
 
 .miniCard {
@@ -151,10 +115,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 14px;
   margin-bottom: 12px;
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @include mq(480) {
+    gap: 10px;
+    padding: 14px;
   }
 }
 
@@ -185,4 +155,9 @@
 .audit {
   background: #eaf3fb;
   color: var(--buttery-blue);
+}
+
+.warn {
+  background: rgba(249, 192, 0, 0.22);
+  color: var(--buttery-black);
 }

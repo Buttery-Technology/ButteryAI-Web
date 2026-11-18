@@ -7,8 +7,18 @@ const teamMembers = [
     role: "CEO/CTO",
     image: "/images/team/jonny.svg",
     bio: [
-      "Jonny is a serial entrepreneur and is the inventor of Buttery's distributed AI systems (DAIS) technology and the core developer of ButteryAI's intelligence engines.",
+      "Jonny is a serial entrepreneur and is the inventor of Buttery's distributed AI systems technology and the core developer of ButteryAI's intelligence engines.",
       "Jonny has a passion for technology and creating things. He's crafted a scalable architecture called the Composable Architecture Pattern that enables dynamic scalable software architecture that is self-sustaining for modern programs. ButteryAI uses this architecture to support the intricate intelligence systems and distributed components.",
+    ],
+  },
+  {
+    id: "pat",
+    name: "Pat",
+    role: "Head of Strategy",
+    image: "/images/team/pat.jpg",
+    bio: [
+      "Pat is a serial entrepreneur and technologist with multiple company exits, including one IPO. He was the founding CEO and CTO of Apropos Technology, which went public on NASDAQ in 2000, and he co-founded RedWave Energy.",
+      "Pat leads strategy at Buttery and is a co-author of Buttery's IP, designs and architecture.",
     ],
   },
   {
@@ -17,8 +27,8 @@ const teamMembers = [
     role: "Director of Web Development",
     image: "/images/team/nick.svg",
     bio: [
-      "Nick is a serial entrepreneur and holds a bachelors in advertising and marketing. Nick ensures that ButteryAI's revolutionary technology consistently has a unique and engaging web experience.",
-      "Nick has been programming since he was a teenager and brings over a decade of web development experience to his role. He's worked with healthcare and other companies delivering solid user experiences across a wide range of products. This experience is also helpful because of the handling of sensitive data, which ButteryAI takes very seriously and why E2EE encryption and compliances are so important.",
+      "Nick is a serial entrepreneur and holds a bachelors in advertising and marketing. Nick ensures that ButteryAI's technology consistently has a unique and engaging web experience.",
+      "Nick has been programming since he was a teenager and brings over a decade of web development experience to his role. He's worked with healthcare and other companies delivering solid user experiences across a wide range of products. This experience is also helpful because of the handling of sensitive data, which ButteryAI takes very seriously and why encryption and governance are so important.",
     ],
   },
   {
@@ -36,7 +46,7 @@ const teamMembers = [
 const HomeTeam = () => (
   <section className={styles.root} data-section="team">
     <div className={styles.content}>
-      <h1 className={styles.title}>Meet the team</h1>
+      <h2 className={styles.title}>Meet the team</h2>
       <div className={styles.team}>
         {teamMembers.map((member) => (
           <div key={member.id} className={styles.member}>

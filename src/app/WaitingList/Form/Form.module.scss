@@ -135,6 +135,7 @@
   font-size: 32px;
   color: #272d31;
   margin-bottom: 16px;
+  text-wrap: balance;
 }
 
 .successMessage {
@@ -142,11 +143,12 @@
   color: #576773;
   margin-bottom: 32px;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .backButton {
   display: inline-block;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   @include scaleAnimation;
   background-color: #288ed2;

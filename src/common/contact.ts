@@ -1,5 +1,7 @@
 export const ENTERPRISE_EMAIL = "sales@buttery.technology";
 
+export const INFO_EMAIL = "info@buttery.technology";
+
 const SUBJECT = "ButteryAI Enterprise Inquiry";
 
 const BODY = [

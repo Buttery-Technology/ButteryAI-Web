@@ -6,6 +6,7 @@ import { Home } from "./app/Home";
 import { Login } from "./app/Login";
 import { WaitingList } from "./app/WaitingList";
 import { Pricing } from "./app/Pricing";
+import { Download } from "./app/Download";
 import { About } from "./app/About";
 import { ProtectedRoute } from "./app/Helper/ProtectedRoute";
 import { Dashboard } from "./app/Dashboard";
@@ -34,6 +35,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/download" element={<Download />} />
             <Route path="/about" element={<About />} />
             <Route path="/waiting-list" element={<WaitingList />} />
             <Route path="/login" element={<Login />} />

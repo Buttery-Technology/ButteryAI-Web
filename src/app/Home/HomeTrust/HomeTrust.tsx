@@ -1,90 +1,60 @@
 import CheckCircle from "@assets/icons/check-circle.svg?react";
 import styles from "./HomeTrust.module.scss";
 
+const TRACE = [
+  { label: "Routed", meta: "Contracts Specialist", tag: "Best fit", tone: "audit" },
+  { label: "First draft", meta: "Said 30 days' notice. No source backs it up.", tag: "Flagged", tone: "warn" },
+  { label: "Retry", meta: "New guidance: quote the termination clause", tag: "Retried", tone: "audit" },
+  { label: "Final answer", meta: "60 days' notice, Supply Agreement §9.2", tag: "Trusted ✓", tone: "enc" },
+] as const;
+
 const HomeTrust = () => (
   <section className={styles.root} data-section="trust">
     <div className={styles.grid}>
       <div>
         <h2 className={styles.title}>
-          Know when to <span>trust</span> the output.
+          Better answers, <span>in real time</span>.
         </h2>
-        <p className={styles.kicker}>Trust me, this is important.</p>
+        <p className={styles.kicker}>Every answer gets a second look.</p>
         <p className={styles.body}>
-          Most AI can't tell you if it's right. ButteryAI scores every single response and checks it against your own
-          sources of truth — so confidence is measured, not assumed.
+          ButteryAI tracks what your AI does and says. It evaluates every answer and updates our real-time metric
+          system as it goes. That&apos;s how it catches hallucinations and makes answers better.
         </p>
 
         <div className={styles.list}>
           <div className={styles.item}>
             <CheckCircle className={styles.check} />
             <span>
-              <b>Value · Trust · Accuracy on every response.</b> Each answer is graded in real time, not sampled later.
+              <b>Tracked and scored.</b> Every answer, as it happens, not sampled later.
             </span>
           </div>
           <div className={styles.item}>
             <CheckCircle className={styles.check} />
             <span>
-              <b>Hallucinations caught at the source.</b> Outputs are fact-checked against your knowledge base before
-              they reach a user.
+              <b>Hallucinations caught.</b> Claims your sources don&apos;t back up get flagged before anyone sees them.
             </span>
           </div>
           <div className={styles.item}>
             <CheckCircle className={styles.check} />
             <span>
-              <b>Gets more accurate over time.</b> Every scored interaction tunes the system — your AI compounds instead
-              of drifting.
+              <b>Retried or re-routed.</b> A weak answer goes back with new guidance, or to a better-fit specialist.
             </span>
           </div>
         </div>
       </div>
 
       <div className={styles.panel}>
-        <p className={styles.panelTitle}>Response evaluation</p>
+        <p className={styles.panelTitle}>Inside one answer</p>
 
-        <div className={styles.bars}>
-          <div className={styles.barRow}>
-            <span className={styles.bn}>Value</span>
-            <span className={styles.track}>
-              <span className={styles.fill} style={{ width: "100%", background: "var(--buttery-blue)" }} />
-            </span>
-            <span className={styles.pct} style={{ color: "var(--buttery-blue)" }}>
-              100
-            </span>
+        {TRACE.map((row) => (
+          <div key={row.label} className={styles.miniCard}>
+            <div>
+              <p className={styles.miniLabel}>{row.label}</p>
+              <p className={styles.miniMeta}>{row.meta}</p>
+            </div>
+            <span className={`${styles.tag} ${styles[row.tone]}`}>{row.tag}</span>
           </div>
-          <div className={styles.barRow}>
-            <span className={styles.bn}>Trust</span>
-            <span className={styles.track}>
-              <span className={styles.fill} style={{ width: "92%", background: "var(--buttery-green)" }} />
-            </span>
-            <span className={styles.pct} style={{ color: "var(--buttery-green)" }}>
-              92
-            </span>
-          </div>
-          <div className={styles.barRow}>
-            <span className={styles.bn}>Accuracy</span>
-            <span className={styles.track}>
-              <span className={styles.fill} style={{ width: "96%", background: "var(--buttery-green)" }} />
-            </span>
-            <span className={styles.pct} style={{ color: "var(--buttery-green)" }}>
-              96
-            </span>
-          </div>
-        </div>
-
-        <div className={styles.miniCard}>
-          <div>
-            <p className={styles.miniLabel}>Confidence</p>
-            <p className={styles.miniMeta}>strong evidence · grounded</p>
-          </div>
-          <span className={`${styles.tag} ${styles.enc}`}>Confident</span>
-        </div>
-        <div className={styles.miniCard}>
-          <div>
-            <p className={styles.miniLabel}>Hallucination check</p>
-            <p className={styles.miniMeta}>matched billing-policy v4</p>
-          </div>
-          <span className={`${styles.tag} ${styles.audit}`}>Passed ✓</span>
-        </div>
+        ))}
       </div>
     </div>
   </section>

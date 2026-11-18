@@ -1,61 +1,240 @@
 @use "@mixins" as *;
 
+$ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$glass: rgba(255, 255, 255, 0.82);
+$shadow: 0 8px 24px rgba(5, 17, 34, 0.08);
+$logo: 72px;
+$touch: "(hover: none), (max-width: 600px)";
+
 .nav {
   position: fixed;
-  top: 18px;
+  top: 16px;
   left: 50%;
-  transform: translateX(-50%);
   z-index: 100;
   display: flex;
   align-items: center;
-  height: 50px;
-  padding: 0 8px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--surface-line);
-  border-radius: 30px;
-  box-shadow: 0 8px 24px rgba(5, 17, 34, 0.08);
+  transform: translateX(calc($logo / -2));
+
+  @media #{$touch} {
+    gap: 10px;
+    transform: translateX(-50%);
+  }
 }
 
-.cell {
-  display: flex;
-  align-items: center;
-}
-
-.divider {
-  width: 1px;
-  height: 18px;
-  background: #d8dde1;
-}
-
-.link {
+.brand {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
+  width: $logo;
+  height: $logo;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &[data-scrolled="1"] {
+    background: $glass;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-color: var(--surface-line);
+    box-shadow: $shadow;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--buttery-blue);
+    outline-offset: 2px;
+  }
+
+  @media #{$touch} {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.brandMark {
+  width: 48px;
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(5, 17, 34, 0.14));
+  transition: transform 0.35s $ease;
+
+  .nav[data-open="1"] & {
+    transform: scale(1.06);
+  }
+
+  @media #{$touch} {
+    width: 36px;
+  }
+}
+
+.hint {
+  position: absolute;
+  top: 50%;
+  left: $logo;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  width: 22px;
+  height: 32px;
+  margin-top: -16px;
+  padding-left: 6px;
+  color: var(--dark-gray);
+  transition: opacity 0.3s ease 0.2s;
+
+  svg {
+    width: 7px;
+    height: 12px;
+    overflow: visible;
+  }
+
+  .nav[data-open="1"] & {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  @media #{$touch} {
+    display: none;
+  }
+}
+
+.halo {
+  stroke: #fff;
+  stroke-width: 5;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+
+  .brand[data-scrolled="1"] ~ .hint & {
+    opacity: 1;
+  }
+}
+
+.nudge svg {
+  animation: hintNudge 0.8s ease-in-out 1.2s 2;
+}
+
+@keyframes hintNudge {
+  0%,
+  70%,
+  100% {
+    transform: none;
+  }
+
+  35% {
+    transform: translateX(3px);
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: center;
   height: 50px;
+  max-width: 0;
+  margin-left: 0;
+  padding: 0;
+  overflow: hidden;
+  background: $glass;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 0 solid var(--surface-line);
+  border-radius: 30px;
+  box-shadow: $shadow;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-10px);
+  transition:
+    max-width 0.42s $ease,
+    margin-left 0.42s $ease,
+    padding 0.42s $ease,
+    border-width 0.42s $ease,
+    opacity 0.25s ease,
+    transform 0.42s $ease;
+
+  .nav[data-open="1"] & {
+    max-width: 220px;
+    margin-left: 10px;
+    padding: 0 4px;
+    border-width: 1px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  @media #{$touch} {
+    max-width: none;
+    margin-left: 0;
+    padding: 0 4px;
+    border-width: 1px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+}
+
+.link {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 48px;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--buttery-black);
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s ease;
 
   svg {
+    flex: none;
     width: 20px;
     height: 20px;
+    transition: transform 0.2s ease;
   }
 
   &:hover {
     color: var(--buttery-blue);
-    transform: translateY(-1px);
+
+    svg {
+      transform: translateY(-1px);
+    }
   }
 
-  @include mq(768) {
+  &:focus-visible {
+    outline: 2px solid var(--buttery-blue);
+    outline-offset: -4px;
+    border-radius: 22px;
+  }
+
+  @media #{$touch} {
     width: 40px;
   }
 }
 
 .active {
   color: var(--buttery-blue);
+}
+
+.divider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: #d8dde1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu,
+  .brandMark,
+  .hint {
+    transition: none;
+  }
+
+  .nav[data-open="1"] .hint {
+    transition: none;
+  }
+
+  .nudge svg {
+    animation: none;
+  }
 }

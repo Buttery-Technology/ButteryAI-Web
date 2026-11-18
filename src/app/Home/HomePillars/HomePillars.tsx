@@ -3,28 +3,28 @@ import styles from "./HomePillars.module.scss";
 
 const PILLARS = [
   {
-    eyebrow: "Trust",
-    title: "Know when to trust it.",
-    body: "Every response is scored for value, trust, and accuracy, and checked against your sources of truth — so hallucinations get caught before they ship.",
-    tag: "Value · Trust · Accuracy",
+    eyebrow: "Control",
+    title: "You set the rules.",
+    body: "Pick the models, the knowledge and what each specialist is allowed to do. Your policies apply to every request.",
+    tag: "Models · Knowledge · Policies",
   },
   {
-    eyebrow: "Security",
-    title: "Encrypted & yours.",
-    body: "End-to-end encryption with a zero-knowledge server, mutual-TLS between every node, and a local-first option — your data never has to leave your walls.",
-    tag: "E2EE · ZKP · At rest encryption",
+    eyebrow: "Transparency",
+    title: "See every step.",
+    body: "Every route, score and retry is on the record. You always know why an answer came out the way it did.",
+    tag: "Routes · Scores · Retries",
   },
   {
-    eyebrow: "Governance",
-    title: "Audit-ready by default.",
-    body: "Tamper-evident audit trails and a policy engine are baked in — every action logged, every rule enforced, no compliance suite to bolt on later.",
-    tag: "SOC-2 · GDPR-ready · RBAC",
+    eyebrow: "Efficiency",
+    title: "Less to run.",
+    body: "One system instead of a pile of tools. Each job goes to the specialist that fits it, so nothing does more work than it needs to.",
+    tag: "One system · Smart routing",
   },
   {
-    eyebrow: "Ownership",
-    title: "Own the whole stack.",
-    body: "Pure Swift, no Python, any open model, deploy local → cloud → on-prem. Your models, your data, your infrastructure — and no per-token lock-in.",
-    tag: "No Python needed · no lock-in",
+    eyebrow: "Better answers",
+    title: "Answers that hold up.",
+    body: "Specialists answer from your own sources, not a guess, and each one gets sharper the more it works.",
+    tag: "Scored · Retried · Re-routed",
   },
 ];
 
@@ -32,10 +32,10 @@ const HomePillars = () => (
   <section className={styles.root} data-section="pillars">
     <div className={styles.header}>
       <h2 className={styles.title}>
-        A proper foundation, <span>essentially</span>.
+        What one system <span>gets you</span>.
       </h2>
       <p className={styles.subtitle}>
-        Four things every AI stack should give you. ButteryAI has them all and much more.
+        Collapse the stack and you get more control, more transparency, more efficiency and better answers.
       </p>
     </div>
 
@@ -52,8 +52,8 @@ const HomePillars = () => (
     </div>
 
     <p className={styles.note}>
-      And many more features, such as continuous learning, auto-knowledge extraction, distributed architecture for
-      limitless scaling, simple and easy deployment beyond local, continuous conversation, and much more.
+      Security and governance come standard: encryption, access roles, policies and a record of every step. SOC 2 —
+      coming 2027.
     </p>
   </section>
 );

@@ -14,45 +14,46 @@ const About = () => {
 
       <header className={styles.hero}>
         <h1 className={styles.title}>
-          Building AI you can trust — <span>and own</span>.
+          We make AI specialists <span>easy</span>.
         </h1>
         <p className={styles.intro}>
-          ButteryAI is a pure-Swift platform for building distributed AI systems you can actually trust — every answer
-          is scored for accuracy, encrypted end-to-end, and fully audited, and the whole stack is yours to own.
+          ButteryAI is the operating system for AI specialists. We collapsed the AI tech stack into one system, so any
+          company can build, deploy and share its own AI specialists on almost any model.
         </p>
       </header>
 
       <div className={styles.visual}>
         <ProductWindow
-          clusterName="Sales Assistant"
-          conversationTitle="Enterprise Plan Inquiry"
-          userMessage="Does our Enterprise plan include SAML SSO?"
+          clusterName="Support Team"
+          conversationTitle="Return Window Question"
+          userMessage="a customer wants to return a jacket after 40 days. can they?"
           metrics={[
-            { label: "tokens", value: "9.1k", tone: "blue" },
-            { label: "time", value: "1.8s", tone: "muted" },
-            { label: "accuracy", value: "100%", tone: "good" },
+            { label: "specialist", value: "Support Specialist", tone: "blue" },
+            { label: "route", value: "Re-routed", tone: "muted" },
+            { label: "trust", value: "Trusted", tone: "good" },
           ]}
         >
-          Yes — <b>SAML SSO</b> and SCIM provisioning are included on Enterprise, alongside BYOK encryption and SOC 2
-          Type II. Grounded in your <b>Plans Knowledge Base</b> (source: plan-catalog v3).
+          Not for a refund. Refunds close at <b>30 days</b>, but your <b>Returns Policy</b> allows store credit up to{" "}
+          <b>60 days</b>. Offer store credit.
         </ProductWindow>
       </div>
 
       <section className={styles.info}>
-        <h2 className={styles.infoHeading}>Built different, from the ground up.</h2>
+        <h2 className={styles.infoHeading}>The future of AI is specialized. We built the system for it.</h2>
         <div className={styles.infoBody}>
           <p>
-            Most AI tools can&apos;t tell you whether their output is right, where your data went, or who&apos;s
-            accountable when something breaks. We started ButteryAI to fix exactly that.
+            Companies don&apos;t need one AI that does everything. They need AI specialists, each built for its job and
+            grounded in what the company knows.
           </p>
           <p>
-            Our proprietary DAIS technology lets anyone compose a distributed network of specialized AI nodes — local
-            models, RAG, or remote APIs — and deploy it anywhere, from a laptop to on-prem. Every node is intelligently
-            orchestrated, scored for trust and accuracy, and governed by policy on every query.
+            Building AI usually means stitching together a pile of tools: vector databases, orchestration frameworks,
+            model routers, eval tools, guardrails, monitoring and the glue code between them. ButteryAI replaces the
+            pile. Bring almost any model. We handle the orchestration, routing, trust and knowledge.
           </p>
           <p>
-            It&apos;s pure Swift and local-first: no Python, no per-token lock-in, and your data never has to leave your
-            walls. The result is AI that&apos;s fast, accountable, and entirely yours.
+            Inside, our real-time metric system tracks and scores every answer. It catches hallucinations and makes the
+            AI retry under new guidance, or re-routes the work to a better-fit specialist. The more your specialists
+            work, the smarter they get. And you can publish and share them securely.
           </p>
         </div>
       </section>

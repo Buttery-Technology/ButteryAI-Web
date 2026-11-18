@@ -89,6 +89,13 @@ export const JOIN_WAITLIST = (name: string, email: string, buildDescription?: st
   },
 });
 
+export const GET_LATEST_RELEASE = () => ({
+  url: BUTTERY_API_URL + "/releases/check/butteryai",
+  options: {
+    method: "GET",
+  },
+});
+
 // Dashboard
 export const GET_DASHBOARD = () => ({
   url: BUTTERY_API_URL + "/dashboard",

@@ -1,58 +1,39 @@
-import { useNavigate } from "react-router-dom";
-import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
-import { openEnterpriseEmail } from "@common/contact";
-import { ProductWindow } from "../../ProductWindow";
+import { Link } from "react-router-dom";
+import { scrollToEnterprise } from "../shared";
+import { StackUntangle } from "./StackUntangle";
 import styles from "./HomeHero.module.scss";
 
-const HomeHero = () => {
-  const navigate = useNavigate();
+const HomeHero = () => (
+  <section className={styles.root} data-section="hero">
+    <div className={styles.inner}>
+      <h1 className={styles.title}>
+        <span>Untangle</span> your AI
+      </h1>
 
-  return (
-    <section className={styles.root} data-section="hero">
-      <div className={styles.inner}>
-        <img src={butteryaiLogo} alt="ButteryAI" className={styles.logo} />
-
-        <h1 className={styles.title}>
-          Build AI you can trust <span>and own</span>
-        </h1>
-        <p className={styles.subtitle}>
-          Spin up an intelligent AI system locally, deploy it anywhere, and own the whole stack.
-        </p>
-        <p className={styles.lede}>
-          Every response is scored for accuracy, encrypted end-to-end, and fully audited — so you ship with confidence
-          instead of crossing your fingers.
-        </p>
-
-        <div className={styles.actions}>
-          <button type="button" className={styles.btnPrimary} onClick={() => navigate("/waiting-list")}>
-            Start building
-          </button>
-          <button type="button" className={styles.btnGhost} onClick={openEnterpriseEmail}>
-            For Enterprise
-          </button>
-        </div>
-        <p className={styles.micro}>No Python · No lock-in · Runs local, on-prem, or cloud</p>
-
-        {/* Product window — reused on the about page too */}
-        <div className={styles.windowWrap}>
-          <ProductWindow
-            clusterName="Customer Support"
-            conversationTitle="Q3 Refund Policy Inquiry"
-            userMessage="what's our Q3 refund policy?"
-            metrics={[
-              { label: "tokens", value: "12.4k", tone: "blue" },
-              { label: "time", value: "2.1s", tone: "muted" },
-              { label: "accuracy", value: "100%", tone: "good" },
-            ]}
-          >
-            Refunds are issued within <b>30 days</b> of purchase for unused plans, processed back to the original payment
-            method. This is grounded in your <b>Policy Knowledge Base</b> (source: billing-policy v4) — not the
-            model&apos;s guess.
-          </ProductWindow>
-        </div>
+      <div className={styles.visual}>
+        <StackUntangle
+          outro={
+            <>
+              <h2 className={styles.outroTitle}>
+                Envision a future where <span>your AI is special</span>
+              </h2>
+              <p className={styles.outroText}>
+                ButteryAI lets you build specialists instead of worrying about the infrastructure.
+              </p>
+              <div className={styles.actions}>
+                <Link to="/download" className={styles.btnPrimary}>
+                  Start building
+                </Link>
+                <button type="button" className={styles.btnGhost} onClick={scrollToEnterprise}>
+                  For Enterprise
+                </button>
+              </div>
+            </>
+          }
+        />
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default HomeHero;
