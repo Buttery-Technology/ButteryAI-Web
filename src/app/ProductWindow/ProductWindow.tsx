@@ -60,12 +60,12 @@ const ProductWindow = ({ clusterName, conversationTitle, userMessage, metrics, c
     </div>
 
     <div className={styles.metrics}>
-      {metrics.map((m) => (
+      {metrics.map((m, i) => (
         <b key={m.label} className={styles[m.tone ?? "muted"]}>
           {m.value}
+          {i === metrics.length - 1 && <InfoDot className={styles.infoDot} />}
         </b>
       ))}
-      <InfoDot className={styles.infoDot} />
     </div>
   </div>
 );

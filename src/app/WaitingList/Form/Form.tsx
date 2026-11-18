@@ -1,17 +1,15 @@
 import { type FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CHECK_WAITLIST_APPROVAL, JOIN_WAITLIST } from "../../../api";
 import styles from "./Form.module.scss";
 
 const Form = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [buildDescription, setBuildDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [result, setResult] = useState<"requested" | "approved" | null>(null);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,8 +49,7 @@ const Form = () => {
       const checkData = await checkResponse.json();
 
       if (checkData.isApproved) {
-        // User is approved, navigate to login
-        navigate("/login");
+        setResult("approved");
         return;
       }
 
@@ -64,9 +61,7 @@ const Form = () => {
         throw new Error("Failed to join waitlist");
       }
 
-      const joinData = await joinResponse.json();
-      setSuccessMessage(joinData.message || "You've been added to the waitlist!");
-      setIsSubmitted(true);
+      setResult("requested");
     } catch (err) {
       setError("Uh, oh… looks like someone turned the lights off. Give us a few minutes and try again.");
       console.error("Waitlist error:", err);
@@ -75,12 +70,24 @@ const Form = () => {
     }
   };
 
-  if (isSubmitted) {
+  if (result === "approved") {
     return (
       <div className={styles.success}>
-        <h2 className={styles.successTitle}>You're on the list!</h2>
+        <h2 className={styles.successTitle}>You’re already approved.</h2>
+        <p className={styles.successMessage}>Download ButteryAI for Mac, then continue with {email.trim()}.</p>
+        <Link to="/download" className={styles.backButton}>
+          Download for Mac
+        </Link>
+      </div>
+    );
+  }
+
+  if (result === "requested") {
+    return (
+      <div className={styles.success}>
+        <h2 className={styles.successTitle}>Thanks, your request is in.</h2>
         <p className={styles.successMessage}>
-          {successMessage || "We'll reach out when it's your turn. Keep an eye on your inbox!"}
+          Our team reviews every request and emails you when your access is approved.
         </p>
         <Link to="/" className={styles.backButton}>
           Back to Home
@@ -98,7 +105,7 @@ const Form = () => {
         <input
           type="text"
           id="name"
-          name="name"
+          autoComplete="name"
           placeholder="Joana"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -114,7 +121,7 @@ const Form = () => {
         <input
           type="email"
           id="email"
-          name="email"
+          autoComplete="email"
           placeholder="joana@buttery.technology"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -129,7 +136,6 @@ const Form = () => {
         </label>
         <textarea
           id="buildDescription"
-          name="buildDescription"
           placeholder="Tell us about your project..."
           value={buildDescription}
           onChange={(e) => setBuildDescription(e.target.value)}

@@ -61,10 +61,10 @@
 .root {
   max-width: 1240px;
   margin-inline: auto;
-  padding: 96px 40px 120px;
+  padding: 120px 40px 120px;
 
   @include mq(768) {
-    padding: 84px 20px 80px;
+    padding: 96px 20px 80px;
   }
 }
 
@@ -100,31 +100,6 @@
   @include mq(768) {
     font-size: 15px;
   }
-}
-
-.founderLine {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 22px;
-  font-size: 14px;
-  color: var(--text-secondary);
-
-  @include mq(768) {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-}
-
-.founderBadge {
-  font-family: var(--sf-pro-rounded-bold);
-  font-size: 12px;
-  letter-spacing: 0.3px;
-  color: #8a6400;
-  background: rgba(202, 150, 0, 0.12);
-  padding: 5px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
 }
 
 /* ---------- Plan columns (line-separated, à la Linear) ---------- */
@@ -258,8 +233,12 @@
 
 .btnPrimary,
 .btnGhost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 48px;
   border-radius: 30px;
+  text-decoration: none;
   font-family: var(--sf-pro-rounded-bold);
   font-size: 15px;
   width: 100%;

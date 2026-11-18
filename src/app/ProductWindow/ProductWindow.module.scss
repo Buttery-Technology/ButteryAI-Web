@@ -1,3 +1,5 @@
+@use "@mixins" as *;
+
 .window {
   width: 100%;
   max-width: 940px;
@@ -50,6 +52,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .tag {
@@ -111,6 +114,10 @@
 
 .chat {
   padding: 16px 26px 6px;
+
+  @include mq(480) {
+    padding-inline: 20px;
+  }
 }
 
 .bubbleUser {
@@ -149,14 +156,29 @@
 
 .metrics {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 8px 16px;
   padding: 16px 26px 18px;
   font-size: 14px;
   font-weight: 500;
 
   b {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
     font-weight: 500;
+    white-space: nowrap;
+  }
+
+  @include mq(480) {
+    gap: 8px 10px;
+    padding-inline: 20px;
+    font-size: 13px;
+
+    b {
+      gap: 10px;
+    }
   }
 }
 

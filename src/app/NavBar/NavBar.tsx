@@ -1,5 +1,6 @@
+import { FocusEvent, KeyboardEvent, PointerEvent, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { openEnterpriseEmail } from "@common/contact";
+import butteryaiLogo from "@assets/logos/ButteryAI-Logo.svg";
 import styles from "./NavBar.module.scss";
 
 const HouseIcon = () => (
@@ -25,11 +26,17 @@ const InfoIcon = () => (
   </svg>
 );
 
-const CalendarIcon = () => (
+const PersonIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3.5" y="5" width="17" height="16" rx="2.5" />
-    <path d="M3.5 9.5h17" />
-    <path d="M8 3.5v3M16 3.5v3" />
+    <circle cx="12" cy="7.9" r="3.9" />
+    <path d="M4.7 20.3c0-3.8 3.3-6.5 7.3-6.5s7.3 2.7 7.3 6.5c0 .5-.4.9-.9.9H5.6c-.5 0-.9-.4-.9-.9z" />
+  </svg>
+);
+
+const ChevronIcon = () => (
+  <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <path className={styles.halo} d="M1.75 1.75 6.25 7l-4.5 5.25" />
+    <path d="M1.75 1.75 6.25 7l-4.5 5.25" />
   </svg>
 );
 
@@ -39,36 +46,132 @@ const ITEMS = [
   { to: "/about", label: "About", Icon: InfoIcon },
 ];
 
+let hintPlayed = false;
+
+const HIDE_AFTER = 80;
+
 const NavBar = () => {
   const { pathname } = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [nudge] = useState(() => !hintPlayed);
+  const navRef = useRef<HTMLElement>(null);
+  const brandRef = useRef<HTMLAnchorElement>(null);
+  const closeTimer = useRef(0);
+  const escaping = useRef(false);
+
+  const show = () => {
+    window.clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+
+  const hide = (delay = 180) => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setOpen(false), delay);
+  };
+
+  const onEnter = (e: PointerEvent) => {
+    if (e.pointerType === "mouse") show();
+  };
+
+  const onLeave = (e: PointerEvent) => {
+    if (e.pointerType === "mouse") hide();
+  };
+
+  const onBlur = (e: FocusEvent) => {
+    if (!navRef.current?.contains(e.relatedTarget as Node | null)) hide(0);
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key !== "Escape") return;
+    if (document.activeElement !== brandRef.current) {
+      escaping.current = true;
+      brandRef.current?.focus();
+      escaping.current = false;
+    }
+    hide(0);
+  };
+
+  const onBrandFocus = () => {
+    if (!escaping.current) show();
+  };
+
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y < HIDE_AFTER) setHidden(false);
+      else if (Math.abs(y - last) < 6) return;
+      else setHidden(y > last);
+      last = y;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  useEffect(() => {
+    hintPlayed = true;
+  }, []);
 
   return (
-    <nav className={styles.nav} aria-label="Primary">
-      {ITEMS.map((item) => {
-        const active = pathname === item.to;
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            className={`${styles.link} ${active ? styles.active : ""}`}
-            aria-label={item.label}
-            aria-current={active ? "page" : undefined}
-            title={item.label}
-          >
-            <item.Icon />
-          </Link>
-        );
-      })}
-
-      <button
-        type="button"
-        onClick={openEnterpriseEmail}
-        className={styles.link}
-        aria-label="Book a demo"
-        title="Book a demo"
+    <nav
+      ref={navRef}
+      className={styles.nav}
+      aria-label="Primary"
+      data-open={open ? "1" : "0"}
+      data-hidden={hidden ? "1" : "0"}
+      onPointerLeave={onLeave}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
+    >
+      <Link
+        ref={brandRef}
+        to="/"
+        className={styles.brand}
+        data-scrolled={scrolled ? "1" : "0"}
+        aria-label="ButteryAI home"
+        onPointerEnter={onEnter}
+        onFocus={onBrandFocus}
       >
-        <CalendarIcon />
-      </button>
+        <img src={butteryaiLogo} alt="" className={styles.brandMark} />
+      </Link>
+
+      <span
+        className={nudge ? `${styles.hint} ${styles.nudge}` : styles.hint}
+        aria-hidden="true"
+        onPointerEnter={onEnter}
+      >
+        <ChevronIcon />
+      </span>
+
+      <div className={styles.menu} onPointerEnter={onEnter} onFocus={show}>
+        {ITEMS.map((item) => {
+          const active = pathname === item.to;
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`${styles.link} ${active ? styles.active : ""}`}
+              aria-label={item.label}
+              aria-current={active ? "page" : undefined}
+              title={item.label}
+            >
+              <item.Icon />
+            </Link>
+          );
+        })}
+
+        <span className={styles.divider} aria-hidden="true" />
+
+        <Link to="/login" className={styles.link} aria-label="Sign in" title="Sign in">
+          <PersonIcon />
+        </Link>
+      </div>
     </nav>
   );
 };

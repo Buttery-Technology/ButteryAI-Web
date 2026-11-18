@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDocumentTitle } from "@hooks";
 import { openEnterpriseEmail } from "@common/contact";
 import CheckCircle from "@assets/icons/check-circle.svg?react";
@@ -14,14 +14,11 @@ type Plan = {
   price: string;
   unit?: string;
   meta?: string;
-  founderNote?: string;
   cta: string;
   popular?: boolean;
   highlights: string[];
 };
 
-// Mirrors ButteryAI-Server/Sources/App/Subscriptions/PlanCatalog.swift
-// (current standard prices; Founder's pricing ships as a separate promo).
 const PLANS: Plan[] = [
   {
     tier: "free",
@@ -33,8 +30,6 @@ const PLANS: Plan[] = [
     highlights: [
       "Local-first inference (unlimited)",
       "500K platform tokens / month",
-      "5 premium-engine queries / day",
-      "24-hour audit retention",
       "Community support",
     ],
   },
@@ -44,7 +39,6 @@ const PLANS: Plan[] = [
     tagline: "Personal power user",
     price: "$75",
     unit: "/ seat / mo",
-    founderNote: "Founding: $50 / seat · year one",
     cta: "Start building",
     popular: true,
     highlights: [
@@ -52,7 +46,6 @@ const PLANS: Plan[] = [
       "Hybrid + intelligent routing",
       "Full Knowledge + Trust Intelligence",
       "5M platform tokens / month",
-      "mTLS + E2EE for chat",
       "Email support (48h)",
     ],
   },
@@ -63,14 +56,12 @@ const PLANS: Plan[] = [
     price: "$125",
     unit: "/ seat / mo",
     meta: "3-seat minimum",
-    founderNote: "Founding: $75 / seat · year one",
     cta: "Start a team",
     highlights: [
       "Everything in Pro, plus:",
       "Per-org RBAC",
       "30M pooled tokens / month",
-      "SOC 2 Type I",
-      "90-day audit retention",
+      "SOC 2 — coming 2027",
       "Email support (8h business)",
     ],
   },
@@ -82,9 +73,6 @@ const PLANS: Plan[] = [
     cta: "Talk to sales",
     highlights: [
       "Everything in Team, plus:",
-      "SAML SSO + SCIM",
-      "BYOK / HSM encryption",
-      "SOC 2 Type II + HIPAA + BAA",
       "Dedicated CSM + SLA",
     ],
   },
@@ -93,7 +81,6 @@ const PLANS: Plan[] = [
 type Row = { label: string; cells: [string, string, string, string] };
 type Group = { category: string; rows: Row[] };
 
-// Mirrors the customer-facing tier table in ButteryAI-Server/PRICING_TIERS.md
 const COMPARISON: Group[] = [
   {
     category: "Intelligence",
@@ -108,18 +95,16 @@ const COMPARISON: Group[] = [
   {
     category: "Security",
     rows: [
-      { label: "Encryption — transport", cells: ["TLS to server", "+ mTLS between nodes", "+ key rotation controls", "+ customer keys / HSM / BYOK"] },
-      { label: "Encryption — at rest", cells: ["Local SQLite encrypted", "+ E2EE for chat", "+ audit log encryption", "+ customer-managed keys"] },
-      { label: "Permissions & RBAC", cells: ["Self-only", "Per-cluster", "Per-org roles", "+ SAML SSO + SCIM"] },
+      { label: "Encryption — transport", cells: ["TLS to server", "TLS to server", "TLS to server", "TLS to server"] },
+      { label: "Permissions & RBAC", cells: ["Self-only", "Per-cluster", "Per-org roles", "Per-org roles"] },
       { label: "Governance", cells: ["—", "Basic policy gates", "Per-org custom policies", "+ compliance reporting + export"] },
-      { label: "Compliance posture", cells: ["—", "—", "SOC 2 Type I", "SOC 2 Type II + HIPAA + BAA"] },
-      { label: "Audit retention", cells: ["24 hours", "30 days", "90 days", "Custom (years) + export"] },
+      { label: "Compliance posture", cells: ["—", "—", "SOC 2 — coming 2027", "SOC 2 — coming 2027"] },
     ],
   },
   {
     category: "Operations",
     rows: [
-      { label: "Sign-in", cells: ["Email + Google + Passkey", "+ GitHub", "+ Microsoft + OIDC", "+ SAML 2.0"] },
+      { label: "Sign-in", cells: ["Email + Google", "Email + Google", "Email + Google", "Email + Google"] },
       { label: "Snapshots", cells: ["Manual", "Manual + 7 retained", "Auto-daily + 30 retained", "Custom + cross-region"] },
       { label: "Support", cells: ["Community", "Email (48h)", "Email (8h) + onboarding", "Slack + SLA + named CSM"] },
     ],
@@ -127,30 +112,20 @@ const COMPARISON: Group[] = [
   {
     category: "Usage",
     rows: [
-      { label: "Included platform tokens / mo", cells: ["500K + daily allowance", "5M", "30M pooled / org", "Unlimited / 500M+ committed"] },
-      { label: "Daily premium-engine allowance", cells: ["5 / day", "Unlimited", "Unlimited", "Unlimited"] },
-      { label: "Pre-query token estimate", cells: ["—", "Pre-query estimate", "+ per-member drill-down", "+ budget alerts + forecasting"] },
+      { label: "Included platform tokens / mo", cells: ["500K", "5M", "30M pooled / org", "Unlimited / 500M+ committed"] },
+      { label: "Pre-query token estimate", cells: ["—", "Coming soon", "Coming soon", "Coming soon"] },
       { label: "Overage rate", cells: ["Hard cap", "$0.50 / 1M tokens", "$0.30 / 1M tokens", "Custom committed"] },
     ],
   },
 ];
 
 const Pricing = () => {
-  const navigate = useNavigate();
   useDocumentTitle("Pricing – ButteryAI");
-
-  const handleCta = (tier: string) => {
-    if (tier === "enterprise") {
-      openEnterpriseEmail();
-      return;
-    }
-    navigate("/waiting-list");
-  };
 
   const renderCell = (value: string) =>
     value === "—" ? null : (
       <span className={styles.cell}>
-        <CheckCircle className={styles.cellCheck} />
+        {!/coming/i.test(value) && <CheckCircle className={styles.cellCheck} />}
         <span>{value}</span>
       </span>
     );
@@ -164,10 +139,6 @@ const Pricing = () => {
           <h1 className={styles.title}>Pricing</h1>
           <p className={styles.subtitle}>
             Own your AI. Pay only for what scales — local-first inference is always free and unlimited.
-          </p>
-          <p className={styles.founderLine}>
-            <span className={styles.founderBadge}>Founding Member</span>
-            Sign up in the first 90 days to lock launch pricing for 12 months.
           </p>
         </header>
 
@@ -198,13 +169,15 @@ const Pricing = () => {
               </ul>
 
               <div className={styles.ctaWrap}>
-                <button
-                  type="button"
-                  className={plan.popular ? styles.btnPrimary : styles.btnGhost}
-                  onClick={() => handleCta(plan.tier)}
-                >
-                  {plan.cta}
-                </button>
+                {plan.tier === "enterprise" ? (
+                  <button type="button" className={styles.btnGhost} onClick={openEnterpriseEmail}>
+                    {plan.cta}
+                  </button>
+                ) : (
+                  <Link to="/download" className={plan.popular ? styles.btnPrimary : styles.btnGhost}>
+                    {plan.cta}
+                  </Link>
+                )}
               </div>
             </article>
           ))}
@@ -251,7 +224,7 @@ const Pricing = () => {
         </section>
 
         <p className={styles.footnote}>
-          Every plan includes local-first inference, end-to-end encryption, and the full audit trail. Prices in USD.
+          Every plan includes local-first inference and a step-by-step record of every answer. Prices in USD.
           Team requires a 3-seat minimum; Enterprise is custom-quoted on top of the published floor.
         </p>
       </main>

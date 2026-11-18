@@ -26,11 +26,11 @@ const Header = () => (
         </svg>
       </Link>
       <h1 className={styles.title}>
-        Request <span className={styles.gradient}>exclusive</span> access to ButteryAI.
+        Start building with <span className={styles.gradient}>ButteryAI</span>.
       </h1>
     </div>
     <p className={styles.subtitle}>
-      We're accepting requests to see what we've been cooking. Let's check your access.
+      Tell us a bit about you and your team to get started.
     </p>
   </header>
 );

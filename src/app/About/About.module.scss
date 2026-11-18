@@ -4,10 +4,10 @@
   max-width: 1100px;
   margin: 0 auto;
   text-align: left;
-  padding: 104px 40px 0;
+  padding: 128px 40px 0;
 
   @include mq(768) {
-    padding: 84px 20px 0;
+    padding: 96px 20px 0;
   }
 }
 
