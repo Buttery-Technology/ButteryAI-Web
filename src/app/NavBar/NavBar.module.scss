@@ -20,7 +20,7 @@ $touch: "(hover: none), (max-width: 600px)";
     transform: translateX(-50%);
     transition: transform 0.3s $ease;
 
-    &[data-hidden="1"]:not(:focus-within) {
+    &[data-hidden="1"]:not(:has(:focus-visible)) {
       transform: translate(-50%, calc(-100% - 48px));
     }
   }
