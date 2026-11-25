@@ -9,12 +9,15 @@ const TERMS_URL = "https://buttery.technology/terms";
 const PRIVACY_URL = "https://buttery.technology/privacy";
 
 const STEPS = [
-  { title: "Open the download", text: "Open the file you downloaded to unpack ButteryAI." },
+  { title: "Open the download", text: "Open the ButteryAI .dmg file in your Downloads folder." },
   {
-    title: "Move it to Applications",
-    text: "Drag ButteryAI into your Applications folder. ButteryAI installs updates only from there.",
+    title: "Drag it to Applications",
+    text: "In the window that opens, drag ButteryAI onto the Applications folder. ButteryAI installs updates only from there.",
   },
-  { title: "Sign in", text: "Open ButteryAI and continue with Google or email, using the email address we approved." },
+  {
+    title: "Sign in",
+    text: "Open ButteryAI from Applications and continue with Google or email, using the email address we approved.",
+  },
 ];
 
 const DownloadIcon = () => (

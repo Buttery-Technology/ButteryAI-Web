@@ -43,14 +43,20 @@ export const parseRelease = (data: unknown): Release | null => {
   if (!isRecord(asset) || typeof asset.url !== "string") {
     throw new Error(`No ${PLATFORM} build in release ${data.version}`);
   }
+  // The DMG installer when the release lists one; the zip is what the in-app updater installs.
+  const installer = asset.installer;
+  const file =
+    isRecord(installer) && typeof installer.url === "string"
+      ? { url: installer.url, size: installer.size }
+      : { url: asset.url, size: asset.size };
   let url: URL;
   try {
-    url = new URL(asset.url);
+    url = new URL(file.url);
   } catch {
     throw new Error("Download URL is invalid");
   }
   if (!isTrustedDownloadURL(url)) {
     throw new Error("Download URL is not on a trusted host");
   }
-  return { version: data.version, url: url.href, size: typeof asset.size === "number" ? asset.size : undefined };
+  return { version: data.version, url: url.href, size: typeof file.size === "number" ? file.size : undefined };
 };

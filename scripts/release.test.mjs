@@ -65,3 +65,26 @@ test("rejects malformed responses", () => {
     assert.throws(() => parseRelease(data));
   }
 });
+
+const ZIP = `${SERVER}/1.1.1/macos-arm64`;
+const DMG = `${ZIP}/installer`;
+
+test("prefers the DMG installer and its size", () => {
+  const data = manifest("1.1.1", ZIP, { size: 138090721, installer: { url: DMG, sha256: "x", size: 137959094 } });
+  assert.deepEqual(parseRelease(data), { version: "1.1.1", url: DMG, size: 137959094 });
+});
+
+test("falls back to the zip when a release has no usable installer", () => {
+  for (const installer of [undefined, null, "x", {}, { url: 5 }]) {
+    assert.deepEqual(parseRelease(manifest("1.1.1", ZIP, { size: 138090721, installer })), {
+      version: "1.1.1",
+      url: ZIP,
+      size: 138090721,
+    });
+  }
+});
+
+test("rejects an installer on an untrusted host", () => {
+  const data = manifest("1.1.1", ZIP, { installer: { url: "https://evil.example/ButteryAI.dmg", size: 1 } });
+  assert.throws(() => parseRelease(data), /not on a trusted host/);
+});
