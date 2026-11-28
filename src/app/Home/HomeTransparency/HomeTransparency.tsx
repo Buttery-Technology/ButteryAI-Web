@@ -47,7 +47,7 @@ const POINTS = [
     icon: RETRY,
   },
   {
-    title: "More accurate over time",
+    title: "Better over time",
     text: "Requests go to the specialists whose answers score best, and the knowledge behind weak answers gets used less. Every answer helps the next one.",
     icon: TREND,
   },
@@ -71,11 +71,11 @@ const HomeTransparency = () => {
       <div className={styles.header}>
         <span className={styles.eyebrow}>Inside every answer</span>
         <h2 id="transparency-title" className={styles.title}>
-          Revolutionary transparency, <span>improved accuracy</span>.
+          Revolutionary transparency, <span>answers you can trust</span>.
         </h2>
         <p className={styles.subtitle}>
           Every answer from your AI specialists leaves a record your team can open. Instead of trusting a black box,
-          you see how each one came together, and every score feeds back in, so answers keep getting more accurate.
+          you see how each one came together, and every score feeds back in, so routing and sources keep improving.
         </p>
       </div>
 

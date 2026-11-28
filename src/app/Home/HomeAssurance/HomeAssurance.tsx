@@ -2,8 +2,6 @@ import type { CSSProperties, ReactNode } from "react";
 import { HEX_PATH, HEX_VIEWBOX, SPECIALISTS, useInView } from "../shared";
 import styles from "./HomeAssurance.module.scss";
 
-type Tone = "routed" | "flagged" | "retry" | "trusted";
-
 const at = (seconds: number) => ({ "--d": `${seconds}s` }) as CSSProperties;
 
 const Glyph = ({ d, viewBox = "0 0 16 16", className }: { d: string[]; viewBox?: string; className?: string }) => (
@@ -27,7 +25,6 @@ const CLOCK = ["M6 1.9a4.1 4.1 0 1 0 0 8.2 4.1 4.1 0 0 0 0-8.2z", "M6 3.9V6l1.4.
 const DOC = ["M4.5 2.5h4.6L11.8 5.2v8.3H4.5z", "M9 2.6v2.8h2.7", "M6.6 8.4h3M6.6 10.8h3"];
 const PEN = ["M10.4 3.1l2.5 2.5-7.1 7.1-3.1.6.6-3.1z", "M9.1 4.4l2.5 2.5"];
 const SEND = ["M13.4 2.6 7.3 8.7", "M13.4 2.6 9.6 13.4 7.3 8.7 2.6 6.4z"];
-const LIST = ["M5.6 4.6h7M5.6 8h7M5.6 11.4h4.6", "M3 4.6h.1M3 8h.1M3 11.4h.1"];
 const CONTRACT_GLYPH = ["M9.3 7h3.5l2.1 2.1V17H9.3z", "M11 12.2h2.2M11 14.5h2.2"];
 
 const CONTRACTS = SPECIALISTS[0];
@@ -36,13 +33,6 @@ const PERMISSIONS = [
   { action: "Read contracts", icon: DOC, allowed: true },
   { action: "Draft replies", icon: PEN, allowed: true },
   { action: "Send email", icon: SEND, allowed: false },
-];
-
-const LOG: { time: string; label: string; rest: string; tone: Tone }[] = [
-  { time: "09:41:02", label: "Routed", rest: " to Contracts", tone: "routed" },
-  { time: "09:41:03", label: "Flagged:", rest: " no source", tone: "flagged" },
-  { time: "09:41:04", label: "Retried", rest: " with new guidance", tone: "retry" },
-  { time: "09:41:05", label: "Trusted,", rest: " Supply\u00a0Agreement\u00a0§9.2", tone: "trusted" },
 ];
 
 const SAFEGUARDS = ["Encryption", "Access roles", "Policies", "Audit record"];
@@ -93,37 +83,6 @@ const ControlVisual = ({ base }: { base: number }) => (
   </div>
 );
 
-const TransparencyVisual = ({ base }: { base: number }) => (
-  <div className={styles.panelCard}>
-    <div className={styles.panelHead}>
-      <span className={styles.headIcon}>
-        <Glyph d={LIST} />
-      </span>
-      <span className={styles.headText}>
-        <span className={styles.headTitle}>Request record</span>
-        <span className={styles.headSub}>“What’s the notice period?”</span>
-      </span>
-    </div>
-    <ol className={styles.log}>
-      {LOG.map((l, i) => (
-        <li
-          key={l.time}
-          className={`${styles.logRow} ${styles.reveal}`}
-          data-tone={l.tone}
-          style={{ ...at(base + 0.3 + i * 0.45), "--dn": `${base + 0.1 + (i + 1) * 0.45}s` } as CSSProperties}
-        >
-          <span className={styles.logTime}>{l.time}</span>
-          <span className={styles.logDot} />
-          <span className={styles.logText}>
-            <b>{l.label}</b>
-            {l.rest}
-          </span>
-        </li>
-      ))}
-    </ol>
-  </div>
-);
-
 const SecurityVisual = ({ base }: { base: number }) => (
   <div className={`${styles.panelCard} ${styles.secure}`}>
     <div className={styles.shieldWrap}>
@@ -166,14 +125,6 @@ const COLUMNS: { eyebrow: string; title: string; text: string; summary: string; 
     summary:
       "Example: the Contracts Specialist is allowed to read contracts and draft replies, and sending email needs approval.",
     visual: (base) => <ControlVisual base={base} />,
-  },
-  {
-    eyebrow: "Transparency",
-    title: "See every step.",
-    text: "Every route, score and retry is on the record, so you always know why an answer came out the way it did.",
-    summary:
-      "Example record: routed to Contracts, flagged for having no source, retried with new guidance, then trusted with Supply Agreement section 9.2 as the source.",
-    visual: (base) => <TransparencyVisual base={base} />,
   },
   {
     eyebrow: "Security",

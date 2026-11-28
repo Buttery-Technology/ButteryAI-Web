@@ -26,9 +26,9 @@ $panel-shadow: 0 1px 2px rgba(5, 17, 34, 0.04), 0 8px 20px rgba(5, 17, 34, 0.07)
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
-  max-width: 1180px;
+  max-width: 800px;
   margin: 64px auto 0;
 
   @include mq(1200) {
@@ -225,24 +225,6 @@ $panel-shadow: 0 1px 2px rgba(5, 17, 34, 0.04), 0 8px 20px rgba(5, 17, 34, 0.07)
   height: 28.6px;
 }
 
-.headIcon {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  background: #f0f3f5;
-  color: #66737c;
-
-  svg {
-    width: 15px;
-    height: 15px;
-    stroke-width: 1.5;
-  }
-}
-
 .headText {
   display: flex;
   flex-direction: column;
@@ -339,100 +321,6 @@ $panel-shadow: 0 1px 2px rgba(5, 17, 34, 0.04), 0 8px 20px rgba(5, 17, 34, 0.07)
   &[data-tone="approval"] {
     background: rgba(249, 192, 0, 0.2);
     color: #8a6a00;
-  }
-}
-
-.log {
-  list-style: none;
-  margin: 0;
-  padding: 6px 0 0;
-}
-
-.logRow {
-  --time-w: 53px;
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 8px minmax(0, 1fr);
-  align-items: start;
-  column-gap: 10px;
-  padding: 6px 0;
-
-  &:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 23px;
-    height: calc(100% - 15px);
-    left: calc(var(--time-w, 56px) + 13.5px);
-    width: 1px;
-    background: #d8e0e6;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.4s $ease;
-    transition-delay: var(--dn, 0s);
-  }
-
-  .grid[data-play="1"] &::after {
-    transform: none;
-  }
-
-  @include mq(1200) {
-    column-gap: 8px;
-
-    &:not(:last-child)::after {
-      left: calc(var(--time-w, 56px) + 11.5px);
-    }
-  }
-}
-
-.logTime {
-  width: var(--time-w, 56px);
-  padding-top: 1px;
-  font-family: $mono;
-  font-size: 10.5px;
-  line-height: 18px;
-  font-variant-numeric: tabular-nums;
-  color: #8b98a2;
-  white-space: nowrap;
-}
-
-.logDot {
-  width: 8px;
-  height: 8px;
-  margin-top: 5px;
-  border-radius: 50%;
-  background: var(--buttery-blue);
-  box-shadow: 0 0 0 3px #eaf3fb;
-
-  .logRow[data-tone="flagged"] & {
-    background: #d22839;
-    box-shadow: 0 0 0 3px #fdecee;
-  }
-
-  .logRow[data-tone="trusted"] & {
-    background: var(--buttery-green);
-    box-shadow: 0 0 0 3px #e7f3ec;
-  }
-}
-
-.logText {
-  font-family: var(--sf-pro-text);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  color: var(--text-secondary);
-  text-wrap: pretty;
-
-  b {
-    font-weight: 700;
-    color: var(--buttery-blue);
-  }
-
-  .logRow[data-tone="flagged"] & b {
-    color: #d22839;
-  }
-
-  .logRow[data-tone="trusted"] & b {
-    color: var(--buttery-green);
   }
 }
 
@@ -535,8 +423,7 @@ $panel-shadow: 0 1px 2px rgba(5, 17, 34, 0.04), 0 8px 20px rgba(5, 17, 34, 0.07)
   .card,
   .reveal,
   .pop,
-  .grow,
-  .logRow:not(:last-child)::after {
+  .grow {
     opacity: 1;
     transform: none;
     transition: none;
