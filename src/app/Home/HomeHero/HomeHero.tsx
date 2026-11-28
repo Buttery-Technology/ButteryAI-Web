@@ -18,7 +18,8 @@ const HomeHero = () => (
                 Envision a future where <span>your AI is special</span>
               </h2>
               <p className={styles.outroText}>
-                ButteryAI lets you build specialists instead of worrying about the infrastructure.
+                ButteryAI helps you build enterprise-grade AI systems that focus specialization where you have full
+                control and can trust your AI.
               </p>
               <div className={styles.actions}>
                 <Link to="/download" className={styles.btnPrimary}>

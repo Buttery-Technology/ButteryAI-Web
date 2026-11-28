@@ -322,6 +322,18 @@ $ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   .stage[data-variant="narrow"] &[data-side="left"] {
     padding: 8px 8px 8px 11px;
   }
+
+  @include mq(359) {
+    .stage[data-variant="narrow"] & {
+      width: 128px;
+      gap: 6px;
+      padding: 8px 8px 8px 7px;
+    }
+
+    .stage[data-variant="narrow"] &[data-side="left"] {
+      padding: 8px 7px 8px 8px;
+    }
+  }
 }
 
 .ghost {

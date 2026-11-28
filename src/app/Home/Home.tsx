@@ -3,11 +3,13 @@ import { useLocation } from "react-router-dom";
 import { useDocumentTitle } from "@hooks";
 import { NavBar } from "../NavBar";
 import { HomeHero } from "./HomeHero";
+import { HomeSpecialists } from "./HomeSpecialists";
 import { HomeStakes } from "./HomeStakes";
 import { HomeSteps } from "./HomeSteps";
 import { HomeEngines } from "./HomeEngines";
 import { HomeScoring } from "./HomeScoring";
 import { HomeEvaluation } from "./HomeEvaluation";
+import { HomeTransparency } from "./HomeTransparency";
 import { HomeKnowledge } from "./HomeKnowledge";
 import { HomeAssurance } from "./HomeAssurance";
 import { HomeShared } from "./HomeShared";
@@ -35,9 +37,11 @@ const Home = () => {
       <NavBar />
       <HomeHero />
       <ScrollCue />
+      <HomeSpecialists />
       <HomeStakes />
       <HomeScoring />
       <HomeEvaluation />
+      <HomeTransparency />
       <HomeKnowledge />
       <HomeSteps />
       <HomeEngines />

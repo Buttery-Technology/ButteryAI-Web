@@ -99,17 +99,26 @@ const NavBar = () => {
 
   useEffect(() => {
     let last = window.scrollY;
+    const yielding = () => document.documentElement.hasAttribute("data-nav-yield");
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 8);
       if (y < HIDE_AFTER) setHidden(false);
+      else if (yielding()) setHidden(true);
       else if (Math.abs(y - last) < 6) return;
       else setHidden(y > last);
       last = y;
     };
+    const mo = new MutationObserver(() => {
+      if (yielding() && window.scrollY >= HIDE_AFTER) setHidden(true);
+    });
     onScroll();
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nav-yield"] });
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      mo.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);

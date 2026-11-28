@@ -60,6 +60,10 @@
   @include mq(768) {
     margin-top: 20px;
   }
+
+  @include mq(480) {
+    margin-inline: -20px;
+  }
 }
 
 .outroTitle {
@@ -81,9 +85,27 @@
   margin-top: 24px;
 
   @include mq(480) {
-    flex-direction: column;
-    align-items: center;
     gap: 10px;
+    margin-top: 20px;
+
+    .btnPrimary,
+    .btnGhost {
+      flex-shrink: 0;
+      height: 44px;
+      padding: 0 18px;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+  }
+
+  @include mq(359) {
+    gap: 8px;
+
+    .btnPrimary,
+    .btnGhost {
+      padding: 0 14px;
+      font-size: 15px;
+    }
   }
 }
 
