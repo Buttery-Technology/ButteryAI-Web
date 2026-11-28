@@ -580,12 +580,21 @@ const StackUntangle = ({ outro }: { outro?: ReactNode }) => {
       syncLive();
     };
 
+    let yielding = false;
+    const yieldNav = (on: boolean) => {
+      if (on === yielding) return;
+      yielding = on;
+      document.documentElement.toggleAttribute("data-nav-yield", on);
+    };
+
     const sync = (force = false) => {
       if (reduced) {
+        yieldNav(false);
         apply(e.P, e.P === 1 ? 1 : 0, force);
         return;
       }
       const s = track.top - root.getBoundingClientRect().top - track.lead;
+      yieldNav(track.top < NAV_CLEAR - 24 && s >= 0 && (s <= track.dist + track.hold || pin.getBoundingClientRect().bottom > NAV_CLEAR));
       apply(clamp01(s / track.dist), smooth(track.dist * 0.86, track.dist + track.hold * 0.45, s), force);
     };
 
@@ -687,6 +696,7 @@ const StackUntangle = ({ outro }: { outro?: ReactNode }) => {
       e.raf = 0;
       cancelAnimationFrame(focusRaf);
       stopLive();
+      yieldNav(false);
       e.lit = {};
     };
   }, [variant, reduced]);
